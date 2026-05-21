@@ -4,17 +4,17 @@ from pyrogram import filters
 from pyrogram.enums import ChatMembersFilter
 from pyrogram.errors import FloodWait
 
-from NOBITA_MUSIC import app
-from NOBITA_MUSIC.misc import SUDOERS
-from NOBITA_MUSIC.utils.database import (
+from RONALDO_MUSIC import app
+from RONALDO_MUSIC.misc import SUDOERS
+from RONALDO_MUSIC.utils.database import (
     get_active_chats,
     get_authuser_names,
     get_client,
     get_served_chats,
     get_served_users,
 )
-from NOBITA_MUSIC.utils.decorators.language import language
-from NOBITA_MUSIC.utils.formatters import alpha_to_int
+from RONALDO_MUSIC.utils.decorators.language import language
+from RONALDO_MUSIC.utils.formatters import alpha_to_int
 from config import adminlist
 
 IS_BROADCASTING = False
@@ -117,7 +117,7 @@ async def braodcast_message(client, message, _):
     if "-assistant" in message.text:
         aw = await message.reply_text(_["broad_5"])
         text = _["broad_6"]
-        from VILLAIN_MUSIC.core.userbot import assistants
+        from DARKX_MUSIC.core.userbot import assistants
 
         for num in assistants:
             sent = 0
