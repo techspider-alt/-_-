@@ -1,4 +1,4 @@
-from NOBITA_MUSIC import app 
+from RONALDO_MUSIC import app 
 import asyncio
 import random
 from pyrogram import Client, filters
