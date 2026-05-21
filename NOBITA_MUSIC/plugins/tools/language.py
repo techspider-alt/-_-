@@ -2,9 +2,9 @@ from pykeyboard import InlineKeyboard
 from pyrogram import filters
 from pyrogram.types import InlineKeyboardButton, Message
 
-from NOBITA_MUSIC import app
-from NOBITA_MUSIC.utils.database import get_lang, set_lang
-from NOBITA_MUSIC.utils.decorators import ActualAdminCB, language, languageCB
+from RONALDO_MUSIC import app
+from RONALDO_MUSIC.utils.database import get_lang, set_lang
+from RONALDO_MUSIC.utils.decorators import ActualAdminCB, language, languageCB
 from config import BANNED_USERS
 from strings import get_string, languages_present
 
