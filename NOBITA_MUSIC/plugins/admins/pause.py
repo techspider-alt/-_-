@@ -1,11 +1,11 @@
 from pyrogram import filters
 from pyrogram.types import Message
 
-from NOBITA_MUSIC import app
-from NOBITA_MUSIC.core.call import NOBITA
-from NOBITA_MUSIC.utils.database import is_music_playing, music_off
-from NOBITA_MUSIC.utils.decorators import AdminRightsCheck
-from NOBITA_MUSIC.utils.inline import close_markup
+from RONALDO_MUSIC import app
+from RONALDO_MUSIC.core.call import NOBITA
+from RONALDO_MUSIC.utils.database import is_music_playing, music_off
+from RONALDO_MUSIC.utils.decorators import AdminRightsCheck
+from RONALDO_MUSIC.utils.inline import close_markup
 from config import BANNED_USERS
 
 
