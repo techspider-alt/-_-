@@ -1,11 +1,11 @@
 from pyrogram import filters
 from pyrogram.types import Message
 
-from NOBITA_MUSIC import app
-from NOBITA_MUSIC.misc import SUDOERS
-from NOBITA_MUSIC.utils.database import add_gban_user, remove_gban_user
-from NOBITA_MUSIC.utils.decorators.language import language
-from NOBITA_MUSIC.utils.extraction import extract_user
+from RONALDO_MUSIC import app
+from RONALDO_MUSIC.misc import SUDOERS
+from RONALDO_MUSIC.utils.database import add_gban_user, remove_gban_user
+from RONALDO_MUSIC.utils.decorators.language import language
+from RONALDO_MUSIC.utils.extraction import extract_user
 from config import BANNED_USERS
 
 
