@@ -2,7 +2,7 @@ import re
 import requests
 from pyrogram import filters
 
-from RONALDO_MUSIC import app
+from NOBITA_MUSIC import app
 from config import LOGGER_ID
 
 

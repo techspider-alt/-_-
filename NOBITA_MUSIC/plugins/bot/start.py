@@ -7,12 +7,12 @@ from youtubesearchpython.__future__ import VideosSearch
 
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, InputMediaPhoto
 import config
-from RONALDO_MUSIC import app
-from RONALDO_MUSIC.misc import _boot_
-from RONALDO_MUSIC.plugins.sudo.sudoers import sudoers_list
-from RONALDO_MUSIC.utils.database import get_served_chats, get_served_users, get_sudoers
-from RONALDO_MUSIC.utils import bot_sys_stats
-from RONALDO_MUSIC.utils.database import (
+from NOBITA_MUSIC import app
+from NOBITA_MUSIC.misc import _boot_
+from NOBITA_MUSIC.plugins.sudo.sudoers import sudoers_list
+from NOBITA_MUSIC.utils.database import get_served_chats, get_served_users, get_sudoers
+from NOBITA_MUSIC.utils import bot_sys_stats
+from NOBITA_MUSIC.utils.database import (
     add_served_chat,
     add_served_user,
     blacklisted_chats,
@@ -20,9 +20,9 @@ from RONALDO_MUSIC.utils.database import (
     is_banned_user,
     is_on_off,
 )
-from RONALDO_MUSIC.utils.decorators.language import LanguageStart
-from RONALDO_MUSIC.utils.formatters import get_readable_time
-from RONALDO_MUSIC.utils.inline import help_pannel, private_panel, start_panel
+from NOBITA_MUSIC.utils.decorators.language import LanguageStart
+from NOBITA_MUSIC.utils.formatters import get_readable_time
+from NOBITA_MUSIC.utils.inline import help_pannel, private_panel, start_panel
 from config import BANNED_USERS
 from strings import get_string
 

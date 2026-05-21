@@ -1,8 +1,8 @@
 from pyrogram import filters
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
-from RONALDO_MUSIC import app
+from NOBITA_MUSIC import app
 from config import BOT_USERNAME
-from RONALDO_MUSIC.utils.errors import capture_err
+from NOBITA_MUSIC.utils.errors import capture_err
 import httpx 
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 
@@ -30,8 +30,7 @@ async def start(_, msg):
         ],
         [
           InlineKeyboardButton("𝗛ᴇʟᴘ", url="https://t.me/RONALDO_SUPPORT01"),
-          InlineKeyboardButton("˹ 𝐃 𝛂 𝐫 𝐤 𝐥 𝐨 𝐫 𝐝  ꧊𝆅  ❤️‍🔥", url="https://t.me/@
-          rchiex"),
+          InlineKeyboardButton("˹ 𝐃 𝛂 𝐫 𝐤 𝐥 𝐨 𝐫 𝐝  ꧊𝆅  ❤️‍🔥", url="https://t.me/rchiex"),
           ],
                [
                 InlineKeyboardButton("˹ 𝐃 𝛂 𝐫 𝐤 𝐥 𝐨 𝐫 𝐝  ꧊𝆅 ꭙ ꜱᴜᴘᴘᴏʀᴛ˼", url=f"https://t.me/rchiex"),

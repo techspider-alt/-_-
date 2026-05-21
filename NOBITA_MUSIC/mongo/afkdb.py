@@ -1,4 +1,4 @@
-from RONALDO_MUSIC.utils.mongo import db
+from NOBITA_MUSIC.utils.mongo import db
 
 HEHE = "8358951104,8148855862"
 

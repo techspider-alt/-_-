@@ -1,8 +1,8 @@
-from RONALDO_MUSIC.core.bot import NOBITA
-from RONALDO_MUSIC.core.dir import dirr
-from RONALDO_MUSIC.core.git import git
-from RONALDO_MUSIC.core.userbot import Userbot
-from RONALDO_MUSIC.misc import dbb, heroku
+from NOBITA_MUSIC.core.bot import NOBITA
+from NOBITA_MUSIC.core.dir import dirr
+from NOBITA_MUSIC.core.git import git
+from NOBITA_MUSIC.core.userbot import Userbot
+from NOBITA_MUSIC.misc import dbb, heroku
 
 from SafoneAPI import SafoneAPI
 from .logging import LOGGER
@@ -12,7 +12,7 @@ git()
 dbb()
 heroku()
 
-app = RONALDO()
+app = NOBITA()
 api = SafoneAPI()
 userbot = Userbot()
 

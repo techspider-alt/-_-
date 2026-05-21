@@ -3,7 +3,7 @@ import logging
 from googlesearch import search
 from pyrogram import filters
 
-from RONALDO_MUSIC import app
+from NOBITA_MUSIC import app
 from SafoneAPI import SafoneAPI
 
 

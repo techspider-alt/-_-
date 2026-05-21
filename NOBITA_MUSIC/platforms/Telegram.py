@@ -6,7 +6,7 @@ from typing import Union
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Voice
 
 import config
-from RONALDO_MUSIC import app
+from NOBITA_MUSIC import app
 from NOBITA_MUSIC.utils.formatters import (
     check_duration,
     convert_bytes,

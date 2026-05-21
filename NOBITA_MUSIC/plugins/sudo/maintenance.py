@@ -1,9 +1,9 @@
 from pyrogram import filters
 from pyrogram.types import Message
 
-from RONALDO_MUSIC import app
-from RONALDO_MUSIC.misc import SUDOERS
-from RONALDO_MUSIC.utils.database import (
+from NOBITA_MUSIC import app
+from NOBITA_MUSIC.misc import SUDOERS
+from NOBITA_MUSIC.utils.database import (
     get_lang,
     is_maintenance,
     maintenance_off,

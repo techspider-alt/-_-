@@ -10,8 +10,8 @@ from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message
 
 from config import BANNED_USERS, lyrical
 from strings import get_command
-from RONALDO_MUSIC import app
-from RONALDO_MUSIC.utils.decorators.language import language
+from NOBITA_MUSIC import app
+from NOBITA_MUSIC.utils.decorators.language import language
 
 ###Commands
 LYRICS_COMMAND = get_command("LYRICS_COMMAND")

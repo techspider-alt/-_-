@@ -1,4 +1,4 @@
-from RONALDO_MUSIC import app
+from NOBITA_MUSIC import app
 from pyrogram.errors import RPCError
 from pyrogram.types import ChatMemberUpdated, InlineKeyboardMarkup, InlineKeyboardButton
 from os import environ
@@ -16,7 +16,7 @@ from asyncio import sleep
 from pyrogram import filters, Client, enums
 from pyrogram.enums import ParseMode
 from logging import getLogger
-from RONALDO_MUSIC.utils.RONALDO_ban import admin_filter
+from NOBITA_MUSIC.utils.NOBITA_ban import admin_filter
 from PIL import ImageDraw, Image, ImageFont, ImageChops
 from pyrogram import *
 from pyrogram.types import *
@@ -83,8 +83,8 @@ def welcomepic(pic, user, chatname, id, uname, brightness_factor=1.3):
     pfp = circle(pfp, brightness_factor=brightness_factor) 
     pfp = pfp.resize((500, 500))
     draw = ImageDraw.Draw(background)
-    font = ImageFont.truetype('RONALDO_MUSIC/assets/font.ttf', size=60)
-    welcome_font = ImageFont.truetype('RONALDO_MUSIC/assets/font.ttf', size=60)
+    font = ImageFont.truetype('NOBITA_MUSIC/assets/font.ttf', size=60)
+    welcome_font = ImageFont.truetype('NOBITA_MUSIC/assets/font.ttf', size=60)
     
  #   draw.text((630, 230), f"USERNAME : {uname}", fill=(255, 255, 255), font=font)
    # draw.text((630, 300), f'NAME: {user}', fill=(255, 255, 255), font=font)

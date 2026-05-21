@@ -4,11 +4,11 @@ import importlib
 from pyrogram import idle
 
 import config
-from RONALDO_MUSIC import LOGGER, app, userbot
-from RONALDO_MUSIC.core.call import NOBITA
-from RONALDO_MUSIC.misc import sudo
-from RONALDO_MUSIC.plugins import ALL_MODULES
-from RONALDO_MUSIC.utils.database import get_banned_users, get_gbanned
+from NOBITA_MUSIC import LOGGER, app, userbot
+from NOBITA_MUSIC.core.call import NOBITA
+from NOBITA_MUSIC.misc import sudo
+from NOBITA_MUSIC.plugins import ALL_MODULES
+from NOBITA_MUSIC.utils.database import get_banned_users, get_gbanned
 from config import BANNED_USERS
 
 
@@ -36,16 +36,16 @@ async def init():
         pass
     await app.start()
     for all_module in ALL_MODULES:
-        importlib.import_module("RONALDO_MUSIC.plugins" + all_module)
-    LOGGER("RONALDO_MUSIC.plugins").info("𝐀𝐥𝐥 𝐅𝐞𝐚𝐭𝐮𝐫𝐞𝐬 𝐋𝐨𝐚𝐝𝐞𝐝 𝐁𝐚𝐛𝐲🥳...")
+        importlib.import_module("NOBITA_MUSIC.plugins" + all_module)
+    LOGGER("NOBITA_MUSIC.plugins").info("𝐀𝐥𝐥 𝐅𝐞𝐚𝐭𝐮𝐫𝐞𝐬 𝐋𝐨𝐚𝐝𝐞𝐝 𝐁𝐚𝐛𝐲🥳...")
     await userbot.start()
-    await RONALDO.start()
-    await RONALDO.decorators()
-    LOGGER("RONALDO_MUSIC").info("╔═════ஜ۩۞۩ஜ════╗\n  ♨️𝗠𝗔𝗗𝗘 𝗕𝗬 ​˹ 𝐃 𝛂 𝐫 𝐤 𝐥 𝐨 𝐫 𝐝 ❤️‍🔥♨️\n╚═════ஜ۩۞۩ஜ════╝")
+    await NOBITA.start()
+    await NOBITA.decorators()
+    LOGGER("NOBITA_MUSIC").info("╔═════ஜ۩۞۩ஜ════╗\n  ♨️𝗠𝗔𝗗𝗘 𝗕𝗬 ​˹ 𝐃 𝛂 𝐫 𝐤 𝐥 𝐨 𝐫 𝐝 ❤️‍🔥♨️\n╚═════ஜ۩۞۩ஜ════╝")
     await idle()
     await app.stop()
     await userbot.stop()
-    LOGGER("RONALDO_MUSIC").info("╔═════ஜ۩۞۩ஜ════╗\n  ♨️𝗠𝗔𝗗𝗘 𝗕𝗬 ˹ 𝐃 𝛂 𝐫 𝐤 𝐥 𝐨 𝐫 𝐝 ❤️‍🔥♨️\n╚═════ஜ۩۞۩ஜ════╝")
+    LOGGER("NOBITA_MUSIC").info("╔═════ஜ۩۞۩ஜ════╗\n  ♨️𝗠𝗔𝗗𝗘 𝗕𝗬 ˹ 𝐃 𝛂 𝐫 𝐤 𝐥 𝐨 𝐫 𝐝 ❤️‍🔥♨️\n╚═════ஜ۩۞۩ஜ════╝")
 
 
 if __name__ == "__main__":

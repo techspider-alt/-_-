@@ -1,11 +1,11 @@
 from pyrogram import filters
 from pyrogram.types import Message
 
-from RONALDO_MUSIC import YouTube, app
-from RONALDO_MUSIC.core.call import RONALDO
-from RONALDO_MUSIC.misc import db
-from RONALDO_MUSIC.utils import AdminRightsCheck, seconds_to_min
-from RONALDO_MUSIC.utils.inline import close_markup
+from NOBITA_MUSIC import YouTube, app
+from NOBITA_MUSIC.core.call import NOBITA
+from NOBITA_MUSIC.misc import db
+from NOBITA_MUSIC.utils import AdminRightsCheck, seconds_to_min
+from NOBITA_MUSIC.utils.inline import close_markup
 from config import BANNED_USERS
 
 

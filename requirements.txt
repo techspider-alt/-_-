@@ -1,6 +1,5 @@
 aiofiles
 aiohttp
-#asyncio==3.4.3
 asyncio
 beautifulsoup4
 dnspython
@@ -13,9 +12,10 @@ httpx[http2]
 heroku3
 hachoir
 motor==3.3.2
-pillow==9.5.0
+Pillow
 psutil
-py-tgcalls==0.9.7
+py-tgcalls==1.2.1
+ntgcalls==1.2.1
 pykeyboard
 pymongo==4.6.3
 python-dotenv
@@ -36,7 +36,7 @@ unidecode
 urllib3
 wget
 git+https://github.com/KurimuzonAkuma/pyrogram.git@2ae00a2710dd3e347798473f3dd784e9639edb1a
-git+https://github.com/yt-dlp/yt-dlp.git
+yt-dlp
 bing_image_downloader
 git+https://github.com/alexmercerind/youtube-search-python@main
 git+https://github.com/joetats/youtube_search@master

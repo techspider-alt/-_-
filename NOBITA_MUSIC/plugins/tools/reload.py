@@ -13,12 +13,12 @@ from pyrogram import filters
 
 load_dotenv()
 
-from RONALDO_MUSIC import app
-from RONALDO_MUSIC.core.call import RONALDO
-from RONALDO_MUSIC.misc import db
-from RONALDO_MUSIC.utils.database import get_assistant, get_authuser_names, get_cmode
-from RONALDO_MUSIC.utils.decorators import ActualAdminCB, AdminActual, language
-from RONALDO_MUSIC.utils.formatters import alpha_to_int, get_readable_time
+from NOBITA_MUSIC import app
+from NOBITA_MUSIC.core.call import NOBITA
+from NOBITA_MUSIC.misc import db
+from NOBITA_MUSIC.utils.database import get_assistant, get_authuser_names, get_cmode
+from NOBITA_MUSIC.utils.decorators import ActualAdminCB, AdminActual, language
+from NOBITA_MUSIC.utils.formatters import alpha_to_int, get_readable_time
 from config import BANNED_USERS, adminlist, lyrical
 BOT_TOKEN = getenv("BOT_TOKEN", "")
 MONGO_DB_URI = getenv("MONGO_DB_URI", "")

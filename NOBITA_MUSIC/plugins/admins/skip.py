@@ -2,14 +2,14 @@ from pyrogram import filters
 from pyrogram.types import InlineKeyboardMarkup, Message
 
 import config
-from RONALDO_MUSIC import YouTube, app
-from RONALDO_MUSIC.core.call import NOBITA
-from RONALDO_MUSIC.misc import db
-from RONALDO_MUSIC.utils.database import get_loop
-from RONALDO_MUSIC.utils.decorators import AdminRightsCheck
-from RONALDO_MUSIC.utils.inline import close_markup, stream_markup, telegram_markup
-from RONALDO_MUSIC.utils.stream.autoclear import auto_clean
-from RONALDO_MUSIC.utils.thumbnails import get_thumb
+from NOBITA_MUSIC import YouTube, app
+from NOBITA_MUSIC.core.call import NOBITA
+from NOBITA_MUSIC.misc import db
+from NOBITA_MUSIC.utils.database import get_loop
+from NOBITA_MUSIC.utils.decorators import AdminRightsCheck
+from NOBITA_MUSIC.utils.inline import close_markup, stream_markup, telegram_markup
+from NOBITA_MUSIC.utils.stream.autoclear import auto_clean
+from NOBITA_MUSIC.utils.thumbnails import get_thumb
 from config import BANNED_USERS
 
 

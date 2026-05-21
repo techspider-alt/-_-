@@ -1,10 +1,10 @@
 from pyrogram import filters
 from pyrogram.types import Message
 
-from RONALDO_MUSIC import app
-from RONALDO_MUSIC.misc import SUDOERS
-from RONALDO_MUSIC.utils.database import blacklist_chat, blacklisted_chats, whitelist_chat
-from RONALDO_MUSIC.utils.decorators.language import language
+from NOBITA_MUSIC import app
+from NOBITA_MUSIC.misc import SUDOERS
+from NOBITA_MUSIC.utils.database import blacklist_chat, blacklisted_chats, whitelist_chat
+from NOBITA_MUSIC.utils.decorators.language import language
 from config import BANNED_USERS
 
 

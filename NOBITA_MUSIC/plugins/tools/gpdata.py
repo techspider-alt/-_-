@@ -1,10 +1,10 @@
 from pyrogram import enums
 from pyrogram.enums import ChatType
 from pyrogram import filters, Client
-from RONALDO_MUSIC import app
+from NOBITA_MUSIC import app
 from config import OWNER_ID
 from pyrogram.types import Message
-from RONALDO_MUSIC.utils.RONALDO_ban import admin_filter
+from NOBITA_MUSIC.utils.NOBITA_ban import admin_filter
 from pyrogram.types import Message, CallbackQuery, InlineKeyboardMarkup, InlineKeyboardButton
 
 

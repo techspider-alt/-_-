@@ -16,15 +16,15 @@ from pyrogram.types import (
 from io import BytesIO
 from pyrogram import filters
 import config
-from RONALDO_MUSIC import app
-from RONALDO_MUSIC.misc import HAPP, SUDOERS, XCB
-from RONALDO_MUSIC.utils.database import (
+from NOBITA_MUSIC import app
+from NOBITA_MUSIC.misc import HAPP, SUDOERS, XCB
+from NOBITA_MUSIC.utils.database import (
     get_active_chats,
     remove_active_chat,
     remove_active_video_chat,
 )
-from RONALDO_MUSIC.utils.decorators.language import language
-from RONALDO_MUSIC.utils.pastebin import NOBITABin
+from NOBITA_MUSIC.utils.decorators.language import language
+from NOBITA_MUSIC.utils.pastebin import NOBITABin
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 

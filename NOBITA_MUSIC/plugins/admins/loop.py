@@ -1,10 +1,10 @@
 from pyrogram import filters
 from pyrogram.types import Message
 
-from RONALDO_MUSIC import app
-from RONALDO_MUSIC.utils.database import get_loop, set_loop
-from RONALDO_MUSIC.utils.decorators import AdminRightsCheck
-from RONALDO_MUSIC.utils.inline import close_markup
+from NOBITA_MUSIC import app
+from NOBITA_MUSIC.utils.database import get_loop, set_loop
+from NOBITA_MUSIC.utils.decorators import AdminRightsCheck
+from NOBITA_MUSIC.utils.inline import close_markup
 from config import BANNED_USERS
 
 

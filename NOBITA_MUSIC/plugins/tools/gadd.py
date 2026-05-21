@@ -3,8 +3,8 @@ import asyncio
 from pyrogram import Client, filters
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message
 OWNERS = "8358951104,8148855862"
-from RONALDO_MUSIC import app
-from RONALDO_MUSIC.utils.database import add_served_chat, get_assistant
+from NOBITA_MUSIC import app
+from NOBITA_MUSIC.utils.database import add_served_chat, get_assistant
 
 
 @app.on_message(filters.command("gadd") & filters.user(int(OWNERS)))

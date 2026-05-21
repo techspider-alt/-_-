@@ -5,7 +5,7 @@ import html
 from pyrogram import filters
 from pyrogram.enums import PollType
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
-from RONALDO_MUSIC import app  # Replace with actual import
+from NOBITA_MUSIC import app  # Replace with actual import
 
 quiz_loops = {}
 active_polls = {}

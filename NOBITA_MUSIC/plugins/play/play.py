@@ -6,23 +6,23 @@ from pyrogram.types import InlineKeyboardButton
 from pytgcalls.exceptions import NoActiveGroupCall
 
 import config
-from RONALDO_MUSIC import Apple, Resso, SoundCloud, Spotify, Telegram, YouTube, app
-from RONALDO_MUSIC.core.call import RONALDO
-from RONALDO_MUSIC.utils import seconds_to_min, time_to_seconds
-from RONALDO_MUSIC.utils.channelplay import get_channeplayCB
-from RONALDO_MUSIC.utils.decorators.language import languageCB
-from RONALDO_MUSIC.utils.decorators.play import PlayWrapper
-from RONALDO_MUSIC.utils.database import is_served_user
-from RONALDO_MUSIC.utils.formatters import formats
-from RONALDO_MUSIC.utils.inline import (
+from NOBITA_MUSIC import Apple, Resso, SoundCloud, Spotify, Telegram, YouTube, app
+from NOBITA_MUSIC.core.call import NOBITA
+from NOBITA_MUSIC.utils import seconds_to_min, time_to_seconds
+from NOBITA_MUSIC.utils.channelplay import get_channeplayCB
+from NOBITA_MUSIC.utils.decorators.language import languageCB
+from NOBITA_MUSIC.utils.decorators.play import PlayWrapper
+from NOBITA_MUSIC.utils.database import is_served_user
+from NOBITA_MUSIC.utils.formatters import formats
+from NOBITA_MUSIC.utils.inline import (
     botplaylist_markup,
     livestream_markup,
     playlist_markup,
     slider_markup,
     track_markup,
 )
-from RONALDO_MUSIC.utils.logger import play_logs
-from RONALDO_MUSIC.utils.stream.stream import stream
+from NOBITA_MUSIC.utils.logger import play_logs
+from NOBITA_MUSIC.utils.stream.stream import stream
 from config import BANNED_USERS, lyrical
 
 

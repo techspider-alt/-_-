@@ -4,17 +4,17 @@ from pyrogram import filters
 from pyrogram.enums import ChatMembersFilter
 from pyrogram.errors import FloodWait
 
-from RONALDO_MUSIC import app
-from RONALDO_MUSIC.misc import SUDOERS
-from RONALDO_MUSIC.utils.database import (
+from NOBITA_MUSIC import app
+from NOBITA_MUSIC.misc import SUDOERS
+from NOBITA_MUSIC.utils.database import (
     get_active_chats,
     get_authuser_names,
     get_client,
     get_served_chats,
     get_served_users,
 )
-from RONALDO_MUSIC.utils.decorators.language import language
-from RONALDO_MUSIC.utils.formatters import alpha_to_int
+from NOBITA_MUSIC.utils.decorators.language import language
+from NOBITA_MUSIC.utils.formatters import alpha_to_int
 from config import adminlist
 
 IS_BROADCASTING = False

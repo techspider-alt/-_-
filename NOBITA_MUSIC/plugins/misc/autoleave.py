@@ -4,9 +4,9 @@ from datetime import datetime
 from pyrogram.enums import ChatType
 
 import config
-from RONALDO_MUSIC import app
-from RONALDO_MUSIC.core.call import RONALDO, autoend
-from RONALDO_MUSIC.utils.database import get_client, is_active_chat, is_autoend
+from NOBITA_MUSIC import app
+from NOBITA_MUSIC.core.call import NOBITA, autoend
+from NOBITA_MUSIC.utils.database import get_client, is_active_chat, is_autoend
 
 
 async def auto_leave():

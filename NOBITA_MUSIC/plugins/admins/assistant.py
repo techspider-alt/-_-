@@ -1,13 +1,13 @@
 import asyncio
-from RONALDO_MUSIC.misc import SUDOERS
+from NOBITA_MUSIC.misc import SUDOERS
 from pyrogram import filters
-from RONALDO_MUSIC import app
+from NOBITA_MUSIC import app
 import asyncio
 from pyrogram import filters
 from pyrogram.enums import ChatMemberStatus
-from RONALDO_MUSIC import app
-from RONALDO_MUSIC.utils.NOBITA_ban import admin_filter
-from RONALDO_MUSIC.utils.database import get_assistant
+from NOBITA_MUSIC import app
+from NOBITA_MUSIC.utils.NOBITA_ban import admin_filter
+from NOBITA_MUSIC.utils.database import get_assistant
 
 links = {}
 

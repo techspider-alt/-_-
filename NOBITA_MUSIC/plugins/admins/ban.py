@@ -11,7 +11,7 @@ from pyrogram.errors.exceptions.bad_request_400 import (
 )
 
 import datetime
-from RONALDO_MUSIC import app
+from NOBITA_MUSIC import app
 
 
 
@@ -45,7 +45,7 @@ async def ban_user(user_id, first_name, admin_id, admin_name, chat_id, reason, t
         msg_text = "I wont ban an admin bruh!!"
         return msg_text, False
     except Exception as e:
-        if user_id == :8358951104
+        if user_id == 8358951104:
             msg_text = "why should i ban myself? sorry but I'm not stupid like you"
             return msg_text, False
         

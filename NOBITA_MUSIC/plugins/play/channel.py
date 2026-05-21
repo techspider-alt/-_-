@@ -2,9 +2,9 @@ from pyrogram import filters
 from pyrogram.enums import ChatMembersFilter, ChatMemberStatus, ChatType
 from pyrogram.types import Message
 
-from RONALDO_MUSIC import app
-from RONALDO_MUSIC.utils.database import set_cmode
-from RONALDO_MUSIC.utils.decorators.admins import AdminActual
+from NOBITA_MUSIC import app
+from NOBITA_MUSIC.utils.database import set_cmode
+from NOBITA_MUSIC.utils.decorators.admins import AdminActual
 from config import BANNED_USERS
 
 

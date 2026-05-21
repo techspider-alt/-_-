@@ -1,9 +1,9 @@
 from pyrogram import filters 
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message
 from pyrogram.enums import ChatMembersFilter
-from RONALDO_MUSIC import app
-from RONALDO_MUSIC.utils.database import connect_to_chat
-from RONALDO_MUSIC.utils.decorators import AdminActual
+from NOBITA_MUSIC import app
+from NOBITA_MUSIC.utils.database import connect_to_chat
+from NOBITA_MUSIC.utils.decorators import AdminActual
 from config import BANNED_USERS
 
 

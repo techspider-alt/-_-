@@ -2,9 +2,9 @@ from pyrogram import filters
 from pyrogram.types import Message
 from unidecode import unidecode
 
-from RONALDO_MUSIC import app
-from RONALDO_MUSIC.misc import SUDOERS
-from RONALDO_MUSIC.utils.database import (
+from NOBITA_MUSIC import app
+from NOBITA_MUSIC.misc import SUDOERS
+from NOBITA_MUSIC.utils.database import (
     get_active_chats,
     get_active_video_chats,
     remove_active_chat,

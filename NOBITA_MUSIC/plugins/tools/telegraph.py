@@ -1,7 +1,7 @@
 import os
 from pyrogram import filters
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
-from RONALDO_MUSIC import app
+from NOBITA_MUSIC import app
 import requests
 
 

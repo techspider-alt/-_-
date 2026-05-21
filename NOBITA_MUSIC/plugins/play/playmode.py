@@ -1,10 +1,10 @@
 from pyrogram import filters
 from pyrogram.types import InlineKeyboardMarkup, Message
 
-from RONALDO_MUSIC import app
-from RONALDO_MUSIC.utils.database import get_playmode, get_playtype, is_nonadmin_chat
-from RONALDO_MUSIC.utils.decorators import language
-from RONALDO_MUSIC.utils.inline.settings import playmode_users_markup
+from NOBITA_MUSIC import app
+from NOBITA_MUSIC.utils.database import get_playmode, get_playtype, is_nonadmin_chat
+from NOBITA_MUSIC.utils.decorators import language
+from NOBITA_MUSIC.utils.inline.settings import playmode_users_markup
 from config import BANNED_USERS
 
 

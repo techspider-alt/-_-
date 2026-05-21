@@ -1,15 +1,15 @@
 from typing import Union
 from pyrogram import filters, types
 from pyrogram.types import InlineKeyboardMarkup, Message, InlineKeyboardButton
-from RONALDO_MUSIC import app
-from RONALDO_MUSIC.utils import help_pannel
-from RONALDO_MUSIC.utils.database import get_lang
-from RONALDO_MUSIC.utils.decorators.language import LanguageStart, languageCB
-from RONALDO_MUSIC.utils.inline.help import help_back_markup, private_help_panel
+from NOBITA_MUSIC import app
+from NOBITA_MUSIC.utils import help_pannel
+from NOBITA_MUSIC.utils.database import get_lang
+from NOBITA_MUSIC.utils.decorators.language import LanguageStart, languageCB
+from NOBITA_MUSIC.utils.inline.help import help_back_markup, private_help_panel
 from config import BANNED_USERS, START_IMG_URL, SUPPORT_CHAT
 from strings import get_string, helpers
-from RONALDO_MUSIC.utils.stuffs.buttons import BUTTONS
-from RONALDO_MUSIC.utils.stuffs.helper import Helper
+from NOBITA_MUSIC.utils.stuffs.buttons import BUTTONS
+from NOBITA_MUSIC.utils.stuffs.helper import Helper
 
 @app.on_message(filters.command(["help"]) & filters.private & ~BANNED_USERS)
 @app.on_callback_query(filters.regex("settings_back_helper") & ~BANNED_USERS)

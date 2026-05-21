@@ -1,9 +1,9 @@
 from pyrogram import filters
 
-from RONALDO_MUSIC import YouTube, app
-from RONALDO_MUSIC.utils.channelplay import get_channeplayCB
-from RONALDO_MUSIC.utils.decorators.language import languageCB
-from RONALDO_MUSIC.utils.stream.stream import stream
+from NOBITA_MUSIC import YouTube, app
+from NOBITA_MUSIC.utils.channelplay import get_channeplayCB
+from NOBITA_MUSIC.utils.decorators.language import languageCB
+from NOBITA_MUSIC.utils.stream.stream import stream
 from config import BANNED_USERS
 
 

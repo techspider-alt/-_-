@@ -9,17 +9,20 @@ from pytgcalls import PyTgCalls, StreamType
 from pytgcalls.exceptions import (
     AlreadyJoinedError,
     NoActiveGroupCall,
-    TelegramServerError,
 )
-from pytgcalls.types import Update
-from pytgcalls.types.input_stream import AudioPiped, AudioVideoPiped
-from pytgcalls.types.input_stream.quality import HighQualityAudio, MediumQualityVideo
-from pytgcalls.types.stream import StreamAudioEnded
+from pytgcalls.types import (
+    Update,
+    AudioPiped,
+    AudioVideoPiped,
+    HighQualityAudio,
+    MediumQualityVideo,
+    StreamAudioEnded,
+)
 
 import config
-from ˹ 𝐑 𝐨 𝐧 𝛂 𝐥 𝐝 𝐨  ꭙ  𝐌 𝐮 𝐬 𝛊 𝐜  𝐁 𝐨 𝐭  ❤️‍🔥 import LOGGER, YouTube, app
-from ˹ 𝐑 𝐨 𝐧 𝛂 𝐥 𝐝 𝐨  ꭙ  𝐌 𝐮 𝐬 𝛊 𝐜  𝐁 𝐨 𝐭  ❤️‍🔥.misc import db
-from ˹ 𝐑 𝐨 𝐧 𝛂 𝐥 𝐝 𝐨  ꭙ  𝐌 𝐮 𝐬 𝛊 𝐜  𝐁 𝐨 𝐭  ❤️‍🔥.utils.database import (
+from NOBITA_MUSIC import LOGGER, YouTube, app
+from NOBITA_MUSIC.misc import db
+from NOBITA_MUSIC.utils.database import (
     add_active_chat,
     add_active_video_chat,
     get_lang,
@@ -31,11 +34,11 @@ from ˹ 𝐑 𝐨 𝐧 𝛂 𝐥 𝐝 𝐨  ꭙ  𝐌 𝐮 𝐬 𝛊 𝐜  𝐁 
     remove_active_video_chat,
     set_loop,
 )
-from ˹ 𝐑 𝐨 𝐧 𝛂 𝐥 𝐝 𝐨  ꭙ  𝐌 𝐮 𝐬 𝛊 𝐜  𝐁 𝐨 𝐭  ❤️‍🔥.utils.exceptions import AssistantErr
-from ˹ 𝐑 𝐨 𝐧 𝛂 𝐥 𝐝 𝐨  ꭙ  𝐌 𝐮 𝐬 𝛊 𝐜  𝐁 𝐨 𝐭  ❤️‍🔥.utils.formatters import check_duration, seconds_to_min, speed_converter
-from ˹ 𝐑 𝐨 𝐧 𝛂 𝐥 𝐝 𝐨  ꭙ  𝐌 𝐮 𝐬 𝛊 𝐜  𝐁 𝐨 𝐭  ❤️‍🔥.utils.inline.play import stream_markup, telegram_markup
-from ˹ 𝐑 𝐨 𝐧 𝛂 𝐥 𝐝 𝐨  ꭙ  𝐌 𝐮 𝐬 𝛊 𝐜  𝐁 𝐨 𝐭  ❤️‍🔥.utils.stream.autoclear import auto_clean
-from ˹ 𝐑 𝐨 𝐧 𝛂 𝐥 𝐝 𝐨  ꭙ  𝐌 𝐮 𝐬 𝛊 𝐜  𝐁 𝐨 𝐭  ❤️‍🔥.utils.thumbnails import get_thumb
+from NOBITA_MUSIC.utils.exceptions import AssistantErr
+from NOBITA_MUSIC.utils.formatters import check_duration, seconds_to_min, speed_converter
+from NOBITA_MUSIC.utils.inline.play import stream_markup, telegram_markup
+from NOBITA_MUSIC.utils.stream.autoclear import auto_clean
+from NOBITA_MUSIC.utils.thumbnails import get_thumb
 from strings import get_string
 
 autoend = {}
@@ -317,7 +320,7 @@ class Call(PyTgCalls):
             raise AssistantErr(_["call_8"])
         except AlreadyJoinedError:
             raise AssistantErr(_["call_9"])
-        except TelegramServerError:
+        except Exception:
             raise AssistantErr(_["call_10"])
         await add_active_chat(chat_id)
         await music_on(chat_id)

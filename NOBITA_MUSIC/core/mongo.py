@@ -11,10 +11,10 @@ TEMP_MONGODB = "mongodb+srv://darklordsaura:H7wUo2r3i49sOeoe@cluster0.xad2czd.mo
 
 if config.MONGO_DB_URI is None:
     LOGGER(__name__).warning(
-        "𝐍o 𝐌ONGO 𝐃B 𝐔RL 𝐅ound.. 𝐘our 𝐁ot 𝐖ill 𝐖ork 𝐎n ˹ 𝐑 𝐨 𝐧 𝛂 𝐥 𝐝 𝐨  ꭙ  𝐌 𝐮 𝐬 𝛊 𝐜  𝐁 𝐨 𝐭  ❤️‍🔥 𝐃atabase"
+        "𝐍o 𝐌ONGO 𝐃B 𝐔RL 𝐅ound.. 𝐘our 𝐁ot 𝐖ill 𝐖ork 𝐎n NOBITA_MUSIC 𝐃atabase"
     )
     temp_client = Client(
-        "RONALDO_MUSIC",
+        "NOBITA_MUSIC",
         bot_token=config.BOT_TOKEN,
         api_id=config.API_ID,
         api_hash=config.API_HASH,

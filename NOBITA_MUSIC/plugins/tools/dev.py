@@ -6,11 +6,11 @@ import traceback
 from inspect import getfullargspec
 from io import StringIO
 from time import time
-from RONALDO_MUSIC.misc import SUDOERS
+from NOBITA_MUSIC.misc import SUDOERS
 from pyrogram import filters
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message
 
-from RONALDO_MUSIC import app
+from NOBITA_MUSIC import app
 
 
 async def aexec(code, client, message):

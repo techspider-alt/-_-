@@ -4,10 +4,10 @@ from pyrogram import filters
 from pyrogram.errors import FloodWait
 from pyrogram.types import Message
 
-from RONALDO_MUSIC import app
-from RONALDO_MUSIC.misc import SUDOERS
-from RONALDO_MUSIC.utils import get_readable_time
-from RONALDO_MUSIC.utils.database import (
+from NOBITA_MUSIC import app
+from NOBITA_MUSIC.misc import SUDOERS
+from NOBITA_MUSIC.utils import get_readable_time
+from NOBITA_MUSIC.utils.database import (
     add_banned_user,
     get_banned_count,
     get_banned_users,
@@ -15,8 +15,8 @@ from RONALDO_MUSIC.utils.database import (
     is_banned_user,
     remove_banned_user,
 )
-from RONALDO_MUSIC.utils.decorators.language import language
-from RONALDO_MUSIC.utils.extraction import extract_user
+from NOBITA_MUSIC.utils.decorators.language import language
+from NOBITA_MUSIC.utils.extraction import extract_user
 from config import BANNED_USERS
 
 

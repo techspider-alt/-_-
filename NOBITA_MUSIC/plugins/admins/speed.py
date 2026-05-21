@@ -1,13 +1,13 @@
 from pyrogram import filters
 from pyrogram.types import Message
 
-from RONALDO_MUSIC import app
-from RONALDO_MUSIC.core.call import RONALDO
-from RONALDO_MUSIC.misc import SUDOERS, db
-from RONALDO_MUSIC.utils import AdminRightsCheck
-from RONALDO_MUSIC.utils.database import is_active_chat, is_nonadmin_chat
-from RONALDO_MUSIC.utils.decorators.language import languageCB
-from RONALDO_MUSIC.utils.inline import close_markup, speed_markup
+from NOBITA_MUSIC import app
+from NOBITA_MUSIC.core.call import NOBITA
+from NOBITA_MUSIC.misc import SUDOERS, db
+from NOBITA_MUSIC.utils import AdminRightsCheck
+from NOBITA_MUSIC.utils.database import is_active_chat, is_nonadmin_chat
+from NOBITA_MUSIC.utils.decorators.language import languageCB
+from NOBITA_MUSIC.utils.inline import close_markup, speed_markup
 from config import BANNED_USERS, adminlist
 
 checker = []

@@ -3,10 +3,10 @@ import asyncio
 from pyrogram import filters
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 
-from RONALDO_MUSIC import YouTube, app
-from RONALDO_MUSIC.core.call import NOBITA
-from RONALDO_MUSIC.misc import SUDOERS, db
-from RONALDO_MUSIC.utils.database import (
+from NOBITA_MUSIC import YouTube, app
+from NOBITA_MUSIC.core.call import NOBITA
+from NOBITA_MUSIC.misc import SUDOERS, db
+from NOBITA_MUSIC.utils.database import (
     get_active_chats,
     get_lang,
     get_upvote_count,
@@ -17,17 +17,17 @@ from RONALDO_MUSIC.utils.database import (
     music_on,
     set_loop,
 )
-from RONALDO_MUSIC.utils.decorators.language import languageCB
-from RONALDO_MUSIC.utils.formatters import seconds_to_min
-from RONALDO_MUSIC.utils.inline import (
+from NOBITA_MUSIC.utils.decorators.language import languageCB
+from NOBITA_MUSIC.utils.formatters import seconds_to_min
+from NOBITA_MUSIC.utils.inline import (
     close_markup,
     stream_markup,
     stream_markup_timer,
     telegram_markup,
     telegram_markup_timer,
 )
-from RONALDO_MUSIC.utils.stream.autoclear import auto_clean
-from RONALDO_MUSIC.utils.thumbnails import get_thumb
+from NOBITA_MUSIC.utils.stream.autoclear import auto_clean
+from NOBITA_MUSIC.utils.thumbnails import get_thumb
 from config import (
     BANNED_USERS,
     SOUNCLOUD_IMG_URL,
@@ -141,7 +141,7 @@ async def del_back_playlist(client, CallbackQuery, _):
             return await CallbackQuery.answer(_["admin_1"], show_alert=True)
         await CallbackQuery.answer()
         await music_off(chat_id)
-        await RONALDO.pause_stream(chat_id)
+        await NOBITA.pause_stream(chat_id)
         await CallbackQuery.message.reply_text(
             _["admin_2"].format(mention),
         )
@@ -150,7 +150,7 @@ async def del_back_playlist(client, CallbackQuery, _):
             return await CallbackQuery.answer(_["admin_3"], show_alert=True)
         await CallbackQuery.answer()
         await music_on(chat_id)
-        await RONALDO.resume_stream(chat_id)
+        await NOBITA.resume_stream(chat_id)
         await CallbackQuery.message.reply_text(
             _["admin_4"].format(mention),
         )
@@ -270,7 +270,7 @@ async def del_back_playlist(client, CallbackQuery, _):
             except:
                 image = None
             try:
-                await RONALDO.skip_stream(chat_id, file_path, video=status, image=image)
+                await NOBITA.skip_stream(chat_id, file_path, video=status, image=image)
             except:
                 return await mystic.edit_text(_["call_6"])
             button = stream_markup(_, videoid, chat_id)
@@ -291,7 +291,7 @@ async def del_back_playlist(client, CallbackQuery, _):
             await mystic.delete()
         elif "index_" in queued:
             try:
-                await RONALDO.skip_stream(chat_id, videoid, video=status)
+                await NOBITA.skip_stream(chat_id, videoid, video=status)
             except:
                 return await CallbackQuery.message.reply_text(_["call_6"])
             button = telegram_markup(_, chat_id)
@@ -314,7 +314,7 @@ async def del_back_playlist(client, CallbackQuery, _):
                 except:
                     image = None
             try:
-                await RONALDO.skip_stream(chat_id, queued, video=status, image=image)
+                await NOBITA.skip_stream(chat_id, queued, video=status, image=image)
             except:
                 return await CallbackQuery.message.reply_text(_["call_6"])
             if videoid == "telegram":

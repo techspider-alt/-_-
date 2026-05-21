@@ -1,9 +1,9 @@
 from pyrogram import filters
 
-from RONALDO_MUSIC import app
+from NOBITA_MUSIC import app
 from ROMALDO_MUSIC.misc import SUDOERS
-from RONALDO_MUSIC.utils.database import add_off, add_on
-from RONALDO_MUSIC.utils.decorators.language import language
+from NOBITA_MUSIC.utils.database import add_off, add_on
+from NOBITA_MUSIC.utils.decorators.language import language
 
 
 @app.on_message(filters.command(["logger"]) & SUDOERS)
