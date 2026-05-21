@@ -11,35 +11,35 @@ assistantids = []
 class Userbot(Client):
     def __init__(self):
         self.one = Client(
-            name="NOBITAAss1",
+            name="DARKXMUSIC1",
             api_id=config.API_ID,
             api_hash=config.API_HASH,
             session_string=str(config.STRING1),
             no_updates=True,
         )
         self.two = Client(
-            name="NOBITAAss2",
+            name="DARKXMUSIC2",
             api_id=config.API_ID,
             api_hash=config.API_HASH,
             session_string=str(config.STRING2),
             no_updates=True,
         )
         self.three = Client(
-            name="NOBITAAss3",
+            name="DARKXMUSIC3",
             api_id=config.API_ID,
             api_hash=config.API_HASH,
             session_string=str(config.STRING3),
             no_updates=True,
         )
         self.four = Client(
-            name="NOBITAAss4",
+            name="DARKXMUSIC4",
             api_id=config.API_ID,
             api_hash=config.API_HASH,
             session_string=str(config.STRING4),
             no_updates=True,
         )
         self.five = Client(
-            name="NOBITAAss5",
+            name="DARKXMUSIC5",
             api_id=config.API_ID,
             api_hash=config.API_HASH,
             session_string=str(config.STRING5),
@@ -51,7 +51,7 @@ class Userbot(Client):
         if config.STRING1:
             await self.one.start()
             try:
-                await self.one.join_chat("NOB1TA_SUPPORT")
+                await self.one.join_chat("RONALDO_SUPPORT01")
                 await self.one.join_chat("KNIGHT_CODER_01")
             except:
                 pass
@@ -72,7 +72,7 @@ class Userbot(Client):
         if config.STRING2:
             await self.two.start()
             try:
-                await self.two.join_chat("NOB1TA_SUPPORT")
+                await self.two.join_chat("RONALDO_SUPPORT01")
                 await self.one.join_chat("KNIGHT_CODER_01")
             except:
                 pass
@@ -93,7 +93,7 @@ class Userbot(Client):
         if config.STRING3:
             await self.three.start()
             try:
-                await self.three.join_chat("NOB1TA_SUPPORT")
+                await self.three.join_chat("RONALDO_SUPPORT01")
                 await self.one.join_chat("KNIGHT_CODER_01")
             except:
                 pass
@@ -114,7 +114,7 @@ class Userbot(Client):
         if config.STRING4:
             await self.four.start()
             try:
-                await self.four.join_chat("NOB1TA_SUPPORT")
+                await self.four.join_chat("RONALDO_SUPPORT01")
                 await self.one.join_chat("KNIGHT_CODER_01")
             except:
                 pass
@@ -135,7 +135,7 @@ class Userbot(Client):
         if config.STRING5:
             await self.five.start()
             try:
-                await self.five.join_chat("NOB1TA_SUPPORT")
+                await self.five.join_chat("RONALDO_SUPPORT01")
                 await self.one.join_chat("KNIGHT_CODER_01")
             except:
                 pass
