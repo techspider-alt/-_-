@@ -6,12 +6,12 @@ from pyrogram.errors import FloodWait
 from pyrogram.types import CallbackQuery, InputMediaPhoto, Message
 
 import config
-from NOBITA_MUSIC import app
-from NOBITA_MUSIC.misc import db
-from NOBITA_MUSIC.utils import NOBITABin, get_channeplayCB, seconds_to_min
-from NOBITA_MUSIC.utils.database import get_cmode, is_active_chat, is_music_playing
-from NOBITA_MUSIC.utils.decorators.language import language, languageCB
-from NOBITA_MUSIC.utils.inline import queue_back_markup, queue_markup
+from RONALDO_MUSIC import app
+from RONALDO_MUSIC.misc import db
+from RONALDO_MUSIC.utils import NOBITABin, get_channeplayCB, seconds_to_min
+from RONALDO_MUSIC.utils.database import get_cmode, is_active_chat, is_music_playing
+from RONALDO_MUSIC.utils.decorators.language import language, languageCB
+from RONALDO_MUSIC.utils.inline import queue_back_markup, queue_markup
 from config import BANNED_USERS
 
 basic = {}
