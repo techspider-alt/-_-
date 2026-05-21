@@ -1,4 +1,4 @@
-# NOBITA MUSIC Bot
+# RONALDO MUSIC Bot
 
 A Telegram music bot for playing audio and video in Telegram voice chats, built with Pyrogram and PyTgCalls.
 
@@ -28,15 +28,14 @@ Before the bot can run, you must set these in the Secrets tab:
 
 ## Running
 
-The workflow command is `bash start`, which runs `python3 -m NOBITA_MUSIC`.
+The workflow command is `bash start`, which runs `python3 -m RONALDO_MUSIC`.
 
 ## Setup Notes
 
-- The `NOBITA_MUSIC/` directory is the main package.
-- All package names were normalized from `RONALDO_MUSIC` to `NOBITA_MUSIC` during import.
+- The `RONALDO_MUSIC/` directory is the main package.
 - py-tgcalls 1.2.1 is used with ntgcalls 1.2.1 for voice chat support.
 - FFmpeg is installed as a system dependency via Nix.
 
 ## User Preferences
 
-- Package names are normalized to `NOBITA_MUSIC` throughout the codebase.
+- Package name is RONALDO_MUSIC throughout the codebase.
