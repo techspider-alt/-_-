@@ -1,6 +1,6 @@
 from pyrogram import filters
 from pyrogram.types import *
-from NOBITA_MUSIC import app
+from RONALDO_MUSIC import app
 from gpytranslate import Translator
 
 #.......
