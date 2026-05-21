@@ -5,7 +5,7 @@ import heroku3
 from pyrogram import filters
 
 import config
-from NOBITA_MUSIC.core.mongo import mongodb
+from RONALDO_MUSIC.core.mongo import mongodb
 
 from .logging import LOGGER
 
