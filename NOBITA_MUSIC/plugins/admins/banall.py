@@ -1,9 +1,9 @@
-from NOBITA_MUSIC import app
+from RONALDO_MUSIC import app
 from config import OWNER_ID
 from pyrogram import filters, enums
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
-from NOBITA_MUSIC.utils.NOBITA_ban import admin_filter
-from NOBITA_MUSIC.misc import SUDOERS
+from RONALDO_MUSIC.utils.RONALDO_ban import admin_filter
+from RONALDO_MUSIC.misc import SUDOERS
 
 BOT_ID = app.me.id  # Corrected this line
 
@@ -24,5 +24,5 @@ async def ban_all(_, msg):
                 pass
     else:
         await msg.reply_text(
-            "ᴇɪᴛʜᴇʀ ɪ ᴅᴏɴ'ᴛ ʜᴀᴠᴇ ᴛʜᴇ ʀɪɢʜᴛ ᴛᴏ ʀᴇsᴛʀɪᴄᴛ ᴜsᴇʀs ᴏʀ ʏᴏᴜ ᴀʀᴇ ɴᴏᴛ ɪɴ sᴜᴅᴏ ᴜsᴇʀs \n ᴏᴡɴᴇʀ ᴋᴏ ᴘᴀᴘᴀ ʙᴏʟ ᴋᴇ sᴜᴅᴏ ʟᴇ ʟᴇ || @ll_NOBITA_DEFAULTERS_ll ||"
+            "ᴇɪᴛʜᴇʀ ɪ ᴅᴏɴ'ᴛ ʜᴀᴠᴇ ᴛʜᴇ ʀɪɢʜᴛ ᴛᴏ ʀᴇsᴛʀɪᴄᴛ ᴜsᴇʀs ᴏʀ ʏᴏᴜ ᴀʀᴇ ɴᴏᴛ ɪɴ sᴜᴅᴏ ᴜsᴇʀs \n ᴏᴡɴᴇʀ ᴋᴏ ᴘᴀᴘᴀ ʙᴏʟ ᴋᴇ sᴜᴅᴏ ʟᴇ ʟᴇ || @rchiex ||"
         )
