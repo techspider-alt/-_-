@@ -4,9 +4,9 @@ from datetime import datetime
 from pyrogram.enums import ChatType
 
 import config
-from NOBITA_MUSIC import app
-from NOBITA_MUSIC.core.call import NOBITA, autoend
-from NOBITA_MUSIC.utils.database import get_client, is_active_chat, is_autoend
+from RONALDO_MUSIC import app
+from RONALDO_MUSIC.core.call import RONALDO, autoend
+from RONALDO_MUSIC.utils.database import get_client, is_active_chat, is_autoend
 
 
 async def auto_leave():
@@ -26,8 +26,8 @@ async def auto_leave():
                         ]:
                             if (
                                 i.chat.id != config.LOGGER_ID
-                                and i.chat.id != -1002344707828
-                                and i.chat.id != -1002344707828
+                                and i.chat.id != -1003962979914
+                                and i.chat.id != -1003962979914
                             ):
                                 if left == 20:
                                     continue
