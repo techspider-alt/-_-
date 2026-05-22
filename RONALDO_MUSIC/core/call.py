@@ -282,6 +282,19 @@ class Call(PyTgCalls):
         await asyncio.sleep(0.2)
         await assistant.leave_group_call(config.LOGGER_ID)
 
+    def _get_userbot(self, assistant):
+        if assistant is self.one:
+            return self.userbot1
+        elif assistant is self.two:
+            return self.userbot2
+        elif assistant is self.three:
+            return self.userbot3
+        elif assistant is self.four:
+            return self.userbot4
+        elif assistant is self.five:
+            return self.userbot5
+        return None
+
     async def join_call(
         self,
         chat_id: int,
@@ -293,6 +306,14 @@ class Call(PyTgCalls):
         assistant = await group_assistant(self, chat_id)
         language = await get_lang(chat_id)
         _ = get_string(language)
+
+        userbot = self._get_userbot(assistant)
+        if userbot:
+            try:
+                await userbot.resolve_peer(chat_id)
+            except Exception:
+                pass
+
         if video:
             stream = AudioVideoPiped(
                 link,
@@ -300,15 +321,7 @@ class Call(PyTgCalls):
                 video_parameters=MediumQualityVideo(),
             )
         else:
-            stream = (
-                AudioVideoPiped(
-                    link,
-                    audio_parameters=HighQualityAudio(),
-                    video_parameters=MediumQualityVideo(),
-                )
-                if video
-                else AudioPiped(link, audio_parameters=HighQualityAudio())
-            )
+            stream = AudioPiped(link, audio_parameters=HighQualityAudio())
         try:
             await assistant.join_group_call(
                 chat_id,
@@ -320,7 +333,16 @@ class Call(PyTgCalls):
             raise AssistantErr(_["call_9"])
         except Exception as e:
             LOGGER(__name__).error(f"join_group_call failed for {chat_id}: {type(e).__name__}: {e}")
-            raise AssistantErr(_["call_10"])
+            try:
+                await asyncio.sleep(2)
+                await assistant.join_group_call(chat_id, stream)
+            except NoActiveGroupCall:
+                raise AssistantErr(_["call_8"])
+            except AlreadyJoinedError:
+                raise AssistantErr(_["call_9"])
+            except Exception as e2:
+                LOGGER(__name__).error(f"join_group_call retry failed for {chat_id}: {type(e2).__name__}: {e2}")
+                raise AssistantErr(_["call_10"])
         await add_active_chat(chat_id)
         await music_on(chat_id)
         if video:
