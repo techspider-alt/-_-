@@ -29,12 +29,11 @@ def generate_qr_code(text):
 
 
 @app.on_message(filters.command("qr"))
-def qr_handler(client, message: Message):
-    # Extracting the text passed after the command
+async def qr_handler(client, message: Message):
     command_text = message.command
     if len(command_text) > 1:
         input_text = " ".join(command_text[1:])
         qr_image = generate_qr_code(input_text)
-        message.reply_photo(qr_image, caption="Here's your QR Code")
+        await message.reply_photo(qr_image, caption="Here's your QR Code")
     else:
-        message.reply_text("Please provide the text for the QR code after the command. Example usage: /qr text")
+        await message.reply_text("Please provide the text for the QR code after the command. Example usage: /qr text")
