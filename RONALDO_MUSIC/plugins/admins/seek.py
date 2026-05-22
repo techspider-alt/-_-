@@ -2,7 +2,7 @@ from pyrogram import filters
 from pyrogram.types import Message
 
 from RONALDO_MUSIC import YouTube, app
-from RONALDO_MUSIC.core.call import NOBITA
+from RONALDO_MUSIC.core.call import RONALDO
 from RONALDO_MUSIC.misc import db
 from RONALDO_MUSIC.utils import AdminRightsCheck, seconds_to_min
 from RONALDO_MUSIC.utils.inline import close_markup
@@ -56,7 +56,7 @@ async def seek_comm(cli, message: Message, _, chat_id):
     if "index_" in file_path:
         file_path = playing[0]["vidid"]
     try:
-        await NOBITA.seek_stream(
+        await RONALDO.seek_stream(
             chat_id,
             file_path,
             seconds_to_min(to_seek),

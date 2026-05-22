@@ -6,7 +6,7 @@ import asyncio
 from pyrogram import filters
 from pyrogram.enums import ChatMemberStatus
 from RONALDO_MUSIC import app
-from RONALDO_MUSIC.utils.NOBITA_ban import admin_filter
+from RONALDO_MUSIC.utils.RONALDO_ban import admin_filter
 from RONALDO_MUSIC.utils.database import get_assistant
 
 links = {}

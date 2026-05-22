@@ -6,7 +6,7 @@ from pyrogram.types import InlineKeyboardMarkup, Message
 
 import config
 from RONALDO_MUSIC import app
-from RONALDO_MUSIC.core.call import NOBITA
+from RONALDO_MUSIC.core.call import RONALDO
 from RONALDO_MUSIC.utils import bot_sys_stats
 from RONALDO_MUSIC.utils.decorators.language import language
 from RONALDO_MUSIC.utils.inline.extras import botplaylist_markup
@@ -26,7 +26,7 @@ async def ping_com(client, message: Message, _):
 
     start = datetime.now()
     try:
-        pytgping = await NOBITA.ping()
+        pytgping = await RONALDO.ping()
     except Exception:
         pytgping = 0
 

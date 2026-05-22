@@ -161,7 +161,27 @@ async def get_thumb(videoid):
         start_x = 150
         end_x = 1130
         line_y = 670
-        draw.line([(start_x, line_y), (end_x, line_y)], fill="white", width=4)
+        # Grey background line
+        draw.line([(start_x, line_y), (end_x, line_y)], fill=(180, 180, 180, 200), width=4)
+        # Glowing red played portion
+        dot_x = start_x + 12
+        draw.line([(start_x, line_y), (dot_x, line_y)], fill=(255, 50, 80), width=4)
+        # Dot on the line
+        dot_r = 9
+        draw.ellipse(
+            [(dot_x - dot_r, line_y - dot_r), (dot_x + dot_r, line_y + dot_r)],
+            fill=(255, 50, 80),
+            outline=(255, 255, 255),
+        )
+        # Stylish 𝗥𝗢𝗡𝗔𝗟𝗗𝗢 label above the dot
+        ronaldo_label = "𝗥𝗢𝗡𝗔𝗟𝗗𝗢 ♫"
+        try:
+            lbl_bbox = draw.textbbox((0, 0), ronaldo_label, font=bold_font)
+            lbl_w = lbl_bbox[2] - lbl_bbox[0]
+        except AttributeError:
+            lbl_w, _ = draw.textsize(ronaldo_label, font=bold_font)
+        label_x = max(start_x, dot_x - lbl_w // 2)
+        draw.text((label_x, 628), ronaldo_label, fill=(255, 50, 80), font=bold_font)
         try:
             dur_bbox = draw.textbbox((0, 0), duration, font=bold_font)
             dur_w = dur_bbox[2] - dur_bbox[0]

@@ -1,7 +1,7 @@
 from pyrogram import  filters
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 
-from RONALDO_MUSIC.utils.NOBITA_font import Fonts
+from RONALDO_MUSIC.utils.RONALDO_font import Fonts
 from RONALDO_MUSIC import app
 
 @app.on_message(filters.command(["font", "fonts"]))

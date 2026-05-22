@@ -132,4 +132,4 @@ async def quiz_stop(client, message):
             pass
 
 
-            # MADE BY NOBITA ONLY FOR AKSHIT 😊
+            # MADE BY RONALDO ONLY FOR AKSHIT 😊

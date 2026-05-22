@@ -1,4 +1,4 @@
-from RONALDO_MUSIC.core.bot import NOBITA
+from RONALDO_MUSIC.core.bot import RONALDO
 from RONALDO_MUSIC.core.dir import dirr
 from RONALDO_MUSIC.core.git import git
 from RONALDO_MUSIC.core.userbot import Userbot
@@ -12,7 +12,7 @@ git()
 dbb()
 heroku()
 
-app = NOBITA()
+app = RONALDO()
 api = SafoneAPI()
 userbot = Userbot()
 

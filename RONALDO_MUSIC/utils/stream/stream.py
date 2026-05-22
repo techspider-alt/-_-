@@ -7,7 +7,7 @@ from pyrogram.types import InlineKeyboardMarkup
 
 import config
 from RONALDO_MUSIC import Carbon, YouTube, app
-from RONALDO_MUSIC.core.call import NOBITA
+from RONALDO_MUSIC.core.call import RONALDO
 from RONALDO_MUSIC.misc import db
 from RONALDO_MUSIC.utils.database import add_active_video_chat, is_active_chat
 from RONALDO_MUSIC.utils.exceptions import AssistantErr
@@ -17,7 +17,7 @@ from RONALDO_MUSIC.utils.inline import (
     stream_markup,
     telegram_markup,
 )
-from RONALDO_MUSIC.utils.pastebin import NOBITABin
+from RONALDO_MUSIC.utils.pastebin import RONALDOBin
 from RONALDO_MUSIC.utils.stream.queue import put_queue, put_queue_index
 from RONALDO_MUSIC.utils.thumbnails import get_thumb
 
@@ -38,7 +38,7 @@ async def stream(
     if not result:
         return
     if forceplay:
-        await NOBITA.force_stop_stream(chat_id)
+        await RONALDO.force_stop_stream(chat_id)
     if streamtype == "playlist":
         msg = f"{_['play_19']}\n\n"
         count = 0
@@ -90,7 +90,7 @@ async def stream(
                         )
                     except Exception:
                         raise AssistantErr(_["play_14"])
-                await NOBITA.join_call(
+                await RONALDO.join_call(
                     chat_id,
                     original_chat_id,
                     file_path,
@@ -127,7 +127,7 @@ async def stream(
         if count == 0:
             return
         else:
-            link = await NOBITABin(msg)
+            link = await RONALDOBin(msg)
             lines = msg.count("\n")
             if lines >= 17:
                 car = os.linesep.join(msg.split(os.linesep)[:17])
@@ -181,7 +181,7 @@ async def stream(
         else:
             if not forceplay:
                 db[chat_id] = []
-            await NOBITA.join_call(
+            await RONALDO.join_call(
                 chat_id,
                 original_chat_id,
                 file_path,
@@ -241,7 +241,7 @@ async def stream(
         else:
             if not forceplay:
                 db[chat_id] = []
-            await NOBITA.join_call(chat_id, original_chat_id, file_path, video=None)
+            await RONALDO.join_call(chat_id, original_chat_id, file_path, video=None)
             await put_queue(
                 chat_id,
                 original_chat_id,
@@ -293,7 +293,7 @@ async def stream(
         else:
             if not forceplay:
                 db[chat_id] = []
-            await NOBITA.join_call(chat_id, original_chat_id, file_path, video=status)
+            await RONALDO.join_call(chat_id, original_chat_id, file_path, video=status)
             await put_queue(
                 chat_id,
                 original_chat_id,
@@ -349,7 +349,7 @@ async def stream(
             n, file_path = await YouTube.video(link)
             if n == 0:
                 raise AssistantErr(_["str_3"])
-            await NOBITA.join_call(
+            await RONALDO.join_call(
                 chat_id,
                 original_chat_id,
                 file_path,
@@ -407,7 +407,7 @@ async def stream(
         else:
             if not forceplay:
                 db[chat_id] = []
-            await NOBITA.join_call(
+            await RONALDO.join_call(
                 chat_id,
                 original_chat_id,
                 link,

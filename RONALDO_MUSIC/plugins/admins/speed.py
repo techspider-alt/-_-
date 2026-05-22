@@ -2,7 +2,7 @@ from pyrogram import filters
 from pyrogram.types import Message
 
 from RONALDO_MUSIC import app
-from RONALDO_MUSIC.core.call import NOBITA
+from RONALDO_MUSIC.core.call import RONALDO
 from RONALDO_MUSIC.misc import SUDOERS, db
 from RONALDO_MUSIC.utils import AdminRightsCheck
 from RONALDO_MUSIC.utils.database import is_active_chat, is_nonadmin_chat
@@ -94,7 +94,7 @@ async def del_back_playlist(client, CallbackQuery, _):
         text=_["admin_32"].format(CallbackQuery.from_user.mention),
     )
     try:
-        await NOBITA.speedup_stream(
+        await RONALDO.speedup_stream(
             chat_id,
             file_path,
             speed,

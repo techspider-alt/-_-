@@ -304,7 +304,10 @@ class Call(PyTgCalls):
             await add_active_video_chat(chat_id)
         if await is_autoend():
             counter[chat_id] = {}
-            users = len(await assistant.get_participants(chat_id))
+            try:
+                users = len(await assistant.get_participants(chat_id))
+            except Exception:
+                users = 0
             if users == 1:
                 autoend[chat_id] = datetime.now() + timedelta(minutes=1)
 
@@ -569,4 +572,4 @@ class Call(PyTgCalls):
             c.on_stream_end()(stream_end_handler1)
 
 
-NOBITA = Call()
+RONALDO = Call()

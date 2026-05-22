@@ -14,7 +14,7 @@ from pyrogram import filters
 load_dotenv()
 
 from RONALDO_MUSIC import app
-from RONALDO_MUSIC.core.call import NOBITA
+from RONALDO_MUSIC.core.call import RONALDO
 from RONALDO_MUSIC.misc import db
 from RONALDO_MUSIC.utils.database import get_assistant, get_authuser_names, get_cmode
 from RONALDO_MUSIC.utils.decorators import ActualAdminCB, AdminActual, language
@@ -70,7 +70,7 @@ async def restartbot(client, message: Message, _):
     await asyncio.sleep(1)
     try:
         db[message.chat.id] = []
-        await NOBITA.stop_stream_force(message.chat.id)
+        await RONALDO.stop_stream_force(message.chat.id)
     except:
         pass
     userbot = await get_assistant(message.chat.id)
@@ -97,7 +97,7 @@ async def restartbot(client, message: Message, _):
             pass
         try:
             db[chat_id] = []
-            await NOBITA.stop_stream_force(chat_id)
+            await RONALDO.stop_stream_force(chat_id)
         except:
             pass
     return await mystic.edit_text(_["reload_5"].format(app.mention))

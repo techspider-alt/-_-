@@ -2,7 +2,7 @@ import asyncio
 from pyrogram.enums import ChatType, ChatMemberStatus
 from RONALDO_MUSIC import app
 from pyrogram import filters
-from RONALDO_MUSIC.utils.NOBITA_ban import admin_filter
+from RONALDO_MUSIC.utils.RONALDO_ban import admin_filter
 
 
 

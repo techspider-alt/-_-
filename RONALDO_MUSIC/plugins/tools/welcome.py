@@ -16,7 +16,7 @@ from asyncio import sleep
 from pyrogram import filters, Client, enums
 from pyrogram.enums import ParseMode
 from logging import getLogger
-from RONALDO_MUSIC.utils.NOBITA_ban import admin_filter
+from RONALDO_MUSIC.utils.RONALDO_ban import admin_filter
 from PIL import ImageDraw, Image, ImageFont, ImageChops
 from pyrogram import *
 from pyrogram.types import *

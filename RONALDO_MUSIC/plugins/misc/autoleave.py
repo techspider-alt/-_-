@@ -5,7 +5,7 @@ from pyrogram.enums import ChatType
 
 import config
 from RONALDO_MUSIC import app
-from RONALDO_MUSIC.core.call import NOBITA, autoend
+from RONALDO_MUSIC.core.call import RONALDO, autoend
 from RONALDO_MUSIC.utils.database import get_client, is_active_chat, is_autoend
 
 
@@ -59,7 +59,7 @@ async def auto_end():
                     continue
                 autoend[chat_id] = {}
                 try:
-                    await NOBITA.stop_stream(chat_id)
+                    await RONALDO.stop_stream(chat_id)
                 except:
                     continue
                 try:

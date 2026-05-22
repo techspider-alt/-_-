@@ -10,7 +10,7 @@ SESSION_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..
 os.makedirs(SESSION_DIR, exist_ok=True)
 
 
-class NOBITA(Client):
+class RONALDO(Client):
     def __init__(self):
         LOGGER(__name__).info(f"Starting Bot...")
         super().__init__(

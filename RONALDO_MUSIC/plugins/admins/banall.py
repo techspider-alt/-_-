@@ -2,7 +2,7 @@ from RONALDO_MUSIC import app
 from config import OWNER_ID
 from pyrogram import filters, enums
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
-from RONALDO_MUSIC.utils.NOBITA_ban import admin_filter
+from RONALDO_MUSIC.utils.RONALDO_ban import admin_filter
 from RONALDO_MUSIC.misc import SUDOERS
 
 BOT_ID = app.me.id  # Corrected this line
