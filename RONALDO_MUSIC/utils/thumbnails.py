@@ -17,7 +17,7 @@ from PIL import Image, ImageDraw, ImageFont, ImageFilter, ImageEnhance
 from youtubesearchpython.__future__ import VideosSearch
 
 def clear(text):
-    return re.sub("\s+", " ", text).strip()
+    return re.sub(r"\s+", " ", text).strip()
 
 def changeImageSize(maxWidth, maxHeight, image):
     widthRatio = maxWidth / image.size[0]
@@ -36,7 +36,7 @@ async def get_thumb(videoid):
         for result in (await results.next())["result"]:
             try:
                 title = result["title"]
-                title = re.sub("\W+", " ", title)
+                title = re.sub(r"\W+", " ", title)
                 title = title.title()
             except:
                 title = "Unsupported Title"
