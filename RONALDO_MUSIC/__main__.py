@@ -33,6 +33,25 @@ try:
     _ta.ToAsync = _PatchedToAsync
 except Exception:
     pass
+
+try:
+    # 3. FFprobe -nostdin fix: ffprobe 7.1.1 does NOT support -nostdin flag.
+    #    Patch build_command to only add -nostdin for ffmpeg, not ffprobe.
+    import pytgcalls.ffmpeg as _ff
+
+    _orig_build_command = _ff.build_command
+
+    def _patched_build_command(name, ffmpeg_parameters, path, stream_parameters,
+                               before_commands=None, headers=None, is_livestream=False):
+        cmd = _orig_build_command(name, ffmpeg_parameters, path, stream_parameters,
+                                  before_commands, headers, is_livestream)
+        if name == 'ffprobe' and '-nostdin' in cmd:
+            cmd = [c for c in cmd if c != '-nostdin']
+        return cmd
+
+    _ff.build_command = _patched_build_command
+except Exception:
+    pass
 # ─────────────────────────────────────────────────────────────────────────
 
 import httpx
