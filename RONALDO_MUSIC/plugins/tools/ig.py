@@ -33,8 +33,11 @@ async def download_instagram_video(client, message):
             await a.edit(f)
         except Exception:
             await message.reply_text(f)
-            return await app.send_message(LOGGER_ID, f)
-        return await app.send_message(LOGGER_ID, f)
+        try:
+            await app.send_message(LOGGER_ID, f)
+        except Exception:
+            pass
+        return
     if not result["error"]:
         video_url = data["url"]
         duration = data["duration"]
