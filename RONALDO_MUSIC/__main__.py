@@ -2,6 +2,39 @@ import asyncio
 import importlib
 import time
 
+# ── Patch ntgcalls/pytgcalls compatibility for ntgcalls 1.2.0 ─────────────
+try:
+    # 1. InputMode enum: Shell→SHELL, File→FILE
+    from ntgcalls import InputMode as _IM
+    if not hasattr(_IM, 'SHELL') and hasattr(_IM, 'Shell'):
+        _IM.SHELL = _IM.Shell
+    if not hasattr(_IM, 'FILE') and hasattr(_IM, 'File'):
+        _IM.FILE = _IM.File
+    if hasattr(_IM, 'SHELL') and not hasattr(_IM, 'Shell'):
+        _IM.Shell = _IM.SHELL
+    if hasattr(_IM, 'FILE') and not hasattr(_IM, 'File'):
+        _IM.File = _IM.FILE
+except Exception:
+    pass
+
+try:
+    # 2. ToAsync: ntgcalls binding methods return asyncio.Future in 1.2.0
+    #    Patch ToAsync._run to await Future/coroutine results directly.
+    import asyncio as _asyncio
+    import pytgcalls.to_async as _ta
+
+    class _PatchedToAsync(_ta.ToAsync):
+        async def _run(self):
+            result = self._function(*self._function_args)
+            if _asyncio.isfuture(result) or _asyncio.iscoroutine(result):
+                return await result
+            return result
+
+    _ta.ToAsync = _PatchedToAsync
+except Exception:
+    pass
+# ─────────────────────────────────────────────────────────────────────────
+
 import httpx
 from pyrogram import idle
 from pyrogram.errors import FloodWait
