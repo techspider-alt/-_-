@@ -85,8 +85,7 @@ async def stream(
                     )
                 except Exception:
                     try:
-                        
-                        file_path, direct = await YTB.download(
+                        file_path, direct = await YouTube.download(
                             vidid, mystic, video=status, videoid=True
                         )
                     except Exception:
@@ -155,7 +154,7 @@ async def stream(
             )
         except Exception:
             try:
-                file_path, direct = await YTB.download(
+                file_path, direct = await YouTube.download(
                     vidid, mystic, videoid=True, video=status
                     )
             except Exception:
@@ -350,7 +349,7 @@ async def stream(
             n, file_path = await YouTube.video(link)
             if n == 0:
                 raise AssistantErr(_["str_3"])
-            await RAUSHAN.join_call(
+            await NOBITA.join_call(
                 chat_id,
                 original_chat_id,
                 file_path,
@@ -408,7 +407,7 @@ async def stream(
         else:
             if not forceplay:
                 db[chat_id] = []
-            await RAUSHAN.join_call(
+            await NOBITA.join_call(
                 chat_id,
                 original_chat_id,
                 link,
