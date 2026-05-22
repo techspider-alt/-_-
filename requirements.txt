@@ -15,7 +15,7 @@ motor==3.3.2
 Pillow
 psutil
 py-tgcalls==1.2.1
-ntgcalls==1.0.7
+ntgcalls==1.2.1
 pykeyboard
 pymongo==4.6.3
 python-dotenv
@@ -59,7 +59,7 @@ heroku3
 httpx[http2]
 motor==3.3.2
 MukeshAPI
-ntgcalls==1.0.7
+ntgcalls==1.2.1
 Pillow
 psutil
 py-tgcalls==1.2.1
@@ -117,3 +117,4 @@ MukeshAPI
 SafoneAPI==1.0.65
 search_engine_parser
 telethon==1.33.1
+ntgcalls==1.2.1
