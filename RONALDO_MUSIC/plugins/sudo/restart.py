@@ -117,10 +117,14 @@ async def update_(client, message, _):
             return
         except Exception as err:
             await response.edit(f"{nrs.text}\n\n{_['server_9']}")
-            return await app.send_message(
-                chat_id=config.LOGGER_ID,
-                text=_["server_10"].format(err),
-            )
+            try:
+                await app.send_message(
+                    chat_id=config.LOGGER_ID,
+                    text=_["server_10"].format(err),
+                )
+            except Exception:
+                pass
+            return
     else:
         os.system("pip3 install -r requirements.txt")
         os.system(f"kill -9 {os.getpid()} && bash start")
