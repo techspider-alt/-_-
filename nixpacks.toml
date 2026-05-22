@@ -1,0 +1,11 @@
+[phases.setup]
+nixPkgs = ["python312", "ffmpeg", "git", "wget", "curl"]
+
+[phases.install]
+cmds = [
+    "pip install --no-cache-dir --upgrade pip",
+    "pip install --no-cache-dir -r requirements.txt"
+]
+
+[start]
+cmd = "python3 -m RONALDO_MUSIC"
