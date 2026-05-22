@@ -61,13 +61,13 @@ async def init():
     await NOBITA.start()
     await NOBITA.decorators()
     LOGGER("RONALDO_MUSIC").info(
-        "╔═════ஜ۩۞۩ஜ════╗\n  ♨️𝗠𝗔𝗗𝗘 𝗕𝗬 ​˹ 𝐑 𝐎 𝐍 𝐀 𝐋 𝐃 𝐎 ❤️‍🔥♨️\n╚═════ஜ۩۞۩ஜ════╝"
+        "╔═════ஜ۩۞۩ஜ════╗\n  ♨️𝗠𝗔𝗗𝗘 𝗕𝗬 ˹ 𝐑 𝐨 𝐧 𝛂 𝐥 𝐝 𝐨  ꧊𝆅  ❤️‍🔥♨️\n╚═════ஜ۩۞۩ஜ════╝"
     )
     await idle()
     await app.stop()
     await userbot.stop()
     LOGGER("RONALDO_MUSIC").info(
-        "╔═════ஜ۩۞۩ஜ════╗\n  ♨️𝗠𝗔𝗗𝗘 𝗕𝗬 ˹ 𝐑 𝐎 𝐍 𝐀 𝐋 𝐃 𝐎 ❤️‍🔥♨️\n╚═════ஜ۩۞۩ஜ════╝"
+        "╔═════ஜ۩۞۩ஜ════╗\n  ♨️𝗠𝗔𝗗𝗘 𝗕𝗬 ˹ 𝐑 𝐨 𝐧 𝛂 𝐥 𝐝 𝐨  ꧊𝆅  ❤️‍🔥♨️\n╚═════ஜ۩۞۩ஜ════╝"
     )
 
 
