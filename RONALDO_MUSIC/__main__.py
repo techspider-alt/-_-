@@ -1,6 +1,5 @@
 import asyncio
 import importlib
-import time
 
 from pyrogram import idle
 from pyrogram.errors import FloodWait
@@ -12,6 +11,27 @@ from RONALDO_MUSIC.misc import sudo
 from RONALDO_MUSIC.plugins import ALL_MODULES
 from RONALDO_MUSIC.utils.database import get_banned_users, get_gbanned
 from config import BANNED_USERS
+
+
+async def _start_bot_with_retry(max_retries=10):
+    """Start bot client, auto-waiting out any FloodWait. No crashes."""
+    for attempt in range(1, max_retries + 1):
+        try:
+            await app.start()
+            LOGGER(__name__).info("Bot client started successfully.")
+            return True
+        except FloodWait as e:
+            wait_sec = e.value + 5
+            LOGGER(__name__).warning(
+                f"[FloodWait] Telegram rate limit — waiting {wait_sec}s "
+                f"(attempt {attempt}/{max_retries})..."
+            )
+            await asyncio.sleep(wait_sec)
+        except Exception as ex:
+            LOGGER(__name__).error(f"Bot start failed: {type(ex).__name__}: {ex}")
+            raise
+    LOGGER(__name__).error("Bot failed to start after all retries.")
+    return False
 
 
 async def init():
@@ -37,21 +57,8 @@ async def init():
     except Exception:
         pass
 
-    for attempt in range(5):
-        try:
-            await app.start()
-            break
-        except FloodWait as e:
-            wait_sec = e.value + 5
-            LOGGER(__name__).warning(
-                f"Telegram FloodWait: waiting {wait_sec} seconds before retry (attempt {attempt + 1}/5)..."
-            )
-            await asyncio.sleep(wait_sec)
-        except Exception as ex:
-            LOGGER(__name__).error(f"Failed to start bot: {ex}")
-            raise
-    else:
-        LOGGER(__name__).error("Failed to start bot after 5 FloodWait retries. Exiting.")
+    started = await _start_bot_with_retry()
+    if not started:
         return
 
     for all_module in ALL_MODULES:
