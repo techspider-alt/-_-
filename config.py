@@ -1,4 +1,5 @@
 import re
+import sys
 from os import getenv
 
 from dotenv import load_dotenv
@@ -6,74 +7,76 @@ from pyrogram import filters
 
 load_dotenv()
 
+
+def _safe_int(key, default=None):
+    val = getenv(key)
+    if val is None:
+        if default is None:
+            print(f"[ERROR] Required variable '{key}' is not set!", file=sys.stderr)
+            sys.exit(1)
+        return default
+    try:
+        return int(str(val).split(",")[0].strip())
+    except (ValueError, TypeError):
+        print(f"[ERROR] Variable '{key}' must be an integer, got: {val}", file=sys.stderr)
+        sys.exit(1)
+
+
 # Get this value from my.telegram.org/apps
-API_ID = int(getenv("API_ID"))
+API_ID = _safe_int("API_ID")
 API_HASH = getenv("API_HASH")
 
 # Get your token from @BotFather on Telegram.
 BOT_TOKEN = getenv("BOT_TOKEN")
-# -------------------------------------------------------
-OWNER_USERNAME = getenv("OWNER_USERNAME","ll_NOBITA_DEFAULTERS_ll")
-# --------------------------------------------------------
-BOT_USERNAME = getenv("BOT_USERNAME","NOBITA_MUSIC_ROBOT")
-# --------------------------------------------------------
-BOT_NAME = getenv("BOT_NAME")
-# ---------------------------------------------------------
 
+OWNER_USERNAME = getenv("OWNER_USERNAME", "RONALDO_MUSIC_BOT")
+BOT_USERNAME = getenv("BOT_USERNAME", "RONALDO_MUSIC_ROBOT")
+BOT_NAME = getenv("BOT_NAME", "RONALDO MUSIC")
 
 # Get your mongo url from cloud.mongodb.com
 MONGO_DB_URI = getenv("MONGO_DB_URI", None)
 
-DURATION_LIMIT_MIN = int(getenv("DURATION_LIMIT", 17000))
+DURATION_LIMIT_MIN = _safe_int("DURATION_LIMIT", 17000)
 
 # Chat id of a group for logging bot's activities
-LOGGER_ID = int(getenv("LOGGER_ID", -1002344707828))
+LOGGER_ID = _safe_int("LOGGER_ID", -1002344707828)
 
-# Get this value from @PURVI_HELP_BOT on Telegram by /id
-OWNER_ID = int(getenv("OWNER_ID", 5536473064))
+# Your Telegram user ID
+OWNER_ID = _safe_int("OWNER_ID", 5536473064)
 
 
-# make your bots privacy from telegra.ph and put your url here 
-PRIVACY_LINK = getenv("PRIVACY_LINK", "https://graph.org/PRIVACY-FOR-TEAM-PURVI-BOTS-09-18")
+# Bot privacy link
+PRIVACY_LINK = getenv("PRIVACY_LINK", "https://t.me/RONALDO_SUPPORT01")
 
-## Fill these variables if you're deploying on heroku.
-# Your heroku app name
-HEROKU_APP_NAME = getenv("HEROKU_APP_NAME")
-# Get it from http://dashboard.heroku.com/account
-HEROKU_API_KEY = getenv("HEROKU_API_KEY")
+# Heroku vars (optional — only needed if deploying on Heroku)
+HEROKU_APP_NAME = getenv("HEROKU_APP_NAME", None)
+HEROKU_API_KEY = getenv("HEROKU_API_KEY", None)
 
 UPSTREAM_REPO = getenv(
     "UPSTREAM_REPO",
-    "https://github.com/iamnobita09/NOBITA_MUSIC",
+    "https://github.com/mystricman0-cell/DARK-MUSICS",
 )
 UPSTREAM_BRANCH = getenv("UPSTREAM_BRANCH", "main")
-GIT_TOKEN = getenv(
-    "GIT_TOKEN", None
-)  # Fill this variable if your upstream repository is private
+GIT_TOKEN = getenv("GIT_TOKEN", None)
 
-SUPPORT_CHANNEL = getenv("SUPPORT_CHANNEL", "https://t.me/NOB1TA_SUPPORT")
-SUPPORT_CHAT = getenv("SUPPORT_CHAT", "https://t.me/+WLTHgUAvkYVmNTg9")
+SUPPORT_CHANNEL = getenv("SUPPORT_CHANNEL", "https://t.me/RONALDO_SUPPORT01")
+SUPPORT_CHAT = getenv("SUPPORT_CHAT", "https://t.me/RONALDO_SUPPORT01")
 
-# Set this to True if you want the assistant to automatically leave chats after an interval
+# Auto leave assistant after interval
 AUTO_LEAVING_ASSISTANT = bool(getenv("AUTO_LEAVING_ASSISTANT", False))
 
-
-# Get this credentials from https://developer.spotify.com/dashboard
+# Spotify credentials from https://developer.spotify.com/dashboard
 SPOTIFY_CLIENT_ID = getenv("SPOTIFY_CLIENT_ID", None)
 SPOTIFY_CLIENT_SECRET = getenv("SPOTIFY_CLIENT_SECRET", None)
 
+# Maximum limit for fetching playlist's tracks
+PLAYLIST_FETCH_LIMIT = _safe_int("PLAYLIST_FETCH_LIMIT", 25)
 
-# Maximum limit for fetching playlist's track from youtube, spotify, apple links.
-PLAYLIST_FETCH_LIMIT = int(getenv("PLAYLIST_FETCH_LIMIT", 25))
+# Telegram file size limits (in bytes)
+TG_AUDIO_FILESIZE_LIMIT = _safe_int("TG_AUDIO_FILESIZE_LIMIT", 104857600)
+TG_VIDEO_FILESIZE_LIMIT = _safe_int("TG_VIDEO_FILESIZE_LIMIT", 1073741824)
 
-
-# Telegram audio and video file size limit (in bytes)
-TG_AUDIO_FILESIZE_LIMIT = int(getenv("TG_AUDIO_FILESIZE_LIMIT", 104857600))
-TG_VIDEO_FILESIZE_LIMIT = int(getenv("TG_VIDEO_FILESIZE_LIMIT", 1073741824))
-# Checkout https://www.gbmb.org/mb-to-bytes for converting mb to bytes
-
-
-# Get your pyrogram v2 session from @StringFatherBot on Telegram
+# Pyrogram v2 session strings (get from @StringFatherBot)
 STRING1 = getenv("STRING_SESSION", None)
 STRING2 = getenv("STRING_SESSION2", None)
 STRING3 = getenv("STRING_SESSION3", None)
@@ -115,14 +118,11 @@ def time_to_seconds(time):
 DURATION_LIMIT = int(time_to_seconds(f"{DURATION_LIMIT_MIN}:00"))
 
 
-if SUPPORT_CHANNEL:
-    if not re.match("(?:http|https)://", SUPPORT_CHANNEL):
-        raise SystemExit(
-            "[ERROR] - Your SUPPORT_CHANNEL url is wrong. Please ensure that it starts with https://"
-        )
+# Validate URL fields gracefully (warn only, don't crash)
+def _validate_url(key, val):
+    if val and not re.match("(?:http|https)://", str(val)):
+        print(f"[WARNING] {key} does not start with https:// — it may not work correctly.")
 
-if SUPPORT_CHAT:
-    if not re.match("(?:http|https)://", SUPPORT_CHAT):
-        raise SystemExit(
-            "[ERROR] - Your SUPPORT_CHAT url is wrong. Please ensure that it starts with https://"
-        )
+
+_validate_url("SUPPORT_CHANNEL", SUPPORT_CHANNEL)
+_validate_url("SUPPORT_CHAT", SUPPORT_CHAT)
