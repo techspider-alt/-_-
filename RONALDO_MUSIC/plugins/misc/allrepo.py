@@ -51,7 +51,7 @@ def get_all_repository_info(github_username):
 
 [
                                 InlineKeyboardButton(
-                                    "𝖩ᴏɪɴ 𝖳ᴇᴀᴍ Nᴏʙɪᴛᴀ 𝖡ᴏᴛs",
-                                    url="t.me/NOB1TA_SUPPORT"
+                                    "𝖩ᴏɪɴ 𝐑 𝐎 𝐍 𝐀 𝐋 𝐃 𝐎 𝖡ᴏᴛs",
+                                    url="t.me/TelephoneVirus"
                                 )
 ]
