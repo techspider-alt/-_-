@@ -3,7 +3,7 @@
 
 # This source code is under MIT License 📜 Unauthorized forking, importing, or using this code without giving proper credit will result in legal action ⚠️
  
-# 📩 DM for permission : @TelephoneVirus
+# 📩 DM for permission : @rchiex
 # =======================================================
 
 
@@ -141,8 +141,8 @@ async def get_thumb(videoid):
 # ======================================================
 # ©️ 2025-26 All Rights Reserved by Nobita Bots 😎
 
-# 🧑‍💻 Developer : @TelephoneVirus
+# 🧑‍💻 Developer : @rchiex
 # 🔗 Source link : https://github.com/iamnobita09/RONALDO_MUSIC.git
-# 📢 Telegram channel : https://t.me/TelephoneVirus
+# 📢 Telegram channel : https://t.me/rchiex
 # =======================================================
         
