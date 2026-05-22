@@ -13,15 +13,15 @@ from pyrogram.types import InlineKeyboardButton,InlineKeyboardMarkup
 ######### sticker id
 
 @app.on_message(filters.command("st"))
-def generate_sticker(client, message):
+async def generate_sticker(client, message):
     if len(message.command) == 2:
         sticker_id = message.command[1]
         try:
-            client.send_sticker(message.chat.id, sticker=sticker_id)
+            await client.send_sticker(message.chat.id, sticker=sticker_id)
         except Exception as e:
-            message.reply_text(f"Error: {e}")
+            await message.reply_text(f"Error: {e}")
     else:
-        message.reply_text("Please provide a sticker ID after /st command.")
+        await message.reply_text("Please provide a sticker ID after /st command.")
 
 
 #---------
