@@ -61,14 +61,16 @@ async def brah3(app: app, message: Message):
 
 
 @app.on_message(filters.command("math", prefixes="/"))
-def calculate_math(client, message):
+async def calculate_math(client, message):
+    if len(message.text.split("/math ", 1)) < 2:
+        return await message.reply("Usage: /math 2+2")
     expression = message.text.split("/math ", 1)[1]
     try:
         result = eval(expression)
         response = f"ᴛʜᴇ ʀᴇsᴜʟᴛ ɪs : {result}"
-    except:
+    except Exception:
         response = "ɪɴᴠᴀʟɪᴅ ᴇxᴘʀᴇssɪᴏɴ"
-    message.reply(response)
+    await message.reply(response)
 
 
 @app.on_message(filters.command(["spg"], ["/", "!", "."]))
