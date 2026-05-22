@@ -1,6 +1,8 @@
 import asyncio
 import importlib
+import time
 
+import httpx
 from pyrogram import idle
 from pyrogram.errors import FloodWait
 
@@ -13,24 +15,72 @@ from RONALDO_MUSIC.utils.database import get_banned_users, get_gbanned
 from config import BANNED_USERS
 
 
-async def _start_bot_with_retry(max_retries=10):
-    """Start bot client, auto-waiting out any FloodWait. No crashes."""
+def _tg_send(text: str):
+    """Send a message to LOGGER_ID via raw HTTP — works even before Pyrogram starts."""
+    try:
+        token = config.BOT_TOKEN
+        chat_id = config.LOGGER_ID
+        if not token or not chat_id:
+            return
+        httpx.post(
+            f"https://api.telegram.org/bot{token}/sendMessage",
+            json={"chat_id": chat_id, "text": text, "parse_mode": "HTML"},
+            timeout=10,
+        )
+    except Exception:
+        pass
+
+
+async def _start_bot_with_retry(max_retries=15):
+    """
+    Start bot client, auto-waiting out any FloodWait.
+    - Logs countdown to console every 30s
+    - Sends Telegram notification to logger via raw HTTP
+    - No crashes, no exit
+    """
     for attempt in range(1, max_retries + 1):
         try:
             await app.start()
-            LOGGER(__name__).info("Bot client started successfully.")
+            LOGGER(__name__).info("✅ Bot client started successfully.")
             return True
+
         except FloodWait as e:
-            wait_sec = e.value + 5
+            wait_sec = int(e.value) + 5
+            mins, secs = divmod(wait_sec, 60)
+
             LOGGER(__name__).warning(
-                f"[FloodWait] Telegram rate limit — waiting {wait_sec}s "
-                f"(attempt {attempt}/{max_retries})..."
+                f"⏳ [FloodWait] Attempt {attempt}/{max_retries} — "
+                f"waiting {wait_sec}s ({mins}m {secs}s)..."
             )
-            await asyncio.sleep(wait_sec)
+
+            # Notify logger group via direct HTTP (no Pyrogram needed)
+            _tg_send(
+                f"⏳ <b>RONALDO MUSIC — FloodWait</b>\n\n"
+                f"Telegram rate limit encountered.\n"
+                f"⏱ Waiting: <code>{wait_sec}s ({mins}m {secs}s)</code>\n"
+                f"🔄 Attempt: {attempt}/{max_retries}\n"
+                f"⚡ Bot will auto-start after wait..."
+            )
+
+            # Wait with countdown logs every 30s
+            elapsed = 0
+            while elapsed < wait_sec:
+                chunk = min(30, wait_sec - elapsed)
+                await asyncio.sleep(chunk)
+                elapsed += chunk
+                remaining = wait_sec - elapsed
+                if remaining > 0:
+                    r_m, r_s = divmod(remaining, 60)
+                    LOGGER(__name__).info(
+                        f"⏳ FloodWait: {remaining}s remaining ({r_m}m {r_s}s)..."
+                    )
+
         except Exception as ex:
             LOGGER(__name__).error(f"Bot start failed: {type(ex).__name__}: {ex}")
             raise
+
     LOGGER(__name__).error("Bot failed to start after all retries.")
+    _tg_send("❌ <b>RONALDO MUSIC</b> — Bot failed to start after all retries!")
     return False
 
 
@@ -43,7 +93,7 @@ async def init():
         and not config.STRING5
     ):
         LOGGER(__name__).error(
-            "𝐒𝐭𝐫𝐢𝐧𝐠 𝐒𝐞𝐬𝐬𝐢𝐨𝐧 𝐍𝐨𝐭 𝐅𝐢𝐥𝐥𝐞𝐝, 𝐏𝐥𝐞𝐚𝐬𝐞 𝐅𝐢𝐥𝐥 𝐀 𝐏𝐲𝐫𝐨𝐠𝐫𝐚𝐦 V2 𝐒𝐞𝐬𝐬𝐢𝐨𝐧🤬"
+            "String Session Not Set — please fill a Pyrogram V2 session!"
         )
 
     await sudo()
@@ -64,18 +114,20 @@ async def init():
     for all_module in ALL_MODULES:
         importlib.import_module("RONALDO_MUSIC.plugins" + all_module)
     LOGGER("RONALDO_MUSIC.plugins").info("𝐀𝐥𝐥 𝐅𝐞𝐚𝐭𝐮𝐫𝐞𝐬 𝐋𝐨𝐚𝐝𝐞𝐝 𝐁𝐚𝐛𝐲🥳...")
+
     await userbot.start()
     await NOBITA.start()
     await NOBITA.decorators()
+
     LOGGER("RONALDO_MUSIC").info(
-        "╔═════ஜ۩۞۩ஜ════╗\n  ♨️𝗠𝗔𝗗𝗘 𝗕𝗬 ˹ 𝐑 𝐨 𝐧 𝛂 𝐥 𝐝 𝐨  ꧊𝆅  ❤️‍🔥♨️\n╚═════ஜ۩۞۩ஜ════╝"
+        "╔═════ஜ۩۞۩ஜ════╗\n"
+        "  ♨️ 𝗠𝗔𝗗𝗘 𝗕𝗬 ˹ 𝐑 𝐨 𝐧 𝛂 𝐥 𝐝 𝐨  ꧊𝆅  ❤️‍🔥 ♨️\n"
+        "╚═════ஜ۩۞۩ஜ════╝"
     )
     await idle()
     await app.stop()
     await userbot.stop()
-    LOGGER("RONALDO_MUSIC").info(
-        "╔═════ஜ۩۞۩ஜ════╗\n  ♨️𝗠𝗔𝗗𝗘 𝗕𝗬 ˹ 𝐑 𝐨 𝐧 𝛂 𝐥 𝐝 𝐨  ꧊𝆅  ❤️‍🔥♨️\n╚═════ஜ۩۞۩ஜ════╝"
-    )
+    LOGGER("RONALDO_MUSIC").info("Bot stopped gracefully.")
 
 
 if __name__ == "__main__":
