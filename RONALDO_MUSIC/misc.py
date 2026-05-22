@@ -1,7 +1,6 @@
 import socket
 import time
 
-import heroku3
 from pyrogram import filters
 
 import config
@@ -10,13 +9,22 @@ from RONALDO_MUSIC.core.mongo import mongodb
 from .logging import LOGGER
 
 SUDOERS = filters.user()
-
 HAPP = None
 _boot_ = time.time()
 
+try:
+    import heroku3 as _heroku3_mod
+    _heroku3_available = True
+except ImportError:
+    _heroku3_mod = None
+    _heroku3_available = False
+
 
 def is_heroku():
-    return "heroku" in socket.getfqdn()
+    try:
+        return "heroku" in socket.getfqdn()
+    except Exception:
+        return False
 
 
 XCB = [
@@ -28,9 +36,9 @@ XCB = [
     "git",
     "heroku",
     "push",
-    str(config.HEROKU_API_KEY),
+    str(config.HEROKU_API_KEY) if config.HEROKU_API_KEY else "",
     "https",
-    str(config.HEROKU_APP_NAME),
+    str(config.HEROKU_APP_NAME) if config.HEROKU_APP_NAME else "",
     "HEAD",
     "master",
 ]
@@ -43,11 +51,10 @@ def dbb():
 
 
 async def sudo():
-    global SUDOERS
     SUDOERS.add(config.OWNER_ID)
     sudoersdb = mongodb.sudoers
-    sudoers = await sudoersdb.find_one({"sudo": "sudo"})
-    sudoers = [] if not sudoers else sudoers["sudoers"]
+    sudoers_doc = await sudoersdb.find_one({"sudo": "sudo"})
+    sudoers = [] if not sudoers_doc else sudoers_doc.get("sudoers", [])
     if config.OWNER_ID not in sudoers:
         sudoers.append(config.OWNER_ID)
         await sudoersdb.update_one(
@@ -55,21 +62,19 @@ async def sudo():
             {"$set": {"sudoers": sudoers}},
             upsert=True,
         )
-    if sudoers:
-        for user_id in sudoers:
-            SUDOERS.add(user_id)
+    for user_id in sudoers:
+        SUDOERS.add(user_id)
     LOGGER(__name__).info(f"𝗦𝗨𝗗𝗢 𝗨𝗦𝗘𝗥 𝗗𝗢𝗡𝗘✨🎋.")
 
 
 def heroku():
     global HAPP
-    if is_heroku:
-        if config.HEROKU_API_KEY and config.HEROKU_APP_NAME:
-            try:
-                Heroku = heroku3.from_key(config.HEROKU_API_KEY)
-                HAPP = Heroku.app(config.HEROKU_APP_NAME)
-                LOGGER(__name__).info(f"🍟𝗛𝗘𝗥𝗢𝗞𝗨 𝗔𝗣𝗣 𝗡𝗔𝗠𝗘 𝗟𝗢𝗔𝗗......💦..")
-            except BaseException:
-                LOGGER(__name__).warning(
-                    f"🏓𝐘𝐨𝐮 𝐇𝐚𝐯𝐞 𝐍𝐨𝐭 𝐅𝐢𝐥𝐥𝐞𝐝 𝐇𝐞𝐫𝐨𝐤𝐮 𝐀𝐩𝐢 𝐊𝐞𝐲 𝐀𝐧𝐝 𝐇𝐞𝐫𝐨𝐤𝐮 𝐀𝐩𝐩 𝐍𝐚𝐦𝐞 🕊️𝐂𝐨𝐫𝐫𝐞𝐜𝐭...."
-                )
+    if not _heroku3_available:
+        return
+    try:
+        if is_heroku() and config.HEROKU_API_KEY and config.HEROKU_APP_NAME:
+            Heroku = _heroku3_mod.from_key(config.HEROKU_API_KEY)
+            HAPP = Heroku.app(config.HEROKU_APP_NAME)
+            LOGGER(__name__).info(f"🍟𝗛𝗘𝗥𝗢𝗞𝗨 𝗔𝗣𝗣 𝗡𝗔𝗠𝗘 𝗟𝗢𝗔𝗗......💦..")
+    except Exception as e:
+        LOGGER(__name__).warning(f"Heroku setup skipped: {e}")
