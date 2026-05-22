@@ -1,41 +1,42 @@
+import os
+
 from pyrogram import Client, filters
-from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, Message
-from pyrogram.errors import ChatAdminRequired, UserNotParticipant, ChatWriteForbidden
+from pyrogram.errors import ChatAdminRequired, ChatWriteForbidden, UserNotParticipant
+from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message
+
 from RONALDO_MUSIC import app
+import config
 
-#--------------------------
+MUST_JOIN = os.getenv("MUST_JOIN", None)
 
-MUST_JOIN = "@RONALDO_SUPPORT01"
-#------------------------
+
 @app.on_message(filters.incoming & filters.private, group=-1)
-async def must_join_channel(app: Client, msg: Message):
+async def must_join_channel(client: Client, msg: Message):
     if not MUST_JOIN:
+        return
+    if not msg.from_user:
         return
     try:
         try:
             await app.get_chat_member(MUST_JOIN, msg.from_user.id)
         except UserNotParticipant:
-            if MUST_JOIN.isalpha():
-                link = "https://t.me/RONALDO_SUPPORT01" + MUST_JOIN
-            else:
-                chat_info = await app.get_chat(MUST_JOIN)
-                link = chat_info.invite_link
             try:
-                await msg.reply_photo(
-                    photo="https://files.catbox.moe/72kvx7.png", caption=f"๏ ᴀᴄᴄᴏʀᴅɪɴɢ ᴛᴏ ᴍʏ ᴅᴀᴛᴀʙᴀsᴇ ʏᴏᴜ'ᴠᴇ ɴᴏᴛ ᴊᴏɪɴᴇᴅ [๏sᴜᴘᴘᴏʀᴛ๏]({link}) ʏᴇᴛ, ɪғ ʏᴏᴜ ᴡᴀɴᴛ ᴛᴏ ᴜsᴇ ᴍᴇ ᴛʜᴇɴ ᴊᴏɪɴ [๏sᴜᴘᴘᴏʀᴛ๏]({link}) ᴀɴᴅ sᴛᴀʀᴛ ᴍᴇ ᴀɢᴀɪɴ ! ",
+                chat_info = await app.get_chat(MUST_JOIN)
+                link = chat_info.invite_link or f"https://t.me/{MUST_JOIN.lstrip('@')}"
+            except Exception:
+                link = f"https://t.me/{MUST_JOIN.lstrip('@')}"
+            try:
+                await msg.reply_text(
+                    f"❍ Please join our support channel to use this bot!\n\n"
+                    f"After joining, send your command again.",
                     reply_markup=InlineKeyboardMarkup(
-                        [
-                            [
-                                InlineKeyboardButton("• ᴊᴏɪɴ •", url="https://t.me/KNIGHT_CODER01"),
-                            ],
-                            [
-                                InlineKeyboardButton("• ᴊᴏɪɴ •", url="https://t.me/RONALDO_SUPPORT01"),
-                            ]
-                        ]
-                    )
+                        [[InlineKeyboardButton("• ᴊᴏɪɴ •", url=link)]]
+                    ),
                 )
                 await msg.stop_propagation()
             except ChatWriteForbidden:
                 pass
     except ChatAdminRequired:
-        print(f"๏ ᴘʀᴏᴍᴏᴛᴇ ᴍᴇ ᴀs ᴀɴ ᴀᴅᴍɪɴ ɪɴ ᴛʜᴇ ᴍᴜsᴛ_ᴊᴏɪɴ ᴄʜᴀᴛ ๏: {MUST_JOIN} !")
+        pass
+    except Exception:
+        pass
