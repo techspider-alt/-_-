@@ -26,7 +26,7 @@ async def shell_cmd(cmd):
     return out.decode("utf-8")
 
 
-cookies_file = "SHUKLAMUSIC/assets/cookies.txt"
+cookies_file = "RONALDO_MUSIC/assets/cookies.txt"
 
 class YouTubeAPI:
     def __init__(self):
@@ -244,6 +244,7 @@ class YouTubeAPI:
         loop = asyncio.get_running_loop()
 
         def audio_dl():
+            os.makedirs("downloads", exist_ok=True)
             ydl_optssx = {
                 "format": "bestaudio/best",
                 "outtmpl": "downloads/%(id)s.%(ext)s",
@@ -253,15 +254,29 @@ class YouTubeAPI:
                 "no_warnings": True,
                 "cookiefile": cookies_file,
             }
+            downloaded_path = [None]
+            def progress_hook(d):
+                if d["status"] == "finished":
+                    downloaded_path[0] = d["filename"]
+            ydl_optssx["progress_hooks"] = [progress_hook]
             x = yt_dlp.YoutubeDL(ydl_optssx)
             info = x.extract_info(link, False)
-            xyz = os.path.join("downloads", f"{info['id']}.{info['ext']}")
-            if os.path.exists(xyz):
-                return xyz
+            vid_id = info.get("id", "unknown")
+            for ext in ["m4a", "webm", "opus", "mp3", "ogg"]:
+                candidate = os.path.join("downloads", f"{vid_id}.{ext}")
+                if os.path.exists(candidate):
+                    return candidate
             x.download([link])
-            return xyz
+            if downloaded_path[0] and os.path.exists(downloaded_path[0]):
+                return downloaded_path[0]
+            for ext in ["m4a", "webm", "opus", "mp3", "ogg"]:
+                candidate = os.path.join("downloads", f"{vid_id}.{ext}")
+                if os.path.exists(candidate):
+                    return candidate
+            return os.path.join("downloads", f"{vid_id}.{info.get('ext', 'webm')}")
 
         def video_dl():
+            os.makedirs("downloads", exist_ok=True)
             ydl_optssx = {
                 "format": "(bestvideo[height<=?720][width<=?1280][ext=mp4])+(bestaudio[ext=m4a])",
                 "outtmpl": "downloads/%(id)s.%(ext)s",
@@ -270,14 +285,25 @@ class YouTubeAPI:
                 "quiet": True,
                 "no_warnings": True,
                 "cookiefile": cookies_file,
+                "merge_output_format": "mp4",
             }
+            downloaded_path = [None]
+            def progress_hook(d):
+                if d["status"] == "finished":
+                    downloaded_path[0] = d["filename"]
+            ydl_optssx["progress_hooks"] = [progress_hook]
             x = yt_dlp.YoutubeDL(ydl_optssx)
             info = x.extract_info(link, False)
-            xyz = os.path.join("downloads", f"{info['id']}.{info['ext']}")
-            if os.path.exists(xyz):
-                return xyz
+            vid_id = info.get("id", "unknown")
+            candidate = os.path.join("downloads", f"{vid_id}.mp4")
+            if os.path.exists(candidate):
+                return candidate
             x.download([link])
-            return xyz
+            if downloaded_path[0] and os.path.exists(downloaded_path[0]):
+                return downloaded_path[0]
+            if os.path.exists(candidate):
+                return candidate
+            return os.path.join("downloads", f"{vid_id}.{info.get('ext', 'mp4')}")
 
         def song_video_dl():
             formats = f"{format_id}+140"
@@ -348,6 +374,20 @@ class YouTubeAPI:
                 else:
                     return
         else:
-            direct = True
-            downloaded_file = await loop.run_in_executor(None, audio_dl)
+            proc = await asyncio.create_subprocess_exec(
+                "yt-dlp",
+                "--cookies", cookies_file,
+                "-g",
+                "-f", "bestaudio",
+                link,
+                stdout=asyncio.subprocess.PIPE,
+                stderr=asyncio.subprocess.PIPE,
+            )
+            stdout, stderr = await proc.communicate()
+            if stdout and stdout.decode().strip():
+                downloaded_file = stdout.decode().strip().split("\n")[0]
+                direct = None
+            else:
+                direct = True
+                downloaded_file = await loop.run_in_executor(None, audio_dl)
         return downloaded_file, direct
