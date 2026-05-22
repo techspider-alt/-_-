@@ -1,3 +1,4 @@
+import asyncio
 import time
 import random
 from pyrogram import filters
@@ -24,7 +25,9 @@ from RONALDO_MUSIC.utils.inline import help_pannel, private_panel, start_panel
 from config import BANNED_USERS
 from strings import get_string
 
-NEXI_VID = [
+RONALDO_VIDS = [
+    config.START_VIDEO_URL,
+] if config.START_VIDEO_URL else [
     "https://telegra.ph/file/1a3c152717eb9d2e94dc2.mp4",
     "https://files.catbox.moe/ln00jb.mp4",
     "https://graph.org/file/83ebf52e8bbf138620de7.mp4",
@@ -37,10 +40,100 @@ NEXI_VID = [
 START_IMG = config.START_IMG_URL
 
 
-async def _send_start(message, caption, markup):
+async def _animated_send_start(message, caption, markup):
+    """
+    Full animated start sequence:
+    1. Loading bar animation → delete
+    2. Ping → Pong → delete
+    3. Opening menu → delete
+    4. Main menu with Ronaldo video
+    """
+    # Step 1 — Loading bar
+    try:
+        msg = await message.reply_text(
+            "⚡ **ʀᴏɴᴀʟᴅᴏ ᴍᴜsɪᴄ** ɪs sᴛᴀʀᴛɪɴɢ...\n"
+            "▓░░░░░░░░░ **10%**"
+        )
+        await asyncio.sleep(0.5)
+        await msg.edit_text(
+            "⚡ **ʀᴏɴᴀʟᴅᴏ ᴍᴜsɪᴄ** ɪs sᴛᴀʀᴛɪɴɢ...\n"
+            "▓▓▓░░░░░░░ **30%**"
+        )
+        await asyncio.sleep(0.5)
+        await msg.edit_text(
+            "⚡ **ʀᴏɴᴀʟᴅᴏ ᴍᴜsɪᴄ** ɪs sᴛᴀʀᴛɪɴɢ...\n"
+            "▓▓▓▓▓░░░░░ **50%**"
+        )
+        await asyncio.sleep(0.5)
+        await msg.edit_text(
+            "⚡ **ʀᴏɴᴀʟᴅᴏ ᴍᴜsɪᴄ** ɪs sᴛᴀʀᴛɪɴɢ...\n"
+            "▓▓▓▓▓▓▓░░░ **70%**"
+        )
+        await asyncio.sleep(0.5)
+        await msg.edit_text(
+            "✅ **ʀᴏɴᴀʟᴅᴏ ᴍᴜsɪᴄ** ʀᴇᴀᴅʏ!\n"
+            "▓▓▓▓▓▓▓▓▓▓ **100%**"
+        )
+        await asyncio.sleep(0.8)
+        await msg.delete()
+    except Exception:
+        pass
+
+    # Step 2 — Ping / Pong
+    try:
+        ping_msg = await message.reply_text(
+            "🏓 **ᴘɪɴɢ...** ᴄʜᴇᴄᴋɪɴɢ ᴄᴏɴɴᴇᴄᴛɪᴏɴ..."
+        )
+        await asyncio.sleep(1.2)
+        await ping_msg.edit_text(
+            "🏓 **ᴘᴏɴɢ!** ᴄᴏɴɴᴇᴄᴛɪᴏɴ ᴏᴋ ✅"
+        )
+        await asyncio.sleep(1.0)
+        await ping_msg.delete()
+    except Exception:
+        pass
+
+    # Step 3 — Opening main menu
+    try:
+        menu_msg = await message.reply_text(
+            "🎯 **ᴏᴘᴇɴɪɴɢ ᴍᴀɪɴ ᴍᴇɴᴜ...**\n"
+            "⚡ ʟᴏᴀᴅɪɴɢ ʏᴏᴜʀ ᴇxᴘᴇʀɪᴇɴᴄᴇ..."
+        )
+        await asyncio.sleep(1.2)
+        await menu_msg.delete()
+    except Exception:
+        pass
+
+    # Step 4 — Main menu with video
     try:
         await message.reply_video(
-            random.choice(NEXI_VID),
+            random.choice(RONALDO_VIDS),
+            caption=caption,
+            reply_markup=markup,
+        )
+    except Exception:
+        try:
+            await message.reply_photo(
+                photo=START_IMG,
+                caption=caption,
+                reply_markup=markup,
+            )
+        except Exception:
+            try:
+                await message.reply_text(
+                    text=caption,
+                    reply_markup=markup,
+                    disable_web_page_preview=True,
+                )
+            except Exception:
+                pass
+
+
+async def _send_start(message, caption, markup):
+    """Simple send for group/welcome (no animation to avoid spam)."""
+    try:
+        await message.reply_video(
+            random.choice(RONALDO_VIDS),
             caption=caption,
             reply_markup=markup,
         )
@@ -88,7 +181,7 @@ async def start_pm(client, message: Message, _):
         if name[0:4] == "help":
             try:
                 keyboard = help_pannel(_)
-                await _send_start(
+                await _animated_send_start(
                     message,
                     _["help_1"].format(config.SUPPORT_CHAT),
                     keyboard,
@@ -106,7 +199,7 @@ async def start_pm(client, message: Message, _):
             return
 
     out = private_panel(_)
-    await _send_start(
+    await _animated_send_start(
         message,
         _["start_2"].format(message.from_user.mention, app.mention),
         InlineKeyboardMarkup(out),
@@ -177,6 +270,5 @@ async def welcome(client, message: Message):
                     await add_served_chat(message.chat.id)
                 except Exception:
                     pass
-                await message.stop_propagation()
-        except Exception as ex:
-            print(f"[welcome] error: {ex}")
+        except Exception:
+            pass
