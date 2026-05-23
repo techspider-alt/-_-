@@ -16,6 +16,7 @@ from pytgcalls.types import (
     AudioQuality,
     VideoQuality,
     StreamAudioEnded,
+    StreamVideoEnded,
 )
 
 import config
