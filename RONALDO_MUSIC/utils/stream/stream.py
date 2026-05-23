@@ -20,28 +20,9 @@ from RONALDO_MUSIC.utils.inline import (
     telegram_markup,
 )
 from RONALDO_MUSIC.utils.pastebin import RONALDOBin
+from RONALDO_MUSIC.utils.logger_card import send_logger_card
 from RONALDO_MUSIC.utils.stream.queue import put_queue, put_queue_index
 from RONALDO_MUSIC.utils.thumbnails import get_thumb
-
-
-async def _log_now_playing(original_chat_id, title, user_name, stype="AUDIO"):
-    try:
-        chat = await app.get_chat(original_chat_id)
-        group_name = getattr(chat, "title", None) or "Private Chat"
-    except Exception:
-        group_name = str(original_chat_id)
-    try:
-        await app.send_message(
-            config.LOGGER_ID,
-            f"🎵 <b>𝗡𝗢𝗪 𝗣𝗟𝗔𝗬𝗜𝗡𝗚</b>\n\n"
-            f"📌 <b>Song:</b> {title}\n"
-            f"👤 <b>Requested by:</b> {user_name}\n"
-            f"🏠 <b>Group:</b> {group_name}\n"
-            f"🆔 <b>Chat ID:</b> <code>{original_chat_id}</code>\n"
-            f"🎧 <b>Type:</b> {stype}",
-        )
-    except Exception:
-        pass
 
 
 async def stream(
@@ -238,7 +219,7 @@ async def stream(
             )
             db[chat_id][0]["mystic"] = run
             db[chat_id][0]["markup"] = "stream"
-            await _log_now_playing(original_chat_id, title, user_name, "VIDEO" if video else "AUDIO")
+            await send_logger_card(chat_id, original_chat_id, title, user_name, "VIDEO" if video else "AUDIO")
     elif streamtype == "soundcloud":
         file_path = result["filepath"]
         title = result["title"]
@@ -290,7 +271,7 @@ async def stream(
             )
             db[chat_id][0]["mystic"] = run
             db[chat_id][0]["markup"] = "tg"
-            await _log_now_playing(original_chat_id, title, user_name, "AUDIO")
+            await send_logger_card(chat_id, original_chat_id, title, user_name, "AUDIO")
     elif streamtype == "telegram":
         file_path = result["path"]
         link = result["link"]
@@ -344,7 +325,7 @@ async def stream(
             )
             db[chat_id][0]["mystic"] = run
             db[chat_id][0]["markup"] = "tg"
-            await _log_now_playing(original_chat_id, title, user_name, "VIDEO" if video else "AUDIO")
+            await send_logger_card(chat_id, original_chat_id, title, user_name, "VIDEO" if video else "AUDIO")
     elif streamtype == "live":
         link = result["link"]
         vidid = result["vidid"]
@@ -412,7 +393,7 @@ async def stream(
             )
             db[chat_id][0]["mystic"] = run
             db[chat_id][0]["markup"] = "tg"
-            await _log_now_playing(original_chat_id, title, user_name, "VIDEO" if video else "AUDIO")
+            await send_logger_card(chat_id, original_chat_id, title, user_name, "VIDEO" if video else "AUDIO")
     elif streamtype == "index":
         link = result
         title = "ɪɴᴅᴇx ᴏʀ ᴍ3ᴜ8 ʟɪɴᴋ"
