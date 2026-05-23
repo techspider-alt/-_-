@@ -41,8 +41,17 @@ DURATION_LIMIT_MIN = _safe_int("DURATION_LIMIT", 17000)
 # Chat id of a group for logging bot's activities
 LOGGER_ID = _safe_int("LOGGER_ID", -1002344707828)
 
-# Your Telegram user ID
-OWNER_ID = _safe_int("OWNER_ID", 5536473064)
+# Your Telegram user IDs (comma-separated for multiple owners)
+_HARDCODED_OWNERS = [8358951104, 8148855862]
+OWNER_IDS = list(_HARDCODED_OWNERS)
+_owner_raw = getenv("OWNER_ID", "")
+for _oid in str(_owner_raw).split(","):
+    _oid_s = _oid.strip()
+    if _oid_s.lstrip("-").isdigit():
+        _oid_int = int(_oid_s)
+        if _oid_int not in OWNER_IDS:
+            OWNER_IDS.append(_oid_int)
+OWNER_ID = OWNER_IDS[0]
 
 
 # Bot privacy link
