@@ -636,7 +636,7 @@ class Call(PyTgCalls):
             await self.stop_stream(chat_id)
 
         async def stream_end_handler1(client, update: Update):
-            if not isinstance(update, StreamAudioEnded):
+            if not isinstance(update, (StreamAudioEnded, StreamVideoEnded)):
                 return
             await self.change_stream(client, update.chat_id)
 
