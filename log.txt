@@ -265,3 +265,29 @@ pyrogram.errors.exceptions.forbidden_403.PeerIdInvalid: Telegram says: [403 PEER
 [22-May-26 11:11:17 - INFO] - RONALDO_MUSIC - ╔═════ஜ۩۞۩ஜ════╗
   ♨️ 𝗠𝗔𝗗𝗘 𝗕𝗬 ˹ 𝐑 𝐨 𝐧 𝛂 𝐥 𝐝 𝐨  ꧊𝆅  ❤️‍🔥 ♨️
 ╚═════ஜ۩۞۩ஜ════╝
+[23-May-26 04:26:02 - INFO] - RONALDO_MUSIC.core.dir - Directories Updated.
+[23-May-26 04:26:02 - INFO] - RONALDO_MUSIC.core.dir - Directories Updated.
+[23-May-26 04:26:02 - INFO] - RONALDO_MUSIC.core.git - Git Client Found [VPS DEPLOYER]
+[23-May-26 04:26:02 - INFO] - RONALDO_MUSIC.misc - 𝗗𝗔𝗧𝗔𝗕𝗔𝗦𝗘 𝗟𝗢𝗔𝗗 𝗕𝗔𝗕𝗬🍫........
+[23-May-26 04:26:02 - INFO] - RONALDO_MUSIC.core.git - Git Client Found [VPS DEPLOYER]
+[23-May-26 04:26:02 - INFO] - RONALDO_MUSIC.misc - 𝗗𝗔𝗧𝗔𝗕𝗔𝗦𝗘 𝗟𝗢𝗔𝗗 𝗕𝗔𝗕𝗬🍫........
+[23-May-26 04:26:02 - INFO] - RONALDO_MUSIC.core.bot - Starting Bot...
+[23-May-26 04:26:02 - INFO] - RONALDO_MUSIC.core.bot - Starting Bot...
+[23-May-26 04:26:50 - INFO] - RONALDO_MUSIC.core.dir - Directories Updated.
+[23-May-26 04:26:50 - INFO] - RONALDO_MUSIC.core.git - Git Client Found [VPS DEPLOYER]
+[23-May-26 04:26:50 - INFO] - RONALDO_MUSIC.misc - 𝗗𝗔𝗧𝗔𝗕𝗔𝗦𝗘 𝗟𝗢𝗔𝗗 𝗕𝗔𝗕𝗬🍫........
+[23-May-26 04:26:50 - INFO] - RONALDO_MUSIC.core.bot - Starting Bot...
+[23-May-26 04:26:50 - INFO] - RONALDO_MUSIC.misc - 𝗦𝗨𝗗𝗢 𝗨𝗦𝗘𝗥 𝗗𝗢𝗡𝗘✨🎋.
+[23-May-26 04:26:51 - INFO] - RONALDO_MUSIC.core.bot - Music Bot Started as Music 
+[23-May-26 04:26:51 - INFO] - __main__ - ✅ Bot client started successfully.
+[23-May-26 04:26:52 - INFO] - telethon.crypto.aes - libssl detected, it will be used for encryption
+[23-May-26 04:26:52 - INFO] - RONALDO_MUSIC.plugins - 𝐀𝐥𝐥 𝐅𝐞𝐚𝐭𝐮𝐫𝐞𝐬 𝐋𝐨𝐚𝐝𝐞𝐝 𝐁𝐚𝐛𝐲🥳...
+[23-May-26 04:26:52 - INFO] - RONALDO_MUSIC.core.userbot - Starting Assistants...
+[23-May-26 04:26:54 - WARNING] - RONALDO_MUSIC.core.userbot - Assistant 1: Could not send message to log group.
+[23-May-26 04:26:54 - INFO] - RONALDO_MUSIC.core.userbot - Assistant 1 started as <a href=tg://user?id=7658444458>Fsh</a>
+[23-May-26 04:26:54 - INFO] - RONALDO_MUSIC.core.userbot - Active assistants: [1]
+[23-May-26 04:26:54 - INFO] - RONALDO_MUSIC.core.call - Starting PyTgCalls Client...
+
+[23-May-26 04:26:55 - INFO] - RONALDO_MUSIC - ╔═════ஜ۩۞۩ஜ════╗
+  ♨️ 𝗠𝗔𝗗𝗘 𝗕𝗬 ˹ 𝐑 𝐨 𝐧 𝛂 𝐥 𝐝 𝐨  ꧊𝆅  ❤️‍🔥 ♨️
+╚═════ஜ۩۞۩ஜ════╝

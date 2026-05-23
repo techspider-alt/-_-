@@ -39,7 +39,7 @@ async def lrsearch(client, message: Message, _):
     ran_hash = "".join(random.choices(string.ascii_uppercase + string.digits, k=10))
     lyric = S.lyrics
     if "Embed" in lyric:
-        lyric = re.sub(r"\d*Embed", "", lyric)
+        lyric = re.sub(r"\d+Embed", "", lyric)
     lyrical[ran_hash] = lyric
     upl = InlineKeyboardMarkup(
         [

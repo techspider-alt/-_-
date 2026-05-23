@@ -18,6 +18,19 @@ except Exception:
     pass
 
 try:
+    # 1b. StreamStatus enum: ntgcalls uses PLAYING/PAUSED/IDLING (uppercase)
+    #     but pytgcalls internals reference Playing/Paused/Idling (titlecase).
+    from ntgcalls import StreamStatus as _SS
+    if hasattr(_SS, 'PLAYING') and not hasattr(_SS, 'Playing'):
+        _SS.Playing = _SS.PLAYING
+    if hasattr(_SS, 'PAUSED') and not hasattr(_SS, 'Paused'):
+        _SS.Paused = _SS.PAUSED
+    if hasattr(_SS, 'IDLING') and not hasattr(_SS, 'Idling'):
+        _SS.Idling = _SS.IDLING
+except Exception:
+    pass
+
+try:
     # 2. ToAsync: ntgcalls binding methods return asyncio.Future in 1.2.0
     #    Patch ToAsync._run to await Future/coroutine results directly.
     import asyncio as _asyncio
