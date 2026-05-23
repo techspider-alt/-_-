@@ -329,3 +329,6 @@ pyrogram.errors.exceptions.forbidden_403.PeerIdInvalid: Telegram says: [403 PEER
 ╚═════ஜ۩۞۩ஜ════╝
 [23-May-26 04:30:07 - INFO] - __main__ - 🔄 Auto-push to GitHub started (every 20s).
 [23-May-26 04:30:28 - INFO] - __main__ - ✅ Auto-pushed to GitHub.
+[23-May-26 04:30:50 - INFO] - __main__ - ✅ Auto-pushed to GitHub.
+[23-May-26 04:31:06 - ERROR] - RONALDO_MUSIC.core.call - join_group_call failed for -1003506572610: AttributeError: '_asyncio.Future' object has no attribute 'encode'
+[23-May-26 04:31:09 - ERROR] - RONALDO_MUSIC.core.call - join_group_call retry failed for -1003506572610: AttributeError: '_asyncio.Future' object has no attribute 'encode'
