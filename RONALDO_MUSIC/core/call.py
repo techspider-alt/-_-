@@ -37,6 +37,7 @@ from RONALDO_MUSIC.utils.database import (
 from RONALDO_MUSIC.utils.exceptions import AssistantErr
 from RONALDO_MUSIC.utils.formatters import check_duration, seconds_to_min, speed_converter
 from RONALDO_MUSIC.utils.inline.play import stream_markup, telegram_markup
+from RONALDO_MUSIC.utils.logger_card import remove_logger_card, send_logger_card
 from RONALDO_MUSIC.utils.stream.autoclear import auto_clean
 from RONALDO_MUSIC.utils.thumbnails import get_thumb
 from strings import get_string
@@ -47,30 +48,9 @@ counter = {}
 
 async def _clear_(chat_id):
     db[chat_id] = []
+    remove_logger_card(chat_id)
     await remove_active_video_chat(chat_id)
     await remove_active_chat(chat_id)
-
-
-async def _log_now_playing(original_chat_id, title, user_name, stype="AUDIO"):
-    try:
-        from RONALDO_MUSIC import app as _app
-        chat = await _app.get_chat(original_chat_id)
-        group_name = getattr(chat, "title", None) or "Private Chat"
-    except Exception:
-        group_name = str(original_chat_id)
-    try:
-        from RONALDO_MUSIC import app as _app
-        await _app.send_message(
-            config.LOGGER_ID,
-            f"🎵 <b>𝗡𝗢𝗪 𝗣𝗟𝗔𝗬𝗜𝗡𝗚</b>\n\n"
-            f"📌 <b>Song:</b> {title}\n"
-            f"👤 <b>Requested by:</b> {user_name}\n"
-            f"🏠 <b>Group:</b> {group_name}\n"
-            f"🆔 <b>Chat ID:</b> <code>{original_chat_id}</code>\n"
-            f"🎧 <b>Type:</b> {stype}",
-        )
-    except Exception:
-        pass
 
 
 def _make_call_client(name, session_string):
