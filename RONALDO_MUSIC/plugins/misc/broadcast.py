@@ -19,133 +19,238 @@ from config import adminlist
 
 IS_BROADCASTING = False
 
+HELP_TEXT = (
+    "╔══〔 📢 <b>𝗕𝗥𝗢𝗔𝗗𝗖𝗔𝗦𝗧 𝗛𝗘𝗟𝗣</b> 〕══╗\n\n"
+    "<b>Usage:</b>\n"
+    "  <code>/broadcast [text]</code>\n"
+    "  <code>/broadcast</code> (reply to a message)\n\n"
+    "<b>Flags:</b>\n"
+    "  <code>-pin</code>       → Pin silently in all groups\n"
+    "  <code>-pinloud</code>   → Pin with notification\n"
+    "  <code>-nobot</code>     → Skip group broadcast\n"
+    "  <code>-user</code>      → Broadcast to all users\n"
+    "  <code>-assistant</code> → Broadcast via assistants\n\n"
+    "<b>Examples:</b>\n"
+    "  <code>/broadcast -pin Hello everyone!</code>\n"
+    "  <code>/broadcast -pinloud -user Big update!</code>\n\n"
+    "╚════════════════════════════╝"
+)
 
-@app.on_message(filters.command(["broadcast", "gcast"]) & SUDOERS)
+
+def _mode_label(text: str) -> str:
+    modes = []
+    if "-pinloud" in text:
+        modes.append("📌 Pin Loud")
+    elif "-pin" in text:
+        modes.append("📌 Pin Silent")
+    if "-user" in text:
+        modes.append("👤 Users")
+    if "-assistant" in text:
+        modes.append("🤖 Assistants")
+    if "-nobot" not in text:
+        modes.append("👥 Groups")
+    return "  •  ".join(modes) if modes else "👥 Groups"
+
+
+@app.on_message(
+    filters.command(["broadcast", "gcast", "bcast"], prefixes=["/", "!", "."])
+    & SUDOERS
+)
 @language
-async def braodcast_message(client, message, _):
+async def broadcast_message(client, message, _):
     global IS_BROADCASTING
+
+    # ── Parse input ────────────────────────────────────────────────────────────
     if message.reply_to_message:
         x = message.reply_to_message.id
         y = message.chat.id
+        query = None
     else:
         if len(message.command) < 2:
-            return await message.reply_text(_["broad_2"])
-        query = message.text.split(None, 1)[1]
-        if "-pin" in query:
-            query = query.replace("-pin", "")
-        if "-nobot" in query:
-            query = query.replace("-nobot", "")
-        if "-pinloud" in query:
-            query = query.replace("-pinloud", "")
-        if "-assistant" in query:
-            query = query.replace("-assistant", "")
-        if "-user" in query:
-            query = query.replace("-user", "")
-        if query == "":
-            return await message.reply_text(_["broad_8"])
+            return await message.reply_text(HELP_TEXT)
+        raw = message.text.split(None, 1)[1]
+        query = raw
+        for flag in ["-pin", "-pinloud", "-nobot", "-assistant", "-user"]:
+            query = query.replace(flag, "")
+        query = query.strip()
+        if not query:
+            return await message.reply_text(HELP_TEXT)
+        x = y = None
 
     IS_BROADCASTING = True
-    await message.reply_text(_["broad_1"])
+    mode_str = _mode_label(message.text)
 
+    status_msg = await message.reply_text(
+        f"╔══〔 📢 <b>𝗕𝗥𝗢𝗔𝗗𝗖𝗔𝗦𝗧𝗜𝗡𝗚</b> 〕══╗\n\n"
+        f"🔄 <b>Status :</b> Starting…\n"
+        f"📡 <b>Modes :</b> {mode_str}\n\n"
+        f"╚════════════════════════════╝"
+    )
+
+    total_sent = 0
+    total_pin = 0
+    total_users = 0
+    total_ass = {}
+
+    # ── GROUP BROADCAST ────────────────────────────────────────────────────────
     if "-nobot" not in message.text:
-        sent = 0
-        pin = 0
-        chats = []
-        schats = await get_served_chats()
-        for chat in schats:
-            chats.append(int(chat["chat_id"]))
-        for i in chats:
+        sent = pin = 0
+        chats = [int(c["chat_id"]) for c in await get_served_chats()]
+        total_chats = len(chats)
+
+        for idx, chat_id in enumerate(chats, 1):
             try:
                 m = (
-                    await app.forward_messages(i, y, x)
+                    await app.forward_messages(chat_id, y, x)
                     if message.reply_to_message
-                    else await app.send_message(i, text=query)
+                    else await app.send_message(chat_id, text=query)
                 )
-                if "-pin" in message.text:
-                    try:
-                        await m.pin(disable_notification=True)
-                        pin += 1
-                    except:
-                        continue
-                elif "-pinloud" in message.text:
+                if "-pinloud" in message.text:
                     try:
                         await m.pin(disable_notification=False)
                         pin += 1
-                    except:
-                        continue
+                    except Exception:
+                        pass
+                elif "-pin" in message.text:
+                    try:
+                        await m.pin(disable_notification=True)
+                        pin += 1
+                    except Exception:
+                        pass
                 sent += 1
                 await asyncio.sleep(0.2)
-            except FloodWait as fw:
-                flood_time = int(fw.value)
-                if flood_time > 200:
-                    continue
-                await asyncio.sleep(flood_time)
-            except:
-                continue
-        try:
-            await message.reply_text(_["broad_3"].format(sent, pin))
-        except:
-            pass
 
+                # Live progress every 25 chats
+                if idx % 25 == 0:
+                    try:
+                        await status_msg.edit_text(
+                            f"╔══〔 📢 <b>𝗕𝗥𝗢𝗔𝗗𝗖𝗔𝗦𝗧𝗜𝗡𝗚</b> 〕══╗\n\n"
+                            f"🔄 <b>Status :</b> Broadcasting to groups…\n"
+                            f"📡 <b>Modes :</b> {mode_str}\n"
+                            f"👥 <b>Progress :</b> {idx}/{total_chats} groups\n"
+                            f"✅ <b>Sent :</b> {sent}  📌 <b>Pinned :</b> {pin}\n\n"
+                            f"╚════════════════════════════╝"
+                        )
+                    except Exception:
+                        pass
+
+            except FloodWait as fw:
+                wait = int(fw.value)
+                if wait > 200:
+                    continue
+                await asyncio.sleep(wait)
+            except Exception:
+                continue
+
+        total_sent = sent
+        total_pin = pin
+
+    # ── USER BROADCAST ─────────────────────────────────────────────────────────
     if "-user" in message.text:
         susr = 0
-        served_users = []
-        susers = await get_served_users()
-        for user in susers:
-            served_users.append(int(user["user_id"]))
-        for i in served_users:
+        users = [int(u["user_id"]) for u in await get_served_users()]
+        total_u = len(users)
+
+        try:
+            await status_msg.edit_text(
+                f"╔══〔 📢 <b>𝗕𝗥𝗢𝗔𝗗𝗖𝗔𝗦𝗧𝗜𝗡𝗚</b> 〕══╗\n\n"
+                f"🔄 <b>Status :</b> Broadcasting to users…\n"
+                f"📡 <b>Modes :</b> {mode_str}\n"
+                f"👤 <b>Total users :</b> {total_u}\n\n"
+                f"╚════════════════════════════╝"
+            )
+        except Exception:
+            pass
+
+        for user_id in users:
             try:
-                m = (
-                    await app.forward_messages(i, y, x)
+                (
+                    await app.forward_messages(user_id, y, x)
                     if message.reply_to_message
-                    else await app.send_message(i, text=query)
+                    else await app.send_message(user_id, text=query)
                 )
                 susr += 1
                 await asyncio.sleep(0.2)
             except FloodWait as fw:
-                flood_time = int(fw.value)
-                if flood_time > 200:
+                wait = int(fw.value)
+                if wait > 200:
                     continue
-                await asyncio.sleep(flood_time)
-            except:
+                await asyncio.sleep(wait)
+            except Exception:
                 pass
-        try:
-            await message.reply_text(_["broad_4"].format(susr))
-        except:
-            pass
 
+        total_users = susr
+
+    # ── ASSISTANT BROADCAST ────────────────────────────────────────────────────
     if "-assistant" in message.text:
-        aw = await message.reply_text(_["broad_5"])
-        text = _["broad_6"]
-        from DARKX_MUSIC.core.userbot import assistants
+        from RONALDO_MUSIC.core.userbot import assistants
+
+        try:
+            await status_msg.edit_text(
+                f"╔══〔 📢 <b>𝗕𝗥𝗢𝗔𝗗𝗖𝗔𝗦𝗧𝗜𝗡𝗚</b> 〕══╗\n\n"
+                f"🔄 <b>Status :</b> Broadcasting via assistants…\n"
+                f"📡 <b>Modes :</b> {mode_str}\n\n"
+                f"╚════════════════════════════╝"
+            )
+        except Exception:
+            pass
 
         for num in assistants:
-            sent = 0
-            client = await get_client(num)
-            async for dialog in client.get_dialogs():
-                try:
-                    (
-                        await client.forward_messages(dialog.chat.id, y, x)
-                        if message.reply_to_message
-                        else await client.send_message(dialog.chat.id, text=query)
-                    )
-                    sent += 1
-                    await asyncio.sleep(3)
-                except FloodWait as fw:
-                    flood_time = int(fw.value)
-                    if flood_time > 200:
+            ass_sent = 0
+            try:
+                ass_client = await get_client(num)
+                async for dialog in ass_client.get_dialogs():
+                    try:
+                        (
+                            await ass_client.forward_messages(dialog.chat.id, y, x)
+                            if message.reply_to_message
+                            else await ass_client.send_message(dialog.chat.id, text=query)
+                        )
+                        ass_sent += 1
+                        await asyncio.sleep(3)
+                    except FloodWait as fw:
+                        wait = int(fw.value)
+                        if wait > 200:
+                            continue
+                        await asyncio.sleep(wait)
+                    except Exception:
                         continue
-                    await asyncio.sleep(flood_time)
-                except:
-                    continue
-            text += _["broad_7"].format(num, sent)
-        try:
-            await aw.edit_text(text)
-        except:
-            pass
+            except Exception:
+                pass
+            total_ass[num] = ass_sent
+
+    # ── FINAL RESULT CARD ──────────────────────────────────────────────────────
     IS_BROADCASTING = False
 
+    ass_lines = ""
+    if total_ass:
+        for num, cnt in total_ass.items():
+            ass_lines += f"  🤖 Assistant {num}: <code>{cnt}</code> chats\n"
 
+    result_card = (
+        f"╔══〔 ✅ <b>𝗕𝗥𝗢𝗔𝗗𝗖𝗔𝗦𝗧 𝗖𝗢𝗠𝗣𝗟𝗘𝗧𝗘</b> 〕══╗\n\n"
+        f"📡 <b>Modes :</b> {mode_str}\n\n"
+    )
+
+    if "-nobot" not in message.text:
+        result_card += (
+            f"👥 <b>Groups sent :</b> <code>{total_sent}</code>\n"
+            f"📌 <b>Pinned :</b> <code>{total_pin}</code>\n"
+        )
+    if "-user" in message.text:
+        result_card += f"👤 <b>Users sent :</b> <code>{total_users}</code>\n"
+    if ass_lines:
+        result_card += f"\n{ass_lines}"
+
+    result_card += f"\n╚════════════════════════════╝"
+
+    try:
+        await status_msg.edit_text(result_card)
+    except Exception:
+        await message.reply_text(result_card)
+
+
+# ── Auto admin-list refresh task ───────────────────────────────────────────────
 async def auto_clean():
     while not await asyncio.sleep(10):
         try:
@@ -162,7 +267,7 @@ async def auto_clean():
                     for user in authusers:
                         user_id = await alpha_to_int(user)
                         adminlist[chat_id].append(user_id)
-        except:
+        except Exception:
             continue
 
 
