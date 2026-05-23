@@ -9,7 +9,7 @@ from RONALDO_MUSIC.utils.database import add_sudo, remove_sudo
 from RONALDO_MUSIC.utils.decorators.language import language
 from RONALDO_MUSIC.utils.extraction import extract_user
 from RONALDO_MUSIC.utils.inline import close_markup
-from config import BANNED_USERS, OWNER_ID
+from config import BANNED_USERS, OWNER_ID, OWNER_IDS
 
 
 
