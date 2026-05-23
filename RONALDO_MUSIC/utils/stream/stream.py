@@ -234,9 +234,11 @@ async def stream(
                     user_name,
                 ),
                 reply_markup=InlineKeyboardMarkup(button),
+                has_spoiler=True,
             )
             db[chat_id][0]["mystic"] = run
             db[chat_id][0]["markup"] = "stream"
+            await _log_now_playing(original_chat_id, title, user_name, "VIDEO" if video else "AUDIO")
     elif streamtype == "soundcloud":
         file_path = result["filepath"]
         title = result["title"]
@@ -284,9 +286,11 @@ async def stream(
                     config.SUPPORT_CHAT, title[:23], duration_min, user_name
                 ),
                 reply_markup=InlineKeyboardMarkup(button),
+                has_spoiler=True,
             )
             db[chat_id][0]["mystic"] = run
             db[chat_id][0]["markup"] = "tg"
+            await _log_now_playing(original_chat_id, title, user_name, "AUDIO")
     elif streamtype == "telegram":
         file_path = result["path"]
         link = result["link"]
@@ -336,9 +340,11 @@ async def stream(
                 photo=config.TELEGRAM_VIDEO_URL if video else config.TELEGRAM_AUDIO_URL,
                 caption=_["stream_1"].format(link, title[:23], duration_min, user_name),
                 reply_markup=InlineKeyboardMarkup(button),
+                has_spoiler=True,
             )
             db[chat_id][0]["mystic"] = run
             db[chat_id][0]["markup"] = "tg"
+            await _log_now_playing(original_chat_id, title, user_name, "VIDEO" if video else "AUDIO")
     elif streamtype == "live":
         link = result["link"]
         vidid = result["vidid"]
@@ -402,9 +408,11 @@ async def stream(
                     user_name,
                 ),
                 reply_markup=InlineKeyboardMarkup(button),
+                has_spoiler=True,
             )
             db[chat_id][0]["mystic"] = run
             db[chat_id][0]["markup"] = "tg"
+            await _log_now_playing(original_chat_id, title, user_name, "VIDEO" if video else "AUDIO")
     elif streamtype == "index":
         link = result
         title = "ɪɴᴅᴇx ᴏʀ ᴍ3ᴜ8 ʟɪɴᴋ"
