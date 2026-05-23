@@ -1,5 +1,7 @@
 import asyncio
 import importlib
+import os
+import subprocess
 import time
 
 # ── Patch ntgcalls/pytgcalls compatibility for ntgcalls 1.2.0 ─────────────
@@ -78,6 +80,44 @@ from RONALDO_MUSIC.misc import sudo
 from RONALDO_MUSIC.plugins import ALL_MODULES
 from RONALDO_MUSIC.utils.database import get_banned_users, get_gbanned
 from config import BANNED_USERS
+
+
+async def _auto_push_github():
+    """Push changes to GitHub every 20 seconds using GIT_TOKEN."""
+    git_token = os.environ.get("GIT_TOKEN")
+    branch = os.environ.get("UPSTREAM_BRANCH", "main")
+    repo = "mystricman0-cell/DARK-MUSICS"
+
+    if not git_token:
+        LOGGER(__name__).warning("GIT_TOKEN not set — auto-push disabled.")
+        return
+
+    remote_url = f"https://{git_token}@github.com/{repo}.git"
+
+    subprocess.run(["git", "config", "user.email", "bot@ronaldomusic.replit"], capture_output=True)
+    subprocess.run(["git", "config", "user.name", "RONALDO MUSIC Bot"], capture_output=True)
+
+    LOGGER(__name__).info("🔄 Auto-push to GitHub started (every 20s).")
+
+    while True:
+        try:
+            await asyncio.sleep(20)
+            subprocess.run(["git", "add", "-A"], capture_output=True)
+            diff = subprocess.run(["git", "diff", "--cached", "--quiet"], capture_output=True)
+            if diff.returncode == 0:
+                continue
+            msg = f"Auto-push: {time.strftime('%Y-%m-%d %H:%M:%S')}"
+            subprocess.run(["git", "commit", "-m", msg], capture_output=True)
+            result = subprocess.run(
+                ["git", "push", remote_url, f"HEAD:{branch}"],
+                capture_output=True, text=True, timeout=30
+            )
+            if result.returncode == 0:
+                LOGGER(__name__).info("✅ Auto-pushed to GitHub.")
+            else:
+                LOGGER(__name__).warning(f"⚠️ Auto-push failed: {result.stderr.strip()}")
+        except Exception as e:
+            LOGGER(__name__).warning(f"⚠️ Auto-push error: {e}")
 
 
 def _tg_send(text: str):
@@ -183,6 +223,8 @@ async def init():
     await userbot.start()
     await RONALDO.start()
     await RONALDO.decorators()
+
+    asyncio.get_event_loop().create_task(_auto_push_github())
 
     LOGGER("RONALDO_MUSIC").info(
         "╔═════ஜ۩۞۩ஜ════╗\n"
