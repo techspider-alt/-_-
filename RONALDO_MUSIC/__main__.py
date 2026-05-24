@@ -4,6 +4,8 @@ import os
 import subprocess
 import time
 
+from aiohttp import web
+
 # ── Patch ntgcalls/pytgcalls compatibility for ntgcalls 1.2.0 ─────────────
 try:
     # 1. InputMode enum: Shell→SHELL, File→FILE
@@ -81,6 +83,41 @@ from RONALDO_MUSIC.misc import sudo
 from RONALDO_MUSIC.plugins import ALL_MODULES
 from RONALDO_MUSIC.utils.database import get_banned_users, get_gbanned
 from config import BANNED_USERS
+
+
+async def _health_handler(request):
+    """Health check endpoint for Railway keep-alive."""
+    return web.Response(text="OK", status=200)
+
+
+async def _start_web_server():
+    """Start a lightweight web server so Railway sees the service as alive."""
+    port = int(os.environ.get("PORT", 8080))
+    app_web = web.Application()
+    app_web.router.add_get("/", _health_handler)
+    app_web.router.add_get("/health", _health_handler)
+    runner = web.AppRunner(app_web)
+    await runner.setup()
+    site = web.TCPSite(runner, "0.0.0.0", port)
+    await site.start()
+    LOGGER(__name__).info(f"💓 Heartbeat web server started on port {port}")
+
+
+async def _heartbeat_loop():
+    """Ping the health endpoint every 10 seconds to keep bot alive."""
+    import aiohttp
+    port = int(os.environ.get("PORT", 8080))
+    url = f"http://localhost:{port}/health"
+    await asyncio.sleep(15)
+    while True:
+        try:
+            async with aiohttp.ClientSession() as session:
+                async with session.get(url, timeout=aiohttp.ClientTimeout(total=5)) as resp:
+                    if resp.status == 200:
+                        LOGGER(__name__).info("💓 Heartbeat OK — bot is alive!")
+        except Exception as e:
+            LOGGER(__name__).warning(f"⚠️ Heartbeat ping failed: {e}")
+        await asyncio.sleep(10)
 
 
 async def _auto_push_github():
@@ -226,6 +263,8 @@ async def init():
     await RONALDO.decorators()
 
     asyncio.get_event_loop().create_task(_auto_push_github())
+    await _start_web_server()
+    asyncio.get_event_loop().create_task(_heartbeat_loop())
 
     LOGGER("RONALDO_MUSIC").info(
         "╔═════ஜ۩۞۩ஜ════╗\n"
