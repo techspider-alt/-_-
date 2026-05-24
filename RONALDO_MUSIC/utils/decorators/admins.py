@@ -152,12 +152,11 @@ def AdminActual(mystic):
             return await message.reply_text(_["general_3"], reply_markup=upl)
         if message.from_user.id not in SUDOERS:
             try:
-                member = (
-                    await app.get_chat_member(message.chat.id, message.from_user.id)
-                ).privileges
-            except:
-                return
-            if not member.can_manage_video_chats:
+                chat_member = await app.get_chat_member(message.chat.id, message.from_user.id)
+                member = chat_member.privileges
+                if not member or not member.can_manage_video_chats:
+                    return await message.reply(_["general_4"])
+            except Exception:
                 return await message.reply(_["general_4"])
         return await mystic(client, message, _)
 
