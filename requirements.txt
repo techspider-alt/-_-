@@ -1,6 +1,5 @@
 aiofiles
 aiohttp
-asyncio
 beautifulsoup4
 bing-image-urls
 bing_image_downloader
@@ -46,7 +45,7 @@ aiohttp
 beautifulsoup4
 bing-image-urls
 bing_image_downloader
-Cloudscraper
+cloudscraper
 dnspython
 ffmpeg-python
 future==0.18.3
@@ -84,12 +83,11 @@ yt-dlp
 aiofiles
 aiohttp
 beautifulsoup4
-Cloudscraper
+cloudscraper
 dnspython
 ffmpeg-python
 future==0.18.3
 gitpython
-googlesearch-python
 gpytranslate
 hachoir
 heroku3
@@ -97,6 +95,7 @@ httpx[http2]
 motor==3.3.2
 Pillow
 psutil
+pymongo==4.6.3
 python-dotenv
 pyyaml==6.0.1
 qrcode
@@ -108,16 +107,14 @@ telethon==1.33.1
 tgcrypto
 unidecode
 urllib3
-wget
 yt-dlp
 bing-image-urls
 bing_image_downloader
-motor==3.3.2
 MukeshAPI
 ntgcalls==1.2.1
 py-tgcalls==1.2.1
 pykeyboard
-pymongo==4.6.3
 SafoneAPI==1.0.65
 search_engine_parser
+wget
 youtube-search-python
