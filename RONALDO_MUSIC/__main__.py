@@ -134,10 +134,14 @@ async def _auto_push_github():
     """Push changes to GitHub every 20 seconds using GIT_TOKEN."""
     git_token = os.environ.get("GIT_TOKEN")
     branch = os.environ.get("UPSTREAM_BRANCH", "main")
-    repo = "mystricman0-cell/DARK-MUSICS"
+    repo = os.environ.get("GITHUB_REPO", "mystricman0-cell/DARK-MUSICS")
 
     if not git_token:
         LOGGER(__name__).warning("GIT_TOKEN not set — auto-push disabled.")
+        return
+
+    if not repo:
+        LOGGER(__name__).warning("GITHUB_REPO not set — auto-push disabled.")
         return
 
     remote_url = f"https://{git_token}@github.com/{repo}.git"
