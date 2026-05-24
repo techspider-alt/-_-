@@ -607,12 +607,18 @@ class Call(PyTgCalls):
         return [c for c in [self.one, self.two, self.three, self.four, self.five] if c is not None]
 
     async def start(self):
+        from pyrogram.errors import AuthKeyDuplicated, AuthKeyUnregistered
         LOGGER(__name__).info("Starting PyTgCalls Client...\n")
         for client in self._active_clients():
             try:
                 await client.start()
+            except (AuthKeyDuplicated, AuthKeyUnregistered) as e:
+                LOGGER(__name__).error(
+                    f"❌ Assistant session INVALID ({type(e).__name__}). "
+                    f"Generate a new STRING_SESSION from @StringFatherBot and update Railway vars."
+                )
             except Exception as e:
-                LOGGER(__name__).warning(f"PyTgCalls start skipped (already running?): {e}")
+                LOGGER(__name__).warning(f"PyTgCalls start skipped: {type(e).__name__}: {e}")
 
     async def decorators(self):
         active = self._active_clients()
