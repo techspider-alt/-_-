@@ -104,17 +104,27 @@ async def _start_web_server():
 
 
 async def _heartbeat_loop():
-    """Ping the health endpoint every 10 seconds to keep bot alive."""
+    """Ping the health endpoint every 10 seconds to keep bot alive.
+    Sends a Telegram notification to the logger group every 5 minutes."""
     import aiohttp
     port = int(os.environ.get("PORT", 8080))
     url = f"http://localhost:{port}/health"
     await asyncio.sleep(15)
+    ping_count = 0
     while True:
         try:
             async with aiohttp.ClientSession() as session:
                 async with session.get(url, timeout=aiohttp.ClientTimeout(total=5)) as resp:
                     if resp.status == 200:
-                        LOGGER(__name__).info("💓 Heartbeat OK — bot is alive!")
+                        ping_count += 1
+                        LOGGER(__name__).info(f"💓 Heartbeat OK — bot is alive! (ping #{ping_count})")
+                        if ping_count % 30 == 0:
+                            _tg_send(
+                                f"💓 <b>RONALDO MUSIC — Heartbeat</b>\n\n"
+                                f"✅ Bot is alive and running!\n"
+                                f"🔢 Total pings: <code>{ping_count}</code>\n"
+                                f"⏱ Uptime: ~{ping_count * 10 // 60} minutes"
+                            )
         except Exception as e:
             LOGGER(__name__).warning(f"⚠️ Heartbeat ping failed: {e}")
         await asyncio.sleep(10)
@@ -259,6 +269,7 @@ async def init():
     LOGGER("RONALDO_MUSIC.plugins").info("𝐀𝐥𝐥 𝐅𝐞𝐚𝐭𝐮𝐫𝐞𝐬 𝐋𝐨𝐚𝐝𝐞𝐝 𝐁𝐚𝐛𝐲🥳...")
 
     await userbot.start()
+    RONALDO.setup_assistants(userbot)
     await RONALDO.start()
     await RONALDO.decorators()
 
