@@ -28,6 +28,26 @@ async def shell_cmd(cmd):
 
 cookies_file = "RONALDO_MUSIC/assets/cookies.txt"
 
+_YT_HEADERS = {
+    "User-Agent": (
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+        "AppleWebKit/537.36 (KHTML, like Gecko) "
+        "Chrome/124.0.0.0 Safari/537.36"
+    ),
+    "Accept-Language": "en-US,en;q=0.9",
+}
+
+
+def _cookies_opts() -> dict:
+    """Return cookiefile option only when the file has real cookie data (> 300 bytes)."""
+    try:
+        if os.path.exists(cookies_file) and os.path.getsize(cookies_file) > 300:
+            return {"cookiefile": cookies_file}
+    except Exception:
+        pass
+    return {}
+
+
 class YouTubeAPI:
     def __init__(self):
         self.base = "https://www.youtube.com/watch?v="
@@ -120,13 +140,13 @@ class YouTubeAPI:
             link = self.base + link
         if "&" in link:
             link = link.split("&")[0]
+        cookies = _cookies_opts()
+        cmd = ["yt-dlp", "-g", "-f", "best[height<=?720][width<=?1280]"]
+        if cookies:
+            cmd += ["--cookies", cookies_file]
+        cmd.append(link)
         proc = await asyncio.create_subprocess_exec(
-            "yt-dlp",
-            "--cookies", cookies_file,
-            "-g",
-            "-f",
-            "best[height<=?720][width<=?1280]",
-            f"{link}",
+            *cmd,
             stdout=asyncio.subprocess.PIPE,
             stderr=asyncio.subprocess.PIPE,
         )
@@ -141,8 +161,10 @@ class YouTubeAPI:
             link = self.listbase + link
         if "&" in link:
             link = link.split("&")[0]
+        cookies = _cookies_opts()
+        cookie_arg = f"--cookies {cookies_file}" if cookies else ""
         playlist = await shell_cmd(
-            f"yt-dlp --cookies {cookies_file} -i --get-id --flat-playlist --playlist-end {limit} --skip-download {link}"
+            f"yt-dlp {cookie_arg} -i --get-id --flat-playlist --playlist-end {limit} --skip-download {link}"
         )
         try:
             result = playlist.split("\n")
@@ -179,7 +201,11 @@ class YouTubeAPI:
             link = self.base + link
         if "&" in link:
             link = link.split("&")[0]
-        ytdl_opts = {"quiet": True, "cookiefile": cookies_file}
+        ytdl_opts = {
+            "quiet": True,
+            "http_headers": _YT_HEADERS,
+            **_cookies_opts(),
+        }
         ydl = yt_dlp.YoutubeDL(ytdl_opts)
         with ydl:
             formats_available = []
@@ -242,6 +268,7 @@ class YouTubeAPI:
         if videoid:
             link = self.base + link
         loop = asyncio.get_running_loop()
+        cookies = _cookies_opts()
 
         def audio_dl():
             os.makedirs("downloads", exist_ok=True)
@@ -252,20 +279,17 @@ class YouTubeAPI:
                 "nocheckcertificate": True,
                 "quiet": True,
                 "no_warnings": True,
-                "cookiefile": cookies_file,
                 "nopart": True,
-                "retries": 3,
+                "retries": 5,
+                "socket_timeout": 30,
+                "http_headers": _YT_HEADERS,
                 "postprocessors": [{
                     "key": "FFmpegExtractAudio",
                     "preferredcodec": "mp3",
                     "preferredquality": "192",
                 }],
+                **cookies,
             }
-            downloaded_path = [None]
-            def progress_hook(d):
-                if d["status"] == "finished":
-                    downloaded_path[0] = d["filename"]
-            ydl_optssx["progress_hooks"] = [progress_hook]
             x = yt_dlp.YoutubeDL(ydl_optssx)
             info = x.extract_info(link, False)
             vid_id = info.get("id", "unknown")
@@ -275,8 +299,6 @@ class YouTubeAPI:
             x.download([link])
             if os.path.exists(mp3_path):
                 return mp3_path
-            if downloaded_path[0] and os.path.exists(downloaded_path[0]):
-                return downloaded_path[0]
             for ext in ["mp3", "m4a", "webm", "opus", "ogg"]:
                 candidate = os.path.join("downloads", f"{vid_id}.{ext}")
                 if os.path.exists(candidate):
@@ -286,20 +308,18 @@ class YouTubeAPI:
         def video_dl():
             os.makedirs("downloads", exist_ok=True)
             ydl_optssx = {
-                "format": "(bestvideo[height<=?720][width<=?1280][ext=mp4])+(bestaudio[ext=m4a])",
+                "format": "(bestvideo[height<=?720][width<=?1280][ext=mp4])+(bestaudio[ext=m4a])/bestvideo[height<=?720]+bestaudio/best",
                 "outtmpl": "downloads/%(id)s.%(ext)s",
                 "geo_bypass": True,
                 "nocheckcertificate": True,
                 "quiet": True,
                 "no_warnings": True,
-                "cookiefile": cookies_file,
                 "merge_output_format": "mp4",
+                "retries": 5,
+                "socket_timeout": 30,
+                "http_headers": _YT_HEADERS,
+                **cookies,
             }
-            downloaded_path = [None]
-            def progress_hook(d):
-                if d["status"] == "finished":
-                    downloaded_path[0] = d["filename"]
-            ydl_optssx["progress_hooks"] = [progress_hook]
             x = yt_dlp.YoutubeDL(ydl_optssx)
             info = x.extract_info(link, False)
             vid_id = info.get("id", "unknown")
@@ -307,8 +327,6 @@ class YouTubeAPI:
             if os.path.exists(candidate):
                 return candidate
             x.download([link])
-            if downloaded_path[0] and os.path.exists(downloaded_path[0]):
-                return downloaded_path[0]
             if os.path.exists(candidate):
                 return candidate
             return os.path.join("downloads", f"{vid_id}.{info.get('ext', 'mp4')}")
@@ -325,7 +343,8 @@ class YouTubeAPI:
                 "no_warnings": True,
                 "prefer_ffmpeg": True,
                 "merge_output_format": "mp4",
-                "cookiefile": cookies_file,  # Add cookie file option here
+                "http_headers": _YT_HEADERS,
+                **cookies,
             }
             x = yt_dlp.YoutubeDL(ydl_optssx)
             x.download([link])
@@ -340,6 +359,7 @@ class YouTubeAPI:
                 "quiet": True,
                 "no_warnings": True,
                 "prefer_ffmpeg": True,
+                "http_headers": _YT_HEADERS,
                 "postprocessors": [
                     {
                         "key": "FFmpegExtractAudio",
@@ -347,7 +367,7 @@ class YouTubeAPI:
                         "preferredquality": "192",
                     }
                 ],
-                "cookiefile": cookies_file,  # Add cookie file option here
+                **cookies,
             }
             x = yt_dlp.YoutubeDL(ydl_optssx)
             x.download([link])
@@ -365,9 +385,10 @@ class YouTubeAPI:
                 direct = True
                 downloaded_file = await loop.run_in_executor(None, video_dl)
             else:
+                cookies_arg = ["--cookies", cookies_file] if cookies else []
                 proc = await asyncio.create_subprocess_exec(
                     "yt-dlp",
-                    "--cookies", cookies_file,
+                    *cookies_arg,
                     "-g",
                     "-f",
                     "best[height<=?720][width<=?1280]",
