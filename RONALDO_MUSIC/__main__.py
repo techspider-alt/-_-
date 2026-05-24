@@ -73,8 +73,8 @@ except Exception:
 # ─────────────────────────────────────────────────────────────────────────
 
 import httpx
-from pyrogram import idle
-from pyrogram.errors import FloodWait
+from pyrogram import Client, idle
+from pyrogram.errors import AuthKeyDuplicated, FloodWait
 
 import config
 from RONALDO_MUSIC import LOGGER, app, userbot
@@ -184,6 +184,75 @@ def _tg_send(text: str):
         pass
 
 
+async def _validate_sessions():
+    """
+    Check each STRING_SESSION before the bot starts.
+    - If AuthKeyDuplicated → alert logger + instruct user to regenerate
+    - If any other error → warn but continue
+    - If valid → proceed normally
+    Returns True if at least one session is valid, False if all are bad.
+    """
+    strings = {
+        "STRING_SESSION":  config.STRING1,
+        "STRING_SESSION2": config.STRING2,
+        "STRING_SESSION3": config.STRING3,
+        "STRING_SESSION4": config.STRING4,
+        "STRING_SESSION5": config.STRING5,
+    }
+
+    any_valid = False
+    all_bad   = True
+
+    for var_name, session_str in strings.items():
+        if not session_str:
+            continue
+
+        LOGGER(__name__).info(f"🔍 Validating {var_name}...")
+        test_client = Client(
+            name=f"_validate_{var_name}",
+            api_id=config.API_ID,
+            api_hash=config.API_HASH,
+            session_string=session_str,
+            no_updates=True,
+            in_memory=True,
+        )
+        try:
+            await test_client.start()
+            me = test_client.me
+            LOGGER(__name__).info(
+                f"✅ {var_name} is VALID — logged in as {me.first_name} (@{me.username})"
+            )
+            any_valid = True
+            all_bad   = False
+        except AuthKeyDuplicated:
+            LOGGER(__name__).error(
+                f"❌ {var_name} is INVALID — AuthKeyDuplicated! "
+                f"Generate a new session from @StringFatherBot and update {var_name} in Railway."
+            )
+            _tg_send(
+                f"❌ <b>RONALDO MUSIC — Session Invalid!</b>\n\n"
+                f"⚠️ <code>{var_name}</code> has been invalidated by Telegram.\n\n"
+                f"<b>Reason:</b> Same session was connected from 2 places simultaneously.\n\n"
+                f"<b>Fix:</b>\n"
+                f"1. Open @StringFatherBot on Telegram\n"
+                f"2. Send /generate → choose Pyrogram V2\n"
+                f"3. Enter your phone number + OTP\n"
+                f"4. Copy the new session string\n"
+                f"5. Replace <code>{var_name}</code> in Railway Variables\n"
+                f"6. Redeploy\n\n"
+                f"🤖 Bot will NOT start until this is fixed."
+            )
+        except Exception as e:
+            LOGGER(__name__).warning(f"⚠️ {var_name} validation error: {type(e).__name__}: {e}")
+        finally:
+            try:
+                await test_client.stop()
+            except Exception:
+                pass
+
+    return not all_bad
+
+
 async def _start_bot_with_retry(max_retries=15):
     """
     Start bot client, auto-waiting out any FloodWait.
@@ -259,6 +328,14 @@ async def init():
             BANNED_USERS.add(user_id)
     except Exception:
         pass
+
+    sessions_ok = await _validate_sessions()
+    if not sessions_ok:
+        LOGGER(__name__).error(
+            "❌ All STRING_SESSION values are invalid! "
+            "Please regenerate from @StringFatherBot and update Railway variables."
+        )
+        return
 
     started = await _start_bot_with_retry()
     if not started:
