@@ -14,10 +14,12 @@ async def github_push_cmd(_, message):
     m = await message.reply_text("🔄 <b>Pushing to GitHub...</b>")
     git_token = os.environ.get("GIT_TOKEN")
     branch = os.environ.get("UPSTREAM_BRANCH", "main")
-    repo = "mystricman0-cell/DARK-MUSICS"
+    repo = os.environ.get("GITHUB_REPO", "mystricman0-cell/DARK-MUSICS")
 
     if not git_token:
         return await m.edit("❌ <b>GIT_TOKEN not set in secrets!</b>")
+    if not repo:
+        return await m.edit("❌ <b>GITHUB_REPO not set in secrets!</b>")
 
     remote_url = f"https://{git_token}@github.com/{repo}.git"
     subprocess.run(["git", "config", "user.email", "bot@ronaldomusic.replit"], capture_output=True)
