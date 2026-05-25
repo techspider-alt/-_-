@@ -1,55 +1,82 @@
+import asyncio
 
-"""
-import random
-import re
-import string
-
-import lyricsgenius as lg
+import aiohttp
 from pyrogram import filters
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message
 
-from config import BANNED_USERS, lyrical
-from strings import get_command
 from RONALDO_MUSIC import app
-from RONALDO_MUSIC.utils.decorators.language import language
+from config import BANNED_USERS, lyrical
+import random
+import string
 
-###Commands
-LYRICS_COMMAND = get_command("LYRICS_COMMAND")
 
-api_key = "Vd9FvPMOKWfsKJNG9RbZnItaTNIRFzVyyXFdrGHONVsGqHcHBoj3AI3sIlNuqzuf0ZNG8uLcF9wAd5DXBBnUzA"
-y = lg.Genius(
-    api_key,
-    skip_non_songs=True,
-    excluded_terms=["(Remix)", "(Live)"],
-    remove_section_headers=True,
+@app.on_message(
+    filters.command(["lyrics", "lyric", "lyri"], prefixes=["/", "!", "."])
+    & ~BANNED_USERS
 )
-y.verbose = False
-
-
-@app.on_message(filters.command(LYRICS_COMMAND) & ~BANNED_USERS)
-@language
-async def lrsearch(client, message: Message, _):
+async def lyrics_command(client, message: Message):
     if len(message.command) < 2:
-        return await message.reply_text(_["lyrics_1"])
-    title = message.text.split(None, 1)[1]
-    m = await message.reply_text(_["lyrics_2"])
-    S = y.search_song(title, get_full_info=False)
-    if S is None:
-        return await m.edit(_["lyrics_3"].format(title))
+        return await message.reply_text(
+            "❍ ᴘʟᴇᴀsᴇ ᴘʀᴏᴠɪᴅᴇ ᴀ sᴏɴɢ ɴᴀᴍᴇ.\n\n<b>ᴇxᴀᴍᴘʟᴇ:</b> <code>/lyrics Shape of You</code>"
+        )
+
+    query = message.text.split(None, 1)[1].strip()
+    m = await message.reply_text(f"❍ ꜱᴇᴀʀᴄʜɪɴɢ ʟʏʀɪᴄs ꜰᴏʀ: <b>{query}</b>...")
+
+    lyrics = None
+
+    # Try lyrics.ovh first (free, no API key needed)
+    try:
+        parts = query.rsplit(" ", 1)
+        if len(parts) == 2:
+            artist, title = parts[0], parts[1]
+        else:
+            artist, title = query, query
+
+        url = f"https://api.lyrics.ovh/v1/{artist}/{title}"
+        async with aiohttp.ClientSession() as session:
+            async with session.get(url, timeout=aiohttp.ClientTimeout(total=8)) as resp:
+                if resp.status == 200:
+                    data = await resp.json()
+                    lyrics = data.get("lyrics", "")
+    except Exception:
+        pass
+
+    # Fallback: try with full query as both artist and title
+    if not lyrics:
+        try:
+            encoded = query.replace(" ", "%20")
+            url = f"https://api.lyrics.ovh/v1/{encoded}/{encoded}"
+            async with aiohttp.ClientSession() as session:
+                async with session.get(url, timeout=aiohttp.ClientTimeout(total=8)) as resp:
+                    if resp.status == 200:
+                        data = await resp.json()
+                        lyrics = data.get("lyrics", "")
+        except Exception:
+            pass
+
+    if not lyrics:
+        return await m.edit(
+            f"❍ ʟʏʀɪᴄs ɴᴏᴛ ꜰᴏᴜɴᴅ ꜰᴏʀ: <b>{query}</b>\n\n"
+            "ᴛʀʏ ᴡɪᴛʜ ꜰᴜʟʟ ꜱᴏɴɢ ɴᴀᴍᴇ ᴏʀ ᴀʀᴛɪꜱᴛ ɴᴀᴍᴇ."
+        )
+
     ran_hash = "".join(random.choices(string.ascii_uppercase + string.digits, k=10))
-    lyric = S.lyrics
-    if "Embed" in lyric:
-        lyric = re.sub("\\d+Embed", "", lyric)
-    lyrical[ran_hash] = lyric
+    lyrical[ran_hash] = lyrics
+
     upl = InlineKeyboardMarkup(
-        [
-            [
-                InlineKeyboardButton(
-                    text=_["L_B_1"],
-                    url=f"https://t.me/{app.username}?start=lyrics_{ran_hash}",
-                ),
-            ]
-        ]
+        [[
+            InlineKeyboardButton(
+                text="📖 ᴠɪᴇᴡ ʟʏʀɪᴄs",
+                url=f"https://t.me/{app.username}?start=lyrics_{ran_hash}",
+            )
+        ]]
     )
-    await m.edit(_["lyrics_4"], reply_markup=upl)
-"""
+
+    preview = lyrics[:200] + "..." if len(lyrics) > 200 else lyrics
+    await m.edit(
+        f"🎵 <b>ʟʏʀɪᴄs ꜰᴏᴜɴᴅ!</b>\n\n"
+        f"<i>{preview}</i>\n\n"
+        f"ᴄʟɪᴄᴋ ʙᴇʟᴏᴡ ᴛᴏ ʀᴇᴀᴅ ꜰᴜʟʟ ʟʏʀɪᴄs 👇",
+        reply_markup=upl,
+    )
