@@ -30,6 +30,7 @@ active = []
 activevideo = []
 assistantdict = {}
 autoend = {}
+autoplay = {}       # per-chat autoplay toggle: {chat_id: True/False}
 count = {}
 channelconnect = {}
 langm = {}
@@ -301,6 +302,19 @@ async def autoend_on():
 async def autoend_off():
     chat_id = 1234
     await autoenddb.delete_one({"chat_id": chat_id})
+
+
+# ── Per-chat autoplay (in-memory, resets on restart) ──────────────────────────
+async def is_autoplay(chat_id: int) -> bool:
+    return autoplay.get(chat_id, False)
+
+
+async def autoplay_on(chat_id: int):
+    autoplay[chat_id] = True
+
+
+async def autoplay_off(chat_id: int):
+    autoplay[chat_id] = False
 
 
 async def get_loop(chat_id: int) -> int:
