@@ -141,7 +141,15 @@ async def set_assistant_new(chat_id, number):
 
 async def set_assistant(chat_id):
     from RONALDO_MUSIC.core.userbot import assistants
+    from RONALDO_MUSIC.utils.exceptions import AssistantErr
 
+    if not assistants:
+        raise AssistantErr(
+            "❍ ɴᴏ ᴀssɪsᴛᴀɴᴛ ᴀᴠᴀɪʟᴀʙʟᴇ.\n\n"
+            "ᴘʟᴇᴀsᴇ sᴇᴛ <code>STRING_SESSION</code> ɪɴ ʏᴏᴜʀ ʀᴀɪʟᴡᴀʏ ᴄᴏɴꜰɪɢ "
+            "ᴀɴᴅ ʀᴇsᴛᴀʀᴛ ᴛʜᴇ ʙᴏᴛ.\n\n"
+            "ɢᴇɴᴇʀᴀᴛᴇ ꜱᴇꜱꜱɪᴏɴ: @StringFatherBot"
+        )
     ran_assistant = random.choice(assistants)
     assistantdict[chat_id] = ran_assistant
     await assdb.update_one(
@@ -182,7 +190,15 @@ async def get_assistant(chat_id: int) -> str:
 
 async def set_calls_assistant(chat_id):
     from RONALDO_MUSIC.core.userbot import assistants
+    from RONALDO_MUSIC.utils.exceptions import AssistantErr
 
+    if not assistants:
+        raise AssistantErr(
+            "❍ ɴᴏ ᴀssɪsᴛᴀɴᴛ ᴀᴠᴀɪʟᴀʙʟᴇ.\n\n"
+            "ᴘʟᴇᴀsᴇ sᴇᴛ <code>STRING_SESSION</code> ɪɴ ʏᴏᴜʀ ʀᴀɪʟᴡᴀʏ ᴄᴏɴꜰɪɢ "
+            "ᴀɴᴅ ʀᴇsᴛᴀʀᴛ ᴛʜᴇ ʙᴏᴛ.\n\n"
+            "ɢᴇɴᴇʀᴀᴛᴇ ꜱᴇꜱꜱɪᴏɴ: @StringFatherBot"
+        )
     ran_assistant = random.choice(assistants)
     assistantdict[chat_id] = ran_assistant
     await assdb.update_one(
