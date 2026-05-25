@@ -24,7 +24,15 @@ from config import BANNED_USERS
 from strings import get_string
 
 
-RADIO_STATIONS = {
+import config as _cfg
+
+_custom = _cfg.STREAM_URL if getattr(_cfg, "STREAM_URL", None) else None
+
+RADIO_STATIONS = {}
+if _custom:
+    RADIO_STATIONS["🎙️ My Stream"] = _custom
+
+RADIO_STATIONS.update({
     "🇮🇳 Radio Mirchi 98.3": "https://air.pc.cdn.bitgravity.com/air/live/pbaudio040/playlist.m3u8",
     "🇮🇳 AIR National (Hindi)": "https://air.pc.cdn.bitgravity.com/air/live/pbnationalhindi/playlist.m3u8",
     "🇮🇳 AIR FM Gold": "https://air.pc.cdn.bitgravity.com/air/live/pbaudio001/playlist.m3u8",
@@ -34,7 +42,7 @@ RADIO_STATIONS = {
     "🎵 Lofi Hip-Hop": "http://streams.ilovemusic.de/iloveradio17.mp3",
     "🎵 Chillout Radio": "http://streams.ilovemusic.de/iloveradio2.mp3",
     "🎵 Jazz FM": "http://streams.ilovemusic.de/iloveradio27.mp3",
-}
+})
 
 
 def _radio_markup():
