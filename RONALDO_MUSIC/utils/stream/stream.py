@@ -151,17 +151,22 @@ async def stream(
         duration_min = result["duration_min"]
         thumbnail = result["thumb"]
         status = True if video else None
-        try:
-            file_path, direct = await YouTube.download(
-                vidid, mystic, videoid=True, video=status
-            )
-        except Exception:
+        downloaded = False
+        for _attempt in range(3):
             try:
                 file_path, direct = await YouTube.download(
                     vidid, mystic, videoid=True, video=status
-                    )
+                )
+                downloaded = True
+                break
             except Exception:
-                raise AssistantErr(_["play_14"])
+                await asyncio.sleep(1)
+        if not downloaded:
+            raise AssistantErr(
+                "❍ ᴅᴏᴡɴʟᴏᴀᴅ ꜰᴀɪʟᴇᴅ!\n\n"
+                "YouTube ᴀʙʜɪ ʀᴀᴛᴇ ʟɪᴍɪᴛ ᴋᴀʀ ʀᴀʜᴀ ʜᴀɪ.\n"
+                "ᴛʜᴏᴅɪ ᴅᴇʀ ʙᴀᴀᴅ /play ᴅᴏʙᴀʀᴀ ᴋᴀʀᴏ."
+            )
         if await is_active_chat(chat_id):
             await put_queue(
                 chat_id,
