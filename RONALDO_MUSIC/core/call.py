@@ -593,6 +593,7 @@ class Call(PyTgCalls):
                 )
                 db[chat_id][0]["mystic"] = run
                 db[chat_id][0]["markup"] = "tg"
+                await music_on(chat_id)
                 await send_logger_card(chat_id, original_chat_id, title, user, "VIDEO" if video else "AUDIO")
             elif "vid_" in queued:
                 mystic = await app.send_message(original_chat_id, _["call_7"])
@@ -700,6 +701,7 @@ class Call(PyTgCalls):
                 )
                 db[chat_id][0]["mystic"] = run
                 db[chat_id][0]["markup"] = "stream"
+                await music_on(chat_id)
                 await send_logger_card(chat_id, original_chat_id, title, user, "VIDEO" if video else "AUDIO")
             elif "index_" in queued:
                 stream = (
@@ -735,6 +737,7 @@ class Call(PyTgCalls):
                 )
                 db[chat_id][0]["mystic"] = run
                 db[chat_id][0]["markup"] = "tg"
+                await music_on(chat_id)
                 await send_logger_card(chat_id, original_chat_id, title, user, "VIDEO" if video else "AUDIO")
             else:
                 # ── Direct file path (already downloaded — Telegram, SoundCloud, cached) ──
@@ -820,6 +823,7 @@ class Call(PyTgCalls):
                     )
                     db[chat_id][0]["mystic"] = run
                     db[chat_id][0]["markup"] = "tg"
+                    await music_on(chat_id)
                     await send_logger_card(chat_id, original_chat_id, title, user, "VIDEO" if video else "AUDIO")
                 elif videoid == "soundcloud":
                     button = telegram_markup(_, chat_id)
@@ -834,6 +838,7 @@ class Call(PyTgCalls):
                     )
                     db[chat_id][0]["mystic"] = run
                     db[chat_id][0]["markup"] = "tg"
+                    await music_on(chat_id)
                     await send_logger_card(chat_id, original_chat_id, title, user, "AUDIO")
                 else:
                     img = await get_thumb(videoid)
@@ -852,6 +857,7 @@ class Call(PyTgCalls):
                     )
                     db[chat_id][0]["mystic"] = run
                     db[chat_id][0]["markup"] = "stream"
+                    await music_on(chat_id)
                     await send_logger_card(chat_id, original_chat_id, title, user, "VIDEO" if video else "AUDIO")
         except Exception as e:
             LOGGER(__name__).error(f"change_stream playback error for {chat_id}: {type(e).__name__}: {e}")
@@ -925,7 +931,11 @@ class Call(PyTgCalls):
         async def stream_end_handler1(client, update: Update):
             if not isinstance(update, (StreamAudioEnded, StreamVideoEnded)):
                 return
-            await self.change_stream(client, update.chat_id)
+            # Use create_task so we exit the pytgcalls callback immediately.
+            # Awaiting change_stream directly here can deadlock py-tgcalls 1.2.x
+            # because the internal stream state is still "transitioning" when the
+            # callback fires — calling client.change_stream() inside it throws.
+            asyncio.create_task(self.change_stream(client, update.chat_id))
 
         for c in active:
             c.on_kicked()(stream_services_handler)
