@@ -419,8 +419,16 @@ class YouTubeAPI:
 
         def audio_dl():
             os.makedirs("downloads", exist_ok=True)
-            # Try multiple player clients to bypass bot detection
-            for player_client in [["android", "web"], ["ios"], ["web"]]:
+            last_err = None
+            # Try multiple player clients — tv_embedded bypasses most bot detection
+            for player_client in [
+                ["tv_embedded"],
+                ["android_embedded"],
+                ["android", "web"],
+                ["ios"],
+                ["mweb"],
+                ["web"],
+            ]:
                 try:
                     ydl_optssx = {
                         "format": "bestaudio[ext=m4a]/bestaudio[ext=webm]/bestaudio/best",
@@ -430,14 +438,15 @@ class YouTubeAPI:
                         "quiet": True,
                         "no_warnings": True,
                         "nopart": True,
-                        "retries": 3,
-                        "fragment_retries": 3,
+                        "retries": 5,
+                        "fragment_retries": 5,
                         "socket_timeout": 30,
                         "http_headers": _YT_HEADERS,
                         "extractor_args": {
                             "youtube": {
                                 "player_client": player_client,
                                 "skip": ["hls", "dash"],
+                                "player_skip": ["configs"],
                             }
                         },
                         "postprocessors": [{
@@ -450,23 +459,30 @@ class YouTubeAPI:
                     x = yt_dlp.YoutubeDL(ydl_optssx)
                     info = x.extract_info(link, download=True)
                     vid_id = info.get("id", "unknown")
-                    # Check for mp3 first (postprocessor output)
                     mp3_path = os.path.join("downloads", f"{vid_id}.mp3")
                     if os.path.exists(mp3_path):
                         return mp3_path
-                    # Fallback: check any audio format
                     for ext in ["m4a", "webm", "opus", "ogg", "mp3"]:
                         candidate = os.path.join("downloads", f"{vid_id}.{ext}")
                         if os.path.exists(candidate):
                             return candidate
                     return os.path.join("downloads", f"{vid_id}.{info.get('ext', 'webm')}")
-                except Exception:
+                except Exception as e:
+                    last_err = e
                     continue
-            raise Exception("YouTube download failed — all player clients exhausted")
+            raise Exception(f"Download failed: {last_err}")
 
         def video_dl():
             os.makedirs("downloads", exist_ok=True)
-            for player_client in [["android", "web"], ["ios"], ["web"]]:
+            last_err = None
+            for player_client in [
+                ["tv_embedded"],
+                ["android_embedded"],
+                ["android", "web"],
+                ["ios"],
+                ["mweb"],
+                ["web"],
+            ]:
                 try:
                     ydl_optssx = {
                         "format": "(bestvideo[height<=?720][width<=?1280][ext=mp4])+(bestaudio[ext=m4a])/bestvideo[height<=?720]+bestaudio/best",
@@ -476,12 +492,15 @@ class YouTubeAPI:
                         "quiet": True,
                         "no_warnings": True,
                         "merge_output_format": "mp4",
-                        "retries": 3,
-                        "fragment_retries": 3,
+                        "retries": 5,
+                        "fragment_retries": 5,
                         "socket_timeout": 30,
                         "http_headers": _YT_HEADERS,
                         "extractor_args": {
-                            "youtube": {"player_client": player_client}
+                            "youtube": {
+                                "player_client": player_client,
+                                "player_skip": ["configs"],
+                            }
                         },
                         **cookies,
                     }
@@ -492,9 +511,10 @@ class YouTubeAPI:
                     if os.path.exists(candidate):
                         return candidate
                     return os.path.join("downloads", f"{vid_id}.{info.get('ext', 'mp4')}")
-                except Exception:
+                except Exception as e:
+                    last_err = e
                     continue
-            raise Exception("YouTube video download failed — all player clients exhausted")
+            raise Exception(f"Video download failed: {last_err}")
 
         def song_video_dl():
             formats = f"{format_id}+140"
