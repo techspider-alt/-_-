@@ -637,6 +637,9 @@ class Call(PyTgCalls):
                             except Exception:
                                 pass
                             return
+                # ── Update db entry with actual file path so autoclear & seeks work ──
+                if direct:
+                    db[chat_id][0]["file"] = file_path
                 if video:
                     stream = MediaStream(
                         file_path,
@@ -654,11 +657,32 @@ class Call(PyTgCalls):
                     )
                 try:
                     await client.change_stream(chat_id, stream)
-                except:
-                    return await app.send_message(
-                        original_chat_id,
-                        text=_["call_6"],
-                    )
+                except Exception:
+                    # change_stream failed — skip to next track
+                    try:
+                        await mystic.delete()
+                    except Exception:
+                        pass
+                    try:
+                        check.pop(0)
+                    except Exception:
+                        pass
+                    if check:
+                        try:
+                            await app.send_message(
+                                original_chat_id,
+                                "❍ ꜱᴛʀᴇᴀᴍ ꜰᴀɪʟᴇᴅ, ꜱᴋɪᴘᴘɪɴɢ ᴛᴏ ɴᴇxᴛ ᴛʀᴀᴄᴋ...",
+                            )
+                        except Exception:
+                            pass
+                        return await self.change_stream(client, chat_id)
+                    else:
+                        await _clear_(chat_id)
+                        try:
+                            await client.leave_group_call(chat_id)
+                        except Exception:
+                            pass
+                        return
                 img = await get_thumb(videoid)
                 button = stream_markup(_, videoid, chat_id)
                 await mystic.delete()
@@ -713,6 +737,33 @@ class Call(PyTgCalls):
                 db[chat_id][0]["markup"] = "tg"
                 await send_logger_card(chat_id, original_chat_id, title, user, "VIDEO" if video else "AUDIO")
             else:
+                # ── Direct file path (already downloaded — Telegram, SoundCloud, cached) ──
+                # Guard: if file doesn't exist on disk, skip to next track
+                import os as _os
+                if not _os.path.isfile(queued):
+                    LOGGER(__name__).warning(
+                        f"change_stream direct-file missing for {chat_id}: {queued!r} — skipping"
+                    )
+                    try:
+                        check.pop(0)
+                    except Exception:
+                        pass
+                    if check:
+                        try:
+                            await app.send_message(
+                                original_chat_id,
+                                "❍ ꜰɪʟᴇ ɴᴏᴛ ꜰᴏᴜɴᴅ, ꜱᴋɪᴘᴘɪɴɢ ᴛᴏ ɴᴇxᴛ ᴛʀᴀᴄᴋ...",
+                            )
+                        except Exception:
+                            pass
+                        return await self.change_stream(client, chat_id)
+                    else:
+                        await _clear_(chat_id)
+                        try:
+                            await client.leave_group_call(chat_id)
+                        except Exception:
+                            pass
+                        return
                 if video:
                     stream = MediaStream(
                         queued,
@@ -730,11 +781,28 @@ class Call(PyTgCalls):
                     )
                 try:
                     await client.change_stream(chat_id, stream)
-                except:
-                    return await app.send_message(
-                        original_chat_id,
-                        text=_["call_6"],
-                    )
+                except Exception:
+                    # change_stream failed — skip to next instead of getting stuck
+                    try:
+                        check.pop(0)
+                    except Exception:
+                        pass
+                    if check:
+                        try:
+                            await app.send_message(
+                                original_chat_id,
+                                "❍ ꜱᴛʀᴇᴀᴍ ꜰᴀɪʟᴇᴅ, ꜱᴋɪᴘᴘɪɴɢ ᴛᴏ ɴᴇxᴛ ᴛʀᴀᴄᴋ...",
+                            )
+                        except Exception:
+                            pass
+                        return await self.change_stream(client, chat_id)
+                    else:
+                        await _clear_(chat_id)
+                        try:
+                            await client.leave_group_call(chat_id)
+                        except Exception:
+                            pass
+                        return
                 if videoid == "telegram":
                     button = telegram_markup(_, chat_id)
                     run = await app.send_photo(
