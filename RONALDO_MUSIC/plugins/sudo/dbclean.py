@@ -23,26 +23,38 @@ def _owner_filter():
 
 # ── Core cleanup logic ─────────────────────────────────────────────────────────
 async def _do_clean() -> dict:
-    countdb    = mongodb.upcount
-    connectdb  = mongodb.connect
-    langdb     = mongodb.language
-    playmodedb = mongodb.playmode
-    playtypedb = mongodb.playtypedb
-    playlistdb = mongodb.playlist
+    countdb      = mongodb.upcount
+    connectdb    = mongodb.connect
+    langdb       = mongodb.language
+    playmodedb   = mongodb.playmode
+    playtypedb   = mongodb.playtypedb
+    playlistdb   = mongodb.playlist
+    activechatdb = mongodb.activechats
+    onoffdb      = mongodb.onoffper
+    skipdb       = mongodb.skipmode
+    autoenddb    = mongodb.autoend
 
     deleted = {}
 
     pairs = [
-        ("AFK entries",          afkdb,      {}),
-        ("Empty playlists",      playlistdb, {"notes": {}}),
-        ("Stale upvote configs", countdb,    {"mode": {"$lte": 0}}),
-        ("Bad nightmode docs",   nightmodedb,{"mode": {"$exists": False}}),
-        ("Empty filter docs",    filtersdb,  {"filters": {}}),
-        ("Empty note docs",      notesdb,    {"notes": {}}),
-        ("Empty couple docs",    coupledb,   {"couple": {}}),
-        ("Broken playmode docs", playmodedb, {"mode": {"$in": [None, ""]}}),
-        ("Broken playtype docs", playtypedb, {"mode": {"$in": [None, ""]}}),
-        ("Broken language docs", langdb,     {"lang":  {"$in": [None, ""]}}),
+        # ── Empty/broken per-chat config docs ─────────────────────────────
+        ("AFK entries",            afkdb,        {}),
+        ("Empty playlists",        playlistdb,   {"notes": {}}),
+        ("Stale upvote configs",   countdb,      {"mode": {"$lte": 0}}),
+        ("Bad nightmode docs",     nightmodedb,  {"mode": {"$exists": False}}),
+        ("Empty filter docs",      filtersdb,    {"filters": {}}),
+        ("Empty note docs",        notesdb,      {"notes": {}}),
+        ("Empty couple docs",      coupledb,     {"couple": {}}),
+        ("Broken playmode docs",   playmodedb,   {"mode": {"$in": [None, ""]}}),
+        ("Broken playtype docs",   playtypedb,   {"mode": {"$in": [None, ""]}}),
+        ("Broken language docs",   langdb,       {"lang":  {"$in": [None, ""]}}),
+        # ── Stale runtime / session docs ──────────────────────────────────
+        ("Stale active chats",     activechatdb, {}),
+        ("Stale onoff docs",       onoffdb,      {"mode": {"$in": [None, ""]}}),
+        ("Stale skip-mode docs",   skipdb,       {"mode": {"$in": [None, ""]}}),
+        ("Stale autoend docs",     autoenddb,    {"autoend": {"$in": [None, ""]}}),
+        # ── Orphan connect docs (no chat_id) ──────────────────────────────
+        ("Orphan connect docs",    connectdb,    {"chat_id": {"$exists": False}}),
     ]
 
     for label, col, query in pairs:
