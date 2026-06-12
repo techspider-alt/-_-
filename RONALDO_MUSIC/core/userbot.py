@@ -1,4 +1,5 @@
 import asyncio
+import httpx
 from pyrogram.errors import FloodWait
 
 import config
@@ -8,26 +9,41 @@ assistants = []
 assistantids = []
 
 
+def _send_to_logger(text: str):
+    try:
+        token = config.BOT_TOKEN
+        chat_id = config.LOGGER_ID
+        if not token or not chat_id:
+            return
+        httpx.post(
+            f"https://api.telegram.org/bot{token}/sendMessage",
+            json={"chat_id": chat_id, "text": text, "parse_mode": "HTML"},
+            timeout=10,
+        )
+    except Exception:
+        pass
+
+
 async def _start_assistant_tasks(client, number, logger_id):
-    """Run post-start tasks using an already-connected Pyrogram client."""
     try:
         await client.join_chat("RONALDO_SUPPORT01")
     except Exception:
         pass
 
     assistants.append(number)
-    try:
-        await client.send_message(logger_id, f"✅ Assistant {number} Started")
-    except Exception:
-        LOGGER(__name__).warning(
-            f"Assistant {number}: Could not send message to log group."
-        )
+
     try:
         client.id = client.me.id
         client.name = client.me.mention
         client.username = client.me.username
         assistantids.append(client.id)
         LOGGER(__name__).info(f"Assistant {number} started as {client.name}")
+        _send_to_logger(
+            f"<u><b>🎵 ᴀssɪsᴛᴀɴᴛ {number} sᴛᴀʀᴛᴇᴅ</b></u>\n\n"
+            f"📛 <b>Name:</b> {client.name}\n"
+            f"🆔 <b>ID:</b> <code>{client.id}</code>\n"
+            f"👤 <b>Username:</b> @{client.username or 'N/A'}"
+        )
     except Exception:
         pass
 
@@ -41,11 +57,6 @@ class Userbot:
         self.five = None
 
     async def start(self):
-        """
-        Use already-started Pyrogram clients from the RONALDO Call instance.
-        This avoids AuthKeyDuplicated by never opening a second connection
-        with the same session string.
-        """
         from RONALDO_MUSIC.core.call import RONALDO
 
         self.one   = RONALDO.userbot1
