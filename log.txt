@@ -661,3 +661,92 @@ pyrogram.errors.exceptions.forbidden_403.PeerIdInvalid: Telegram says: [403 PEER
 [12-Jun-26 15:15:54 - INFO] - __main__ - 💓 Heartbeat OK — bot is alive! (ping #2)
 [12-Jun-26 15:16:04 - INFO] - aiohttp.access - 127.0.0.1 [12/Jun/2026:15:16:04 +0000] "GET /health HTTP/1.1" 200 154 "-" "Python/3.12 aiohttp/3.14.1"
 [12-Jun-26 15:16:04 - INFO] - __main__ - 💓 Heartbeat OK — bot is alive! (ping #3)
+[12-Jun-26 15:16:14 - INFO] - aiohttp.access - 127.0.0.1 [12/Jun/2026:15:16:14 +0000] "GET /health HTTP/1.1" 200 154 "-" "Python/3.12 aiohttp/3.14.1"
+[12-Jun-26 15:16:14 - INFO] - __main__ - 💓 Heartbeat OK — bot is alive! (ping #4)
+[12-Jun-26 15:16:24 - INFO] - aiohttp.access - 127.0.0.1 [12/Jun/2026:15:16:24 +0000] "GET /health HTTP/1.1" 200 154 "-" "Python/3.12 aiohttp/3.14.1"
+[12-Jun-26 15:16:24 - INFO] - __main__ - 💓 Heartbeat OK — bot is alive! (ping #5)
+[12-Jun-26 15:16:34 - INFO] - aiohttp.access - 127.0.0.1 [12/Jun/2026:15:16:34 +0000] "GET /health HTTP/1.1" 200 154 "-" "Python/3.12 aiohttp/3.14.1"
+[12-Jun-26 15:16:34 - INFO] - __main__ - 💓 Heartbeat OK — bot is alive! (ping #6)
+[12-Jun-26 15:16:44 - INFO] - aiohttp.access - 127.0.0.1 [12/Jun/2026:15:16:44 +0000] "GET /health HTTP/1.1" 200 154 "-" "Python/3.12 aiohttp/3.14.1"
+[12-Jun-26 15:16:44 - INFO] - __main__ - 💓 Heartbeat OK — bot is alive! (ping #7)
+[12-Jun-26 15:16:54 - INFO] - aiohttp.access - 127.0.0.1 [12/Jun/2026:15:16:54 +0000] "GET /health HTTP/1.1" 200 154 "-" "Python/3.12 aiohttp/3.14.1"
+[12-Jun-26 15:16:54 - INFO] - __main__ - 💓 Heartbeat OK — bot is alive! (ping #8)
+[12-Jun-26 15:17:04 - INFO] - aiohttp.access - 127.0.0.1 [12/Jun/2026:15:17:04 +0000] "GET /health HTTP/1.1" 200 154 "-" "Python/3.12 aiohttp/3.14.1"
+[12-Jun-26 15:17:04 - INFO] - __main__ - 💓 Heartbeat OK — bot is alive! (ping #9)
+[12-Jun-26 15:17:14 - INFO] - aiohttp.access - 127.0.0.1 [12/Jun/2026:15:17:14 +0000] "GET /health HTTP/1.1" 200 154 "-" "Python/3.12 aiohttp/3.14.1"
+[12-Jun-26 15:17:14 - INFO] - __main__ - 💓 Heartbeat OK — bot is alive! (ping #10)
+[12-Jun-26 15:17:24 - INFO] - aiohttp.access - 127.0.0.1 [12/Jun/2026:15:17:24 +0000] "GET /health HTTP/1.1" 200 154 "-" "Python/3.12 aiohttp/3.14.1"
+[12-Jun-26 15:17:24 - INFO] - __main__ - 💓 Heartbeat OK — bot is alive! (ping #11)
+[12-Jun-26 15:17:34 - INFO] - aiohttp.access - 127.0.0.1 [12/Jun/2026:15:17:34 +0000] "GET /health HTTP/1.1" 200 154 "-" "Python/3.12 aiohttp/3.14.1"
+[12-Jun-26 15:17:34 - INFO] - __main__ - 💓 Heartbeat OK — bot is alive! (ping #12)
+[12-Jun-26 15:17:37 - INFO] - aiohttp.access - 127.0.0.1 [12/Jun/2026:15:17:37 +0000] "GET / HTTP/1.1" 200 154 "https://7712605b-e7d1-4e03-8b9d-12f6e943ed6f-00-191h9o68lp9gy.sisko.replit.dev/__replco/workspace_iframe.html?initialPath=%2F&id=__default_preview__" "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36"
+[12-Jun-26 15:17:44 - INFO] - aiohttp.access - 127.0.0.1 [12/Jun/2026:15:17:44 +0000] "GET /health HTTP/1.1" 200 154 "-" "Python/3.12 aiohttp/3.14.1"
+[12-Jun-26 15:17:44 - INFO] - __main__ - 💓 Heartbeat OK — bot is alive! (ping #13)
+[12-Jun-26 15:17:54 - INFO] - aiohttp.access - 127.0.0.1 [12/Jun/2026:15:17:54 +0000] "GET /health HTTP/1.1" 200 154 "-" "Python/3.12 aiohttp/3.14.1"
+[12-Jun-26 15:17:54 - INFO] - __main__ - 💓 Heartbeat OK — bot is alive! (ping #14)
+[12-Jun-26 15:18:04 - INFO] - aiohttp.access - 127.0.0.1 [12/Jun/2026:15:18:04 +0000] "GET /health HTTP/1.1" 200 154 "-" "Python/3.12 aiohttp/3.14.1"
+[12-Jun-26 15:18:04 - INFO] - __main__ - 💓 Heartbeat OK — bot is alive! (ping #15)
+[12-Jun-26 15:18:14 - INFO] - aiohttp.access - 127.0.0.1 [12/Jun/2026:15:18:14 +0000] "GET /health HTTP/1.1" 200 154 "-" "Python/3.12 aiohttp/3.14.1"
+[12-Jun-26 15:18:14 - INFO] - __main__ - 💓 Heartbeat OK — bot is alive! (ping #16)
+[12-Jun-26 15:18:24 - INFO] - aiohttp.access - 127.0.0.1 [12/Jun/2026:15:18:24 +0000] "GET /health HTTP/1.1" 200 154 "-" "Python/3.12 aiohttp/3.14.1"
+[12-Jun-26 15:18:24 - INFO] - __main__ - 💓 Heartbeat OK — bot is alive! (ping #17)
+[12-Jun-26 15:18:34 - INFO] - aiohttp.access - 127.0.0.1 [12/Jun/2026:15:18:34 +0000] "GET /health HTTP/1.1" 200 154 "-" "Python/3.12 aiohttp/3.14.1"
+[12-Jun-26 15:18:34 - INFO] - __main__ - 💓 Heartbeat OK — bot is alive! (ping #18)
+[12-Jun-26 15:18:35 - ERROR] - pyrogram.dispatcher - Telegram says: [400 CHAT_ADMIN_REQUIRED] - The method requires chat admin privileges (caused by "messages.ExportChatInvite")
+Traceback (most recent call last):
+  File "/home/runner/workspace/.pythonlibs/lib/python3.12/site-packages/pyrogram/dispatcher.py", line 240, in handler_worker
+    await handler.callback(self.client, *args)
+  File "/home/runner/workspace/RONALDO_MUSIC/plugins/tools/chatlog.py", line 20, in join_watcher
+    link = await app.export_chat_invite_link(chat.id)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/workspace/.pythonlibs/lib/python3.12/site-packages/pyrogram/methods/invite_links/export_chat_invite_link.py", line 58, in export_chat_invite_link
+    r = await self.invoke(
+        ^^^^^^^^^^^^^^^^^^
+  File "/home/runner/workspace/.pythonlibs/lib/python3.12/site-packages/pyrogram/methods/advanced/invoke.py", line 79, in invoke
+    r = await self.session.invoke(
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/workspace/.pythonlibs/lib/python3.12/site-packages/pyrogram/session/session.py", line 389, in invoke
+    return await self.send(query, timeout=timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/workspace/.pythonlibs/lib/python3.12/site-packages/pyrogram/session/session.py", line 357, in send
+    RPCError.raise_it(result, type(data))
+  File "/home/runner/workspace/.pythonlibs/lib/python3.12/site-packages/pyrogram/errors/rpc_error.py", line 91, in raise_it
+    raise getattr(
+pyrogram.errors.exceptions.bad_request_400.ChatAdminRequired: Telegram says: [400 CHAT_ADMIN_REQUIRED] - The method requires chat admin privileges (caused by "messages.ExportChatInvite")
+[12-Jun-26 15:18:44 - INFO] - aiohttp.access - 127.0.0.1 [12/Jun/2026:15:18:44 +0000] "GET /health HTTP/1.1" 200 154 "-" "Python/3.12 aiohttp/3.14.1"
+[12-Jun-26 15:18:44 - INFO] - __main__ - 💓 Heartbeat OK — bot is alive! (ping #19)
+[12-Jun-26 15:18:54 - INFO] - aiohttp.access - 127.0.0.1 [12/Jun/2026:15:18:54 +0000] "GET /health HTTP/1.1" 200 154 "-" "Python/3.12 aiohttp/3.14.1"
+[12-Jun-26 15:18:54 - INFO] - __main__ - 💓 Heartbeat OK — bot is alive! (ping #20)
+[12-Jun-26 15:19:04 - INFO] - aiohttp.access - 127.0.0.1 [12/Jun/2026:15:19:04 +0000] "GET /health HTTP/1.1" 200 154 "-" "Python/3.12 aiohttp/3.14.1"
+[12-Jun-26 15:19:04 - INFO] - __main__ - 💓 Heartbeat OK — bot is alive! (ping #21)
+[12-Jun-26 15:19:14 - INFO] - aiohttp.access - 127.0.0.1 [12/Jun/2026:15:19:14 +0000] "GET /health HTTP/1.1" 200 154 "-" "Python/3.12 aiohttp/3.14.1"
+[12-Jun-26 15:19:14 - INFO] - __main__ - 💓 Heartbeat OK — bot is alive! (ping #22)
+[12-Jun-26 15:19:24 - INFO] - aiohttp.access - 127.0.0.1 [12/Jun/2026:15:19:24 +0000] "GET /health HTTP/1.1" 200 154 "-" "Python/3.12 aiohttp/3.14.1"
+[12-Jun-26 15:19:24 - INFO] - __main__ - 💓 Heartbeat OK — bot is alive! (ping #23)
+[12-Jun-26 15:19:34 - INFO] - aiohttp.access - 127.0.0.1 [12/Jun/2026:15:19:34 +0000] "GET /health HTTP/1.1" 200 154 "-" "Python/3.12 aiohttp/3.14.1"
+[12-Jun-26 15:19:34 - INFO] - __main__ - 💓 Heartbeat OK — bot is alive! (ping #24)
+[12-Jun-26 15:19:44 - INFO] - aiohttp.access - 127.0.0.1 [12/Jun/2026:15:19:44 +0000] "GET /health HTTP/1.1" 200 154 "-" "Python/3.12 aiohttp/3.14.1"
+[12-Jun-26 15:19:44 - INFO] - __main__ - 💓 Heartbeat OK — bot is alive! (ping #25)
+[12-Jun-26 15:19:54 - INFO] - aiohttp.access - 127.0.0.1 [12/Jun/2026:15:19:54 +0000] "GET /health HTTP/1.1" 200 154 "-" "Python/3.12 aiohttp/3.14.1"
+[12-Jun-26 15:19:54 - INFO] - __main__ - 💓 Heartbeat OK — bot is alive! (ping #26)
+[12-Jun-26 15:19:59 - INFO] - RONALDO_MUSIC.core.dir - Directories Updated.
+[12-Jun-26 15:19:59 - INFO] - RONALDO_MUSIC.core.git - Git Client Found [VPS DEPLOYER]
+[12-Jun-26 15:19:59 - INFO] - RONALDO_MUSIC.misc - 𝗗𝗔𝗧𝗔𝗕𝗔𝗦𝗘 𝗟𝗢𝗔𝗗 𝗕𝗔𝗕𝗬🍫........
+[12-Jun-26 15:19:59 - INFO] - RONALDO_MUSIC.core.bot - Starting Bot...
+[12-Jun-26 15:19:59 - INFO] - RONALDO_MUSIC.misc - 𝗦𝗨𝗗𝗢 𝗨𝗦𝗘𝗥 𝗗𝗢𝗡𝗘✨🎋.
+[12-Jun-26 15:20:05 - ERROR] - RONALDO_MUSIC.core.bot - Bot has failed to access the log group/channel.
+  Reason : ValueError.
+[12-Jun-26 15:20:05 - INFO] - RONALDO_MUSIC.core.bot - Music Bot Started as ˹ 𝐑 𝐨 𝐧 𝛂 𝐥 𝐝 𝐨 ꭙ 𝐌 𝐮 𝐬 𝛊 𝐜 𝐁 𝐨 𝐭 ❤️‍🔥 
+[12-Jun-26 15:20:05 - INFO] - __main__ - ✅ Bot client started successfully.
+[12-Jun-26 15:20:05 - INFO] - telethon.crypto.aes - libssl detected, it will be used for encryption
+[12-Jun-26 15:20:06 - INFO] - RONALDO_MUSIC.plugins - 𝐀𝐥𝐥 𝐅𝐞𝐚𝐭𝐮𝐫𝐞𝐬 𝐋𝐨𝐚𝐝𝐞𝐝 𝐁𝐚𝐛𝐲🥳...
+[12-Jun-26 15:20:06 - INFO] - RONALDO_MUSIC.core.call - Starting PyTgCalls Client...
+
+[12-Jun-26 15:20:07 - INFO] - RONALDO_MUSIC.core.userbot - Starting Assistants (reusing Call clients)...
+[12-Jun-26 15:20:07 - WARNING] - RONALDO_MUSIC.core.userbot - Assistant 1: Could not send message to log group.
+[12-Jun-26 15:20:07 - INFO] - RONALDO_MUSIC.core.userbot - Assistant 1 started as <a href=tg://user?id=8686557690>Krishna</a>
+[12-Jun-26 15:20:07 - INFO] - RONALDO_MUSIC.core.userbot - Active assistants: [1]
+[12-Jun-26 15:20:07 - INFO] - __main__ - 💓 Heartbeat web server started on port 8080
+[12-Jun-26 15:20:07 - INFO] - RONALDO_MUSIC - ╔═════ஜ۩۞۩ஜ════╗
+  ♨️ 𝗠𝗔𝗗𝗘 𝗕𝗬 ˹ 𝐑 𝐨 𝐧 𝛂 𝐥 𝐝 𝐨  ꧊𝆅  ❤️‍🔥 ♨️
+╚═════ஜ۩۞۩ஜ════╝
