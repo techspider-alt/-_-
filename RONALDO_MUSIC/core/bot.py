@@ -1,7 +1,6 @@
 import os
 import httpx
-from pyrogram import Client, errors
-from pyrogram.enums import ChatMemberStatus
+from pyrogram import Client
 
 import config
 from ..logging import LOGGER
@@ -43,6 +42,12 @@ class RONALDO(Client):
         self.name = self.me.first_name + " " + (self.me.last_name or "")
         self.username = self.me.username
         self.mention = f"@{self.username}"
+
+        try:
+            from RONALDO_MUSIC.utils.activity_tracker import set_bot_info
+            set_bot_info(self.name, self.id, self.username)
+        except Exception:
+            pass
 
         _send_to_logger(
             f"<u><b>🤖 ʙᴏᴛ sᴛᴀʀᴛᴇᴅ</b></u>\n\n"

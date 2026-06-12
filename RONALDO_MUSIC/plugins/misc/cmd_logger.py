@@ -31,9 +31,12 @@ async def command_log_handler(client, message: Message):
         cmd_text = (message.text or message.caption or "").split("\n")[0][:200]
 
         if chat.type == ChatType.PRIVATE:
+            chat_title = "Private"
+            chat_id_val = user.id if user else 0
             chat_info = "🔒 <b>Chat:</b> Private"
         else:
             chat_title = getattr(chat, "title", "Unknown")
+            chat_id_val = chat.id
             chat_info = (
                 f"👥 <b>Group:</b> {chat_title}\n"
                 f"📌 <b>Chat ID:</b> <code>{chat.id}</code>"
@@ -46,6 +49,11 @@ async def command_log_handler(client, message: Message):
                 f"👤 <b>User:</b> {user_name} ({username})\n"
                 f"🆔 <b>User ID:</b> <code>{user.id}</code>"
             )
+            try:
+                from RONALDO_MUSIC.utils.activity_tracker import record_command
+                record_command(user_name, user.id, chat_title, chat_id_val, cmd_text)
+            except Exception:
+                pass
         else:
             user_info = "👤 <b>User:</b> Anonymous"
 

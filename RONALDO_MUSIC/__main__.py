@@ -103,7 +103,7 @@ async def _start_web_server():
 
 async def _heartbeat_loop():
     """Ping the health endpoint every 10 seconds to keep bot alive.
-    Sends bot + assistant status to logger every 5 minutes."""
+    Sends full bot + assistant activity report to logger every 5 minutes."""
     import aiohttp
     from RONALDO_MUSIC.core.userbot import assistants
     port = int(os.environ.get("PORT", 8080))
@@ -118,19 +118,37 @@ async def _heartbeat_loop():
                         ping_count += 1
                         LOGGER(__name__).info(f"💓 Heartbeat OK — bot is alive! (ping #{ping_count})")
                         if ping_count % 30 == 0:
-                            uptime_min = ping_count * 10 // 60
-                            active = assistants if assistants else []
-                            assistant_text = (
-                                f"✅ Active: {len(active)} assistant(s) — {active}"
-                                if active else "⚠️ No assistants active"
-                            )
-                            _tg_send(
-                                f"💓 <b>RONALDO MUSIC — Status Report</b>\n\n"
-                                f"🤖 <b>Bot:</b> ✅ Online\n"
-                                f"🎵 <b>Assistants:</b> {assistant_text}\n"
-                                f"⏱ <b>Uptime:</b> ~{uptime_min} minutes\n"
-                                f"🔢 <b>Total pings:</b> <code>{ping_count}</code>"
-                            )
+                            try:
+                                from RONALDO_MUSIC.utils import activity_tracker as at
+                                bot_line = (
+                                    f"📛 {at.bot_name} | 🆔 <code>{at.bot_id}</code> | @{at.bot_username}"
+                                    if at.bot_id else "✅ Online"
+                                )
+                                if at.assistant_info:
+                                    asst_lines = "\n".join(
+                                        f"  ├ <b>#{n}</b> {info['name']} | 🆔 <code>{info['id']}</code> | @{info['username']}"
+                                        for n, info in sorted(at.assistant_info.items())
+                                    )
+                                else:
+                                    asst_lines = "  ⚠️ No assistants active"
+                                recent_cmds = ""
+                                if at.command_log:
+                                    recent_cmds = "\n\n📋 <b>Recent Commands (last 5):</b>\n"
+                                    for entry in at.command_log[-5:]:
+                                        recent_cmds += f"  • <code>{entry['cmd']}</code> — {entry['user']}\n"
+                                _tg_send(
+                                    f"💓 <b>RONALDO MUSIC — Activity Report</b>\n\n"
+                                    f"🤖 <b>Bot:</b> {bot_line}\n\n"
+                                    f"🎵 <b>Assistants ({len(at.assistant_info)} active):</b>\n{asst_lines}\n\n"
+                                    f"📊 <b>Total Commands Used:</b> <code>{at.total_commands}</code>\n"
+                                    f"⏱ <b>Uptime:</b> {at.get_uptime_str()}"
+                                    f"{recent_cmds}"
+                                )
+                            except Exception as e:
+                                _tg_send(
+                                    f"💓 <b>RONALDO MUSIC — Bot Alive</b>\n"
+                                    f"⏱ Uptime ping #{ping_count}"
+                                )
         except Exception as e:
             LOGGER(__name__).warning(f"⚠️ Heartbeat ping failed: {e}")
         await asyncio.sleep(10)

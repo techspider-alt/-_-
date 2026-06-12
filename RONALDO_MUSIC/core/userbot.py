@@ -1,7 +1,4 @@
-import asyncio
 import httpx
-from pyrogram.errors import FloodWait
-
 import config
 from ..logging import LOGGER
 
@@ -34,9 +31,16 @@ async def _start_assistant_tasks(client, number, logger_id):
 
     try:
         client.id = client.me.id
-        client.name = client.me.mention
+        client.name = client.me.first_name or f"Assistant {number}"
         client.username = client.me.username
         assistantids.append(client.id)
+
+        try:
+            from RONALDO_MUSIC.utils.activity_tracker import register_assistant
+            register_assistant(number, client.name, client.id, client.username)
+        except Exception:
+            pass
+
         LOGGER(__name__).info(f"Assistant {number} started as {client.name}")
         _send_to_logger(
             f"<u><b>🎵 ᴀssɪsᴛᴀɴᴛ {number} sᴛᴀʀᴛᴇᴅ</b></u>\n\n"
