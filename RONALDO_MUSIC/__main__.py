@@ -103,8 +103,9 @@ async def _start_web_server():
 
 async def _heartbeat_loop():
     """Ping the health endpoint every 10 seconds to keep bot alive.
-    Sends a Telegram notification to the logger group every 5 minutes."""
+    Sends bot + assistant status to logger every 5 minutes."""
     import aiohttp
+    from RONALDO_MUSIC.core.userbot import assistants
     port = int(os.environ.get("PORT", 8080))
     url = f"http://localhost:{port}/health"
     await asyncio.sleep(15)
@@ -117,15 +118,42 @@ async def _heartbeat_loop():
                         ping_count += 1
                         LOGGER(__name__).info(f"💓 Heartbeat OK — bot is alive! (ping #{ping_count})")
                         if ping_count % 30 == 0:
+                            uptime_min = ping_count * 10 // 60
+                            active = assistants if assistants else []
+                            assistant_text = (
+                                f"✅ Active: {len(active)} assistant(s) — {active}"
+                                if active else "⚠️ No assistants active"
+                            )
                             _tg_send(
-                                f"💓 <b>RONALDO MUSIC — Heartbeat</b>\n\n"
-                                f"✅ Bot is alive and running!\n"
-                                f"🔢 Total pings: <code>{ping_count}</code>\n"
-                                f"⏱ Uptime: ~{ping_count * 10 // 60} minutes"
+                                f"💓 <b>RONALDO MUSIC — Status Report</b>\n\n"
+                                f"🤖 <b>Bot:</b> ✅ Online\n"
+                                f"🎵 <b>Assistants:</b> {assistant_text}\n"
+                                f"⏱ <b>Uptime:</b> ~{uptime_min} minutes\n"
+                                f"🔢 <b>Total pings:</b> <code>{ping_count}</code>"
                             )
         except Exception as e:
             LOGGER(__name__).warning(f"⚠️ Heartbeat ping failed: {e}")
         await asyncio.sleep(10)
+
+
+async def _autopush_loop():
+    """Auto-push changes to GitHub every 30 minutes."""
+    await asyncio.sleep(60)
+    while True:
+        try:
+            proc = await asyncio.create_subprocess_shell(
+                "bash autopush.sh",
+                stdout=asyncio.subprocess.PIPE,
+                stderr=asyncio.subprocess.PIPE,
+            )
+            stdout, stderr = await proc.communicate()
+            if stdout:
+                LOGGER(__name__).info(f"[autopush] {stdout.decode().strip()}")
+            if stderr:
+                LOGGER(__name__).warning(f"[autopush] {stderr.decode().strip()}")
+        except Exception as e:
+            LOGGER(__name__).warning(f"[autopush] failed: {e}")
+        await asyncio.sleep(1800)
 
 
 
@@ -305,6 +333,7 @@ async def init():
 
     await _start_web_server()
     asyncio.get_event_loop().create_task(_heartbeat_loop())
+    asyncio.get_event_loop().create_task(_autopush_loop())
 
     LOGGER("RONALDO_MUSIC").info(
         "╔═════ஜ۩۞۩ஜ════╗\n"

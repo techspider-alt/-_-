@@ -750,3 +750,151 @@ pyrogram.errors.exceptions.bad_request_400.ChatAdminRequired: Telegram says: [40
 [12-Jun-26 15:20:07 - INFO] - RONALDO_MUSIC - ╔═════ஜ۩۞۩ஜ════╗
   ♨️ 𝗠𝗔𝗗𝗘 𝗕𝗬 ˹ 𝐑 𝐨 𝐧 𝛂 𝐥 𝐝 𝐨  ꧊𝆅  ❤️‍🔥 ♨️
 ╚═════ஜ۩۞۩ஜ════╝
+[12-Jun-26 15:20:16 - INFO] - aiohttp.access - 127.0.0.1 [12/Jun/2026:15:20:16 +0000] "GET / HTTP/1.1" 200 154 "https://7712605b-e7d1-4e03-8b9d-12f6e943ed6f-00-191h9o68lp9gy.sisko.replit.dev/__replco/workspace_iframe.html?initialPath=%2F&id=__default_preview__" "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36"
+[12-Jun-26 15:20:22 - INFO] - aiohttp.access - 127.0.0.1 [12/Jun/2026:15:20:22 +0000] "GET /health HTTP/1.1" 200 154 "-" "Python/3.12 aiohttp/3.14.1"
+[12-Jun-26 15:20:22 - INFO] - __main__ - 💓 Heartbeat OK — bot is alive! (ping #1)
+[12-Jun-26 15:20:32 - INFO] - aiohttp.access - 127.0.0.1 [12/Jun/2026:15:20:32 +0000] "GET /health HTTP/1.1" 200 154 "-" "Python/3.12 aiohttp/3.14.1"
+[12-Jun-26 15:20:32 - INFO] - __main__ - 💓 Heartbeat OK — bot is alive! (ping #2)
+[12-Jun-26 15:20:42 - INFO] - aiohttp.access - 127.0.0.1 [12/Jun/2026:15:20:42 +0000] "GET /health HTTP/1.1" 200 154 "-" "Python/3.12 aiohttp/3.14.1"
+[12-Jun-26 15:20:42 - INFO] - __main__ - 💓 Heartbeat OK — bot is alive! (ping #3)
+[12-Jun-26 15:20:52 - INFO] - aiohttp.access - 127.0.0.1 [12/Jun/2026:15:20:52 +0000] "GET /health HTTP/1.1" 200 154 "-" "Python/3.12 aiohttp/3.14.1"
+[12-Jun-26 15:20:52 - INFO] - __main__ - 💓 Heartbeat OK — bot is alive! (ping #4)
+[12-Jun-26 15:21:02 - INFO] - aiohttp.access - 127.0.0.1 [12/Jun/2026:15:21:02 +0000] "GET /health HTTP/1.1" 200 154 "-" "Python/3.12 aiohttp/3.14.1"
+[12-Jun-26 15:21:02 - INFO] - __main__ - 💓 Heartbeat OK — bot is alive! (ping #5)
+[12-Jun-26 15:21:12 - INFO] - aiohttp.access - 127.0.0.1 [12/Jun/2026:15:21:12 +0000] "GET /health HTTP/1.1" 200 154 "-" "Python/3.12 aiohttp/3.14.1"
+[12-Jun-26 15:21:12 - INFO] - __main__ - 💓 Heartbeat OK — bot is alive! (ping #6)
+[12-Jun-26 15:21:22 - INFO] - aiohttp.access - 127.0.0.1 [12/Jun/2026:15:21:22 +0000] "GET /health HTTP/1.1" 200 154 "-" "Python/3.12 aiohttp/3.14.1"
+[12-Jun-26 15:21:22 - INFO] - __main__ - 💓 Heartbeat OK — bot is alive! (ping #7)
+[12-Jun-26 15:21:32 - INFO] - aiohttp.access - 127.0.0.1 [12/Jun/2026:15:21:32 +0000] "GET /health HTTP/1.1" 200 154 "-" "Python/3.12 aiohttp/3.14.1"
+[12-Jun-26 15:21:32 - INFO] - __main__ - 💓 Heartbeat OK — bot is alive! (ping #8)
+[12-Jun-26 15:21:42 - INFO] - aiohttp.access - 127.0.0.1 [12/Jun/2026:15:21:42 +0000] "GET /health HTTP/1.1" 200 154 "-" "Python/3.12 aiohttp/3.14.1"
+[12-Jun-26 15:21:42 - INFO] - __main__ - 💓 Heartbeat OK — bot is alive! (ping #9)
+[12-Jun-26 15:21:52 - INFO] - aiohttp.access - 127.0.0.1 [12/Jun/2026:15:21:52 +0000] "GET /health HTTP/1.1" 200 154 "-" "Python/3.12 aiohttp/3.14.1"
+[12-Jun-26 15:21:52 - INFO] - __main__ - 💓 Heartbeat OK — bot is alive! (ping #10)
+[12-Jun-26 15:22:02 - INFO] - aiohttp.access - 127.0.0.1 [12/Jun/2026:15:22:02 +0000] "GET /health HTTP/1.1" 200 154 "-" "Python/3.12 aiohttp/3.14.1"
+[12-Jun-26 15:22:02 - INFO] - __main__ - 💓 Heartbeat OK — bot is alive! (ping #11)
+[12-Jun-26 15:22:12 - INFO] - aiohttp.access - 127.0.0.1 [12/Jun/2026:15:22:12 +0000] "GET /health HTTP/1.1" 200 154 "-" "Python/3.12 aiohttp/3.14.1"
+[12-Jun-26 15:22:12 - INFO] - __main__ - 💓 Heartbeat OK — bot is alive! (ping #12)
+[12-Jun-26 15:22:22 - INFO] - aiohttp.access - 127.0.0.1 [12/Jun/2026:15:22:22 +0000] "GET /health HTTP/1.1" 200 154 "-" "Python/3.12 aiohttp/3.14.1"
+[12-Jun-26 15:22:22 - INFO] - __main__ - 💓 Heartbeat OK — bot is alive! (ping #13)
+[12-Jun-26 15:22:32 - INFO] - aiohttp.access - 127.0.0.1 [12/Jun/2026:15:22:32 +0000] "GET /health HTTP/1.1" 200 154 "-" "Python/3.12 aiohttp/3.14.1"
+[12-Jun-26 15:22:32 - INFO] - __main__ - 💓 Heartbeat OK — bot is alive! (ping #14)
+[12-Jun-26 15:22:42 - INFO] - aiohttp.access - 127.0.0.1 [12/Jun/2026:15:22:42 +0000] "GET /health HTTP/1.1" 200 154 "-" "Python/3.12 aiohttp/3.14.1"
+[12-Jun-26 15:22:42 - INFO] - __main__ - 💓 Heartbeat OK — bot is alive! (ping #15)
+[12-Jun-26 15:22:52 - INFO] - aiohttp.access - 127.0.0.1 [12/Jun/2026:15:22:52 +0000] "GET /health HTTP/1.1" 200 154 "-" "Python/3.12 aiohttp/3.14.1"
+[12-Jun-26 15:22:52 - INFO] - __main__ - 💓 Heartbeat OK — bot is alive! (ping #16)
+[12-Jun-26 15:23:02 - INFO] - aiohttp.access - 127.0.0.1 [12/Jun/2026:15:23:02 +0000] "GET /health HTTP/1.1" 200 154 "-" "Python/3.12 aiohttp/3.14.1"
+[12-Jun-26 15:23:02 - INFO] - __main__ - 💓 Heartbeat OK — bot is alive! (ping #17)
+[12-Jun-26 15:23:12 - INFO] - aiohttp.access - 127.0.0.1 [12/Jun/2026:15:23:12 +0000] "GET /health HTTP/1.1" 200 154 "-" "Python/3.12 aiohttp/3.14.1"
+[12-Jun-26 15:23:12 - INFO] - __main__ - 💓 Heartbeat OK — bot is alive! (ping #18)
+[12-Jun-26 15:23:22 - INFO] - aiohttp.access - 127.0.0.1 [12/Jun/2026:15:23:22 +0000] "GET /health HTTP/1.1" 200 154 "-" "Python/3.12 aiohttp/3.14.1"
+[12-Jun-26 15:23:22 - INFO] - __main__ - 💓 Heartbeat OK — bot is alive! (ping #19)
+[12-Jun-26 15:23:32 - INFO] - aiohttp.access - 127.0.0.1 [12/Jun/2026:15:23:32 +0000] "GET /health HTTP/1.1" 200 154 "-" "Python/3.12 aiohttp/3.14.1"
+[12-Jun-26 15:23:32 - INFO] - __main__ - 💓 Heartbeat OK — bot is alive! (ping #20)
+[12-Jun-26 15:23:42 - INFO] - aiohttp.access - 127.0.0.1 [12/Jun/2026:15:23:42 +0000] "GET /health HTTP/1.1" 200 154 "-" "Python/3.12 aiohttp/3.14.1"
+[12-Jun-26 15:23:42 - INFO] - __main__ - 💓 Heartbeat OK — bot is alive! (ping #21)
+[12-Jun-26 15:23:52 - INFO] - aiohttp.access - 127.0.0.1 [12/Jun/2026:15:23:52 +0000] "GET /health HTTP/1.1" 200 154 "-" "Python/3.12 aiohttp/3.14.1"
+[12-Jun-26 15:23:52 - INFO] - __main__ - 💓 Heartbeat OK — bot is alive! (ping #22)
+[12-Jun-26 15:24:02 - INFO] - aiohttp.access - 127.0.0.1 [12/Jun/2026:15:24:02 +0000] "GET /health HTTP/1.1" 200 154 "-" "Python/3.12 aiohttp/3.14.1"
+[12-Jun-26 15:24:02 - INFO] - __main__ - 💓 Heartbeat OK — bot is alive! (ping #23)
+[12-Jun-26 15:24:12 - INFO] - aiohttp.access - 127.0.0.1 [12/Jun/2026:15:24:12 +0000] "GET /health HTTP/1.1" 200 154 "-" "Python/3.12 aiohttp/3.14.1"
+[12-Jun-26 15:24:12 - INFO] - __main__ - 💓 Heartbeat OK — bot is alive! (ping #24)
+[12-Jun-26 15:24:22 - INFO] - aiohttp.access - 127.0.0.1 [12/Jun/2026:15:24:22 +0000] "GET /health HTTP/1.1" 200 154 "-" "Python/3.12 aiohttp/3.14.1"
+[12-Jun-26 15:24:22 - INFO] - __main__ - 💓 Heartbeat OK — bot is alive! (ping #25)
+[12-Jun-26 15:24:32 - INFO] - aiohttp.access - 127.0.0.1 [12/Jun/2026:15:24:32 +0000] "GET /health HTTP/1.1" 200 154 "-" "Python/3.12 aiohttp/3.14.1"
+[12-Jun-26 15:24:32 - INFO] - __main__ - 💓 Heartbeat OK — bot is alive! (ping #26)
+[12-Jun-26 15:24:42 - INFO] - aiohttp.access - 127.0.0.1 [12/Jun/2026:15:24:42 +0000] "GET /health HTTP/1.1" 200 154 "-" "Python/3.12 aiohttp/3.14.1"
+[12-Jun-26 15:24:42 - INFO] - __main__ - 💓 Heartbeat OK — bot is alive! (ping #27)
+[12-Jun-26 15:24:52 - INFO] - aiohttp.access - 127.0.0.1 [12/Jun/2026:15:24:52 +0000] "GET /health HTTP/1.1" 200 154 "-" "Python/3.12 aiohttp/3.14.1"
+[12-Jun-26 15:24:52 - INFO] - __main__ - 💓 Heartbeat OK — bot is alive! (ping #28)
+[12-Jun-26 15:25:02 - INFO] - aiohttp.access - 127.0.0.1 [12/Jun/2026:15:25:02 +0000] "GET /health HTTP/1.1" 200 154 "-" "Python/3.12 aiohttp/3.14.1"
+[12-Jun-26 15:25:02 - INFO] - __main__ - 💓 Heartbeat OK — bot is alive! (ping #29)
+[12-Jun-26 15:25:12 - INFO] - aiohttp.access - 127.0.0.1 [12/Jun/2026:15:25:12 +0000] "GET /health HTTP/1.1" 200 154 "-" "Python/3.12 aiohttp/3.14.1"
+[12-Jun-26 15:25:12 - INFO] - __main__ - 💓 Heartbeat OK — bot is alive! (ping #30)
+[12-Jun-26 15:25:23 - INFO] - aiohttp.access - 127.0.0.1 [12/Jun/2026:15:25:23 +0000] "GET /health HTTP/1.1" 200 154 "-" "Python/3.12 aiohttp/3.14.1"
+[12-Jun-26 15:25:23 - INFO] - __main__ - 💓 Heartbeat OK — bot is alive! (ping #31)
+[12-Jun-26 15:25:33 - INFO] - aiohttp.access - 127.0.0.1 [12/Jun/2026:15:25:33 +0000] "GET /health HTTP/1.1" 200 154 "-" "Python/3.12 aiohttp/3.14.1"
+[12-Jun-26 15:25:33 - INFO] - __main__ - 💓 Heartbeat OK — bot is alive! (ping #32)
+[12-Jun-26 15:25:43 - INFO] - aiohttp.access - 127.0.0.1 [12/Jun/2026:15:25:43 +0000] "GET /health HTTP/1.1" 200 154 "-" "Python/3.12 aiohttp/3.14.1"
+[12-Jun-26 15:25:43 - INFO] - __main__ - 💓 Heartbeat OK — bot is alive! (ping #33)
+[12-Jun-26 15:25:53 - INFO] - aiohttp.access - 127.0.0.1 [12/Jun/2026:15:25:53 +0000] "GET /health HTTP/1.1" 200 154 "-" "Python/3.12 aiohttp/3.14.1"
+[12-Jun-26 15:25:53 - INFO] - __main__ - 💓 Heartbeat OK — bot is alive! (ping #34)
+[12-Jun-26 15:26:03 - INFO] - aiohttp.access - 127.0.0.1 [12/Jun/2026:15:26:03 +0000] "GET /health HTTP/1.1" 200 154 "-" "Python/3.12 aiohttp/3.14.1"
+[12-Jun-26 15:26:03 - INFO] - __main__ - 💓 Heartbeat OK — bot is alive! (ping #35)
+[12-Jun-26 15:26:13 - INFO] - aiohttp.access - 127.0.0.1 [12/Jun/2026:15:26:13 +0000] "GET /health HTTP/1.1" 200 154 "-" "Python/3.12 aiohttp/3.14.1"
+[12-Jun-26 15:26:13 - INFO] - __main__ - 💓 Heartbeat OK — bot is alive! (ping #36)
+[12-Jun-26 15:26:23 - INFO] - aiohttp.access - 127.0.0.1 [12/Jun/2026:15:26:23 +0000] "GET /health HTTP/1.1" 200 154 "-" "Python/3.12 aiohttp/3.14.1"
+[12-Jun-26 15:26:23 - INFO] - __main__ - 💓 Heartbeat OK — bot is alive! (ping #37)
+[12-Jun-26 15:26:33 - INFO] - aiohttp.access - 127.0.0.1 [12/Jun/2026:15:26:33 +0000] "GET /health HTTP/1.1" 200 154 "-" "Python/3.12 aiohttp/3.14.1"
+[12-Jun-26 15:26:33 - INFO] - __main__ - 💓 Heartbeat OK — bot is alive! (ping #38)
+[12-Jun-26 15:26:43 - INFO] - aiohttp.access - 127.0.0.1 [12/Jun/2026:15:26:43 +0000] "GET /health HTTP/1.1" 200 154 "-" "Python/3.12 aiohttp/3.14.1"
+[12-Jun-26 15:26:43 - INFO] - __main__ - 💓 Heartbeat OK — bot is alive! (ping #39)
+[12-Jun-26 15:26:53 - INFO] - aiohttp.access - 127.0.0.1 [12/Jun/2026:15:26:53 +0000] "GET /health HTTP/1.1" 200 154 "-" "Python/3.12 aiohttp/3.14.1"
+[12-Jun-26 15:26:53 - INFO] - __main__ - 💓 Heartbeat OK — bot is alive! (ping #40)
+[12-Jun-26 15:27:03 - INFO] - aiohttp.access - 127.0.0.1 [12/Jun/2026:15:27:03 +0000] "GET /health HTTP/1.1" 200 154 "-" "Python/3.12 aiohttp/3.14.1"
+[12-Jun-26 15:27:03 - INFO] - __main__ - 💓 Heartbeat OK — bot is alive! (ping #41)
+[12-Jun-26 15:27:13 - INFO] - aiohttp.access - 127.0.0.1 [12/Jun/2026:15:27:13 +0000] "GET /health HTTP/1.1" 200 154 "-" "Python/3.12 aiohttp/3.14.1"
+[12-Jun-26 15:27:13 - INFO] - __main__ - 💓 Heartbeat OK — bot is alive! (ping #42)
+[12-Jun-26 15:27:23 - INFO] - aiohttp.access - 127.0.0.1 [12/Jun/2026:15:27:23 +0000] "GET /health HTTP/1.1" 200 154 "-" "Python/3.12 aiohttp/3.14.1"
+[12-Jun-26 15:27:23 - INFO] - __main__ - 💓 Heartbeat OK — bot is alive! (ping #43)
+[12-Jun-26 15:27:33 - INFO] - aiohttp.access - 127.0.0.1 [12/Jun/2026:15:27:33 +0000] "GET /health HTTP/1.1" 200 154 "-" "Python/3.12 aiohttp/3.14.1"
+[12-Jun-26 15:27:33 - INFO] - __main__ - 💓 Heartbeat OK — bot is alive! (ping #44)
+[12-Jun-26 15:27:43 - INFO] - aiohttp.access - 127.0.0.1 [12/Jun/2026:15:27:43 +0000] "GET /health HTTP/1.1" 200 154 "-" "Python/3.12 aiohttp/3.14.1"
+[12-Jun-26 15:27:43 - INFO] - __main__ - 💓 Heartbeat OK — bot is alive! (ping #45)
+[12-Jun-26 15:27:53 - INFO] - aiohttp.access - 127.0.0.1 [12/Jun/2026:15:27:53 +0000] "GET /health HTTP/1.1" 200 154 "-" "Python/3.12 aiohttp/3.14.1"
+[12-Jun-26 15:27:53 - INFO] - __main__ - 💓 Heartbeat OK — bot is alive! (ping #46)
+[12-Jun-26 15:28:03 - INFO] - aiohttp.access - 127.0.0.1 [12/Jun/2026:15:28:03 +0000] "GET /health HTTP/1.1" 200 154 "-" "Python/3.12 aiohttp/3.14.1"
+[12-Jun-26 15:28:03 - INFO] - __main__ - 💓 Heartbeat OK — bot is alive! (ping #47)
+[12-Jun-26 15:28:13 - INFO] - aiohttp.access - 127.0.0.1 [12/Jun/2026:15:28:13 +0000] "GET /health HTTP/1.1" 200 154 "-" "Python/3.12 aiohttp/3.14.1"
+[12-Jun-26 15:28:13 - INFO] - __main__ - 💓 Heartbeat OK — bot is alive! (ping #48)
+[12-Jun-26 15:28:23 - INFO] - aiohttp.access - 127.0.0.1 [12/Jun/2026:15:28:23 +0000] "GET /health HTTP/1.1" 200 154 "-" "Python/3.12 aiohttp/3.14.1"
+[12-Jun-26 15:28:23 - INFO] - __main__ - 💓 Heartbeat OK — bot is alive! (ping #49)
+[12-Jun-26 15:28:33 - INFO] - aiohttp.access - 127.0.0.1 [12/Jun/2026:15:28:33 +0000] "GET /health HTTP/1.1" 200 154 "-" "Python/3.12 aiohttp/3.14.1"
+[12-Jun-26 15:28:33 - INFO] - __main__ - 💓 Heartbeat OK — bot is alive! (ping #50)
+[12-Jun-26 15:28:42 - INFO] - RONALDO_MUSIC.core.dir - Directories Updated.
+[12-Jun-26 15:28:42 - INFO] - RONALDO_MUSIC.core.git - Git Client Found [VPS DEPLOYER]
+[12-Jun-26 15:28:42 - INFO] - RONALDO_MUSIC.misc - 𝗗𝗔𝗧𝗔𝗕𝗔𝗦𝗘 𝗟𝗢𝗔𝗗 𝗕𝗔𝗕𝗬🍫........
+[12-Jun-26 15:28:42 - INFO] - RONALDO_MUSIC.core.bot - Starting Bot...
+[12-Jun-26 15:28:44 - INFO] - RONALDO_MUSIC.misc - 𝗦𝗨𝗗𝗢 𝗨𝗦𝗘𝗥 𝗗𝗢𝗡𝗘✨🎋.
+[12-Jun-26 15:28:49 - ERROR] - RONALDO_MUSIC.core.bot - Bot has failed to access the log group/channel.
+  Reason : ValueError.
+[12-Jun-26 15:28:49 - INFO] - RONALDO_MUSIC.core.bot - Music Bot Started as ˹ 𝐑 𝐨 𝐧 𝛂 𝐥 𝐝 𝐨 ꭙ 𝐌 𝐮 𝐬 𝛊 𝐜 𝐁 𝐨 𝐭 ❤️‍🔥 
+[12-Jun-26 15:28:49 - INFO] - __main__ - ✅ Bot client started successfully.
+[12-Jun-26 15:28:51 - INFO] - telethon.crypto.aes - libssl detected, it will be used for encryption
+[12-Jun-26 15:28:51 - INFO] - RONALDO_MUSIC.plugins - 𝐀𝐥𝐥 𝐅𝐞𝐚𝐭𝐮𝐫𝐞𝐬 𝐋𝐨𝐚𝐝𝐞𝐝 𝐁𝐚𝐛𝐲🥳...
+[12-Jun-26 15:28:51 - INFO] - RONALDO_MUSIC.core.call - Starting PyTgCalls Client...
+
+[12-Jun-26 15:28:53 - INFO] - RONALDO_MUSIC.core.userbot - Starting Assistants (reusing Call clients)...
+[12-Jun-26 15:28:53 - WARNING] - RONALDO_MUSIC.core.userbot - Assistant 1: Could not send message to log group.
+[12-Jun-26 15:28:53 - INFO] - RONALDO_MUSIC.core.userbot - Assistant 1 started as <a href=tg://user?id=8686557690>Krishna</a>
+[12-Jun-26 15:28:53 - INFO] - RONALDO_MUSIC.core.userbot - Active assistants: [1]
+[12-Jun-26 15:28:53 - INFO] - __main__ - 💓 Heartbeat web server started on port 8080
+[12-Jun-26 15:28:53 - INFO] - RONALDO_MUSIC - ╔═════ஜ۩۞۩ஜ════╗
+  ♨️ 𝗠𝗔𝗗𝗘 𝗕𝗬 ˹ 𝐑 𝐨 𝐧 𝛂 𝐥 𝐝 𝐨  ꧊𝆅  ❤️‍🔥 ♨️
+╚═════ஜ۩۞۩ஜ════╝
+[12-Jun-26 15:28:57 - INFO] - aiohttp.access - 127.0.0.1 [12/Jun/2026:15:28:57 +0000] "GET / HTTP/1.1" 200 154 "https://7712605b-e7d1-4e03-8b9d-12f6e943ed6f-00-191h9o68lp9gy.sisko.replit.dev/__replco/workspace_iframe.html?initialPath=%2F&id=__default_preview__" "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36"
+[12-Jun-26 15:29:08 - INFO] - aiohttp.access - 127.0.0.1 [12/Jun/2026:15:29:08 +0000] "GET /health HTTP/1.1" 200 154 "-" "Python/3.12 aiohttp/3.14.1"
+[12-Jun-26 15:29:08 - INFO] - __main__ - 💓 Heartbeat OK — bot is alive! (ping #1)
+[12-Jun-26 15:29:18 - INFO] - aiohttp.access - 127.0.0.1 [12/Jun/2026:15:29:18 +0000] "GET /health HTTP/1.1" 200 154 "-" "Python/3.12 aiohttp/3.14.1"
+[12-Jun-26 15:29:18 - INFO] - __main__ - 💓 Heartbeat OK — bot is alive! (ping #2)
+[12-Jun-26 15:29:28 - INFO] - aiohttp.access - 127.0.0.1 [12/Jun/2026:15:29:28 +0000] "GET /health HTTP/1.1" 200 154 "-" "Python/3.12 aiohttp/3.14.1"
+[12-Jun-26 15:29:28 - INFO] - __main__ - 💓 Heartbeat OK — bot is alive! (ping #3)
+[12-Jun-26 15:29:38 - INFO] - aiohttp.access - 127.0.0.1 [12/Jun/2026:15:29:38 +0000] "GET /health HTTP/1.1" 200 154 "-" "Python/3.12 aiohttp/3.14.1"
+[12-Jun-26 15:29:38 - INFO] - __main__ - 💓 Heartbeat OK — bot is alive! (ping #4)
+[12-Jun-26 15:29:48 - INFO] - aiohttp.access - 127.0.0.1 [12/Jun/2026:15:29:48 +0000] "GET /health HTTP/1.1" 200 154 "-" "Python/3.12 aiohttp/3.14.1"
+[12-Jun-26 15:29:48 - INFO] - __main__ - 💓 Heartbeat OK — bot is alive! (ping #5)
+[12-Jun-26 15:29:53 - INFO] - __main__ - [autopush] [autopush] GIT_TOKEN not set, skipping push.
+[12-Jun-26 15:29:58 - INFO] - aiohttp.access - 127.0.0.1 [12/Jun/2026:15:29:58 +0000] "GET /health HTTP/1.1" 200 154 "-" "Python/3.12 aiohttp/3.14.1"
+[12-Jun-26 15:29:58 - INFO] - __main__ - 💓 Heartbeat OK — bot is alive! (ping #6)
+[12-Jun-26 15:30:08 - INFO] - aiohttp.access - 127.0.0.1 [12/Jun/2026:15:30:08 +0000] "GET /health HTTP/1.1" 200 154 "-" "Python/3.12 aiohttp/3.14.1"
+[12-Jun-26 15:30:08 - INFO] - __main__ - 💓 Heartbeat OK — bot is alive! (ping #7)
+[12-Jun-26 15:30:18 - INFO] - aiohttp.access - 127.0.0.1 [12/Jun/2026:15:30:18 +0000] "GET /health HTTP/1.1" 200 154 "-" "Python/3.12 aiohttp/3.14.1"
+[12-Jun-26 15:30:18 - INFO] - __main__ - 💓 Heartbeat OK — bot is alive! (ping #8)
+[12-Jun-26 15:30:28 - INFO] - aiohttp.access - 127.0.0.1 [12/Jun/2026:15:30:28 +0000] "GET /health HTTP/1.1" 200 154 "-" "Python/3.12 aiohttp/3.14.1"
+[12-Jun-26 15:30:28 - INFO] - __main__ - 💓 Heartbeat OK — bot is alive! (ping #9)
+[12-Jun-26 15:30:38 - INFO] - aiohttp.access - 127.0.0.1 [12/Jun/2026:15:30:38 +0000] "GET /health HTTP/1.1" 200 154 "-" "Python/3.12 aiohttp/3.14.1"
+[12-Jun-26 15:30:38 - INFO] - __main__ - 💓 Heartbeat OK — bot is alive! (ping #10)
+[12-Jun-26 15:30:48 - INFO] - aiohttp.access - 127.0.0.1 [12/Jun/2026:15:30:48 +0000] "GET /health HTTP/1.1" 200 154 "-" "Python/3.12 aiohttp/3.14.1"
+[12-Jun-26 15:30:48 - INFO] - __main__ - 💓 Heartbeat OK — bot is alive! (ping #11)
+[12-Jun-26 15:30:58 - INFO] - aiohttp.access - 127.0.0.1 [12/Jun/2026:15:30:58 +0000] "GET /health HTTP/1.1" 200 154 "-" "Python/3.12 aiohttp/3.14.1"
+[12-Jun-26 15:30:58 - INFO] - __main__ - 💓 Heartbeat OK — bot is alive! (ping #12)

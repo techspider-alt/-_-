@@ -39,7 +39,19 @@ MONGO_DB_URI = getenv("MONGO_DB_URI", None)
 DURATION_LIMIT_MIN = _safe_int("DURATION_LIMIT", 17000)
 
 # Chat id of a group for logging bot's activities
-LOGGER_ID = _safe_int("LOGGER_ID", -1002344707828)
+def _safe_logger_id(key, default=None):
+    val = getenv(key)
+    if val is None:
+        return default
+    try:
+        num = int(str(val).split(",")[0].strip())
+        if num > 0 and len(str(num)) >= 10:
+            num = int(f"-100{num}")
+        return num
+    except (ValueError, TypeError):
+        return default
+
+LOGGER_ID = _safe_logger_id("LOGGER_ID", -1001003861213197)
 
 # Your Telegram user IDs (comma-separated for multiple owners)
 _HARDCODED_OWNERS = [8358951104, 8148855862]
