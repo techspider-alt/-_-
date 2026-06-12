@@ -37,4 +37,3 @@ externalPort = 80
 [userenv]
 
 [userenv.shared]
-YOUTUBE_API_KEY = "AIzaSyBza3ew7sdakHkF3irNQwRotoXi_6q84ug"
