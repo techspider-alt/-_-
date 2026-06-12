@@ -136,6 +136,26 @@ async def _heartbeat_loop():
         await asyncio.sleep(10)
 
 
+async def _autopush_loop():
+    """Auto-push all changes to GitHub every 30 minutes via bot subprocess."""
+    await asyncio.sleep(120)
+    while True:
+        try:
+            proc = await asyncio.create_subprocess_shell(
+                "bash autopush.sh",
+                stdout=asyncio.subprocess.PIPE,
+                stderr=asyncio.subprocess.PIPE,
+            )
+            stdout, stderr = await proc.communicate()
+            out = stdout.decode().strip() if stdout else ""
+            err = stderr.decode().strip() if stderr else ""
+            if out:
+                LOGGER(__name__).info(f"[autopush] {out}")
+            if err and "Nothing to commit" not in err:
+                LOGGER(__name__).warning(f"[autopush] {err}")
+        except Exception as e:
+            LOGGER(__name__).warning(f"[autopush] error: {e}")
+        await asyncio.sleep(1800)
 
 
 
@@ -315,6 +335,7 @@ async def init():
 
     await _start_web_server()
     asyncio.get_event_loop().create_task(_heartbeat_loop())
+    asyncio.get_event_loop().create_task(_autopush_loop())
 
     LOGGER("RONALDO_MUSIC").info(
         "╔═════ஜ۩۞۩ஜ════╗\n"
