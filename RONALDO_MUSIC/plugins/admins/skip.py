@@ -30,7 +30,7 @@ async def skip(cli, message: Message, _, chat_id):
             check = db.get(chat_id)
             if check:
                 count = len(check)
-                if count > 2:
+                if count > 1:
                     count = int(count - 1)
                     if 1 <= state <= count:
                         for x in range(state):
