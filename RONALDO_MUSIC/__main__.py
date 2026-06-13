@@ -316,6 +316,50 @@ async def _start_bot_with_retry(max_retries=15):
     return False
 
 
+def _load_yt_cookies():
+    """
+    Load YouTube cookies from YOUTUBE_COOKIES_B64 or YOUTUBE_COOKIES env var.
+    Writes to RONALDO_MUSIC/assets/cookies.txt so yt-dlp can use them.
+    This bypasses YouTube's datacenter IP bot-detection.
+
+    How to get cookies:
+    1. Install "Get cookies.txt LOCALLY" Chrome extension
+    2. Go to youtube.com and sign in to your Google account
+    3. Click the extension → Export → Netscape format
+    4. Base64-encode the file: base64 -w0 cookies.txt
+    5. Set YOUTUBE_COOKIES_B64 in Railway Variables
+    """
+    import base64
+    cookies_path = "RONALDO_MUSIC/assets/cookies.txt"
+    try:
+        # Option 1: Base64-encoded cookies (recommended — safe in env vars)
+        b64 = os.environ.get("YOUTUBE_COOKIES_B64", "").strip()
+        if b64:
+            decoded = base64.b64decode(b64).decode("utf-8")
+            if len(decoded) > 100:
+                os.makedirs(os.path.dirname(cookies_path), exist_ok=True)
+                with open(cookies_path, "w") as f:
+                    f.write(decoded)
+                LOGGER(__name__).info(f"✅ YouTube cookies loaded from YOUTUBE_COOKIES_B64 ({len(decoded)} bytes)")
+                return
+
+        # Option 2: Plain text cookies (Netscape format directly in env var)
+        plain = os.environ.get("YOUTUBE_COOKIES", "").strip()
+        if plain and len(plain) > 100:
+            os.makedirs(os.path.dirname(cookies_path), exist_ok=True)
+            with open(cookies_path, "w") as f:
+                f.write(plain)
+            LOGGER(__name__).info(f"✅ YouTube cookies loaded from YOUTUBE_COOKIES ({len(plain)} bytes)")
+            return
+
+        LOGGER(__name__).warning(
+            "⚠️ No YouTube cookies set. Set YOUTUBE_COOKIES_B64 in Railway Variables "
+            "to fix download failures on server IPs."
+        )
+    except Exception as e:
+        LOGGER(__name__).warning(f"⚠️ Failed to load YouTube cookies: {e}")
+
+
 async def init():
     if (
         not config.STRING1
@@ -327,6 +371,9 @@ async def init():
         LOGGER(__name__).error(
             "String Session Not Set — please fill a Pyrogram V2 session!"
         )
+
+    # Load YouTube cookies FIRST — needed for all downloads on server IPs
+    _load_yt_cookies()
 
     await sudo()
     try:
