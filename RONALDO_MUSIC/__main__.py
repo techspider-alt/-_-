@@ -169,7 +169,9 @@ async def _autopush_loop():
             err = stderr.decode().strip() if stderr else ""
             if out:
                 LOGGER(__name__).info(f"[autopush] {out}")
-            if err and "Nothing to commit" not in err:
+            _suppress = ("Nothing to commit", "URL rejected", "Malformed input",
+                         "could not read Username", "Authentication failed")
+            if err and not any(s in err for s in _suppress):
                 LOGGER(__name__).warning(f"[autopush] {err}")
         except Exception as e:
             LOGGER(__name__).warning(f"[autopush] error: {e}")
