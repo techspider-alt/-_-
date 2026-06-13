@@ -212,9 +212,18 @@ def _soundcloud_fallback_dl(query: str, vid_id: str = "sc_fallback") -> str:
     Fallback: search SoundCloud for the given query and download best audio.
     SoundCloud works from server/datacenter IPs without cookies.
     Called when YouTube download fails due to IP-based bot detection.
+    Tries progressively shorter queries to maximise hit rate.
     """
     os.makedirs("downloads", exist_ok=True)
-    sc_query = f"scsearch1:{query}"
+
+    # Build candidate queries: full → first 5 words → first 3 words
+    words = query.split()
+    queries = [query]
+    if len(words) > 5:
+        queries.append(" ".join(words[:5]))
+    if len(words) > 3:
+        queries.append(" ".join(words[:3]))
+
     ydl_opts = {
         "format": "bestaudio/best",
         "outtmpl": f"downloads/sc_{vid_id}.%(ext)s",
@@ -230,24 +239,42 @@ def _soundcloud_fallback_dl(query: str, vid_id: str = "sc_fallback") -> str:
             "preferredquality": "192",
         }],
     }
-    with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-        info = ydl.extract_info(sc_query, download=True)
-        if info and "entries" in info:
-            info = info["entries"][0]
-        if not info:
-            raise Exception("SoundCloud: no result found")
-        sc_id = info.get("id", vid_id)
 
-    # Check for sc_{vid_id}.mp3 first, then sc_{sc_id}.mp3, then any ext
-    for name in [f"sc_{vid_id}", f"sc_{sc_id}"]:
-        mp3_path = os.path.join("downloads", f"{name}.mp3")
-        if os.path.exists(mp3_path):
-            return mp3_path
-        for ext in ["m4a", "webm", "opus", "ogg", "mp3"]:
-            candidate = os.path.join("downloads", f"{name}.{ext}")
-            if os.path.exists(candidate):
-                return candidate
-    raise Exception("SoundCloud: downloaded file not found")
+    for q in queries:
+        sc_query = f"scsearch1:{q}"
+        try:
+            # First check if query has results (extract_flat is fast)
+            check_opts = {"quiet": True, "no_warnings": True, "logtostderr": False,
+                          "extract_flat": True, "socket_timeout": 10}
+            with yt_dlp.YoutubeDL(check_opts) as ydl:
+                check = ydl.extract_info(sc_query, download=False)
+            entries = list(check.get("entries", [])) if check else []
+            if not entries:
+                continue  # try shorter query
+
+            # Found results — download
+            with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+                info = ydl.extract_info(sc_query, download=True)
+                if info and "entries" in info:
+                    entries_dl = list(info["entries"])
+                    info = entries_dl[0] if entries_dl else None
+                if not info:
+                    continue
+                sc_id = info.get("id", vid_id)
+
+            # Locate downloaded file
+            for name in [f"sc_{vid_id}", f"sc_{sc_id}"]:
+                mp3_path = os.path.join("downloads", f"{name}.mp3")
+                if os.path.exists(mp3_path):
+                    return mp3_path
+                for ext in ["m4a", "webm", "opus", "ogg"]:
+                    candidate = os.path.join("downloads", f"{name}.{ext}")
+                    if os.path.exists(candidate):
+                        return candidate
+        except Exception:
+            continue
+
+    raise Exception(f"SoundCloud: no results for '{query}' — YouTube cookies needed")
 
 
 class YouTubeAPI:
