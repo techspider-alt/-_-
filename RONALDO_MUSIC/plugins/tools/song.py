@@ -1,22 +1,112 @@
-import os
 import asyncio
+import os
 
-import requests
+import httpx
 import yt_dlp
 from pyrogram import filters
-from youtube_search import YoutubeSearch
+from pyrogram.enums import ChatAction
+
 from RONALDO_MUSIC import app
+from config import BANNED_USERS, SUPPORT_CHAT
 
-from config import SUPPORT_CHAT, BANNED_USERS
+
+_YT_HEADERS = {
+    "User-Agent": (
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+        "AppleWebKit/537.36 (KHTML, like Gecko) "
+        "Chrome/124.0.0.0 Safari/537.36"
+    ),
+}
 
 
-def time_to_seconds(time):
-    stringt = str(time)
-    return sum(int(x) * 60**i for i, x in enumerate(reversed(stringt.split(":"))))
+async def _search_yt(query: str) -> dict | None:
+    loop = asyncio.get_running_loop()
+
+    def _fetch():
+        ydl_opts = {
+            "quiet": True,
+            "no_warnings": True,
+            "extract_flat": True,
+            "skip_download": True,
+            "nocheckcertificate": True,
+            "geo_bypass": True,
+            "http_headers": _YT_HEADERS,
+            "extractor_args": {
+                "youtube": {"player_client": ["tv_embedded", "ios"]}
+            },
+        }
+        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+            info = ydl.extract_info(f"ytsearch1:{query}", download=False)
+        if not info or not info.get("entries"):
+            return None
+        entry = info["entries"][0]
+        vid_id = entry.get("id", "")
+        dur_sec = entry.get("duration") or 0
+        dur_str = f"{int(dur_sec // 60)}:{int(dur_sec % 60):02d}"
+        thumb = entry.get("thumbnail") or f"https://i.ytimg.com/vi/{vid_id}/hqdefault.jpg"
+        return {
+            "title": (entry.get("title") or "Unknown")[:50],
+            "url": f"https://www.youtube.com/watch?v={vid_id}",
+            "vid_id": vid_id,
+            "duration": dur_str,
+            "duration_sec": int(dur_sec),
+            "thumb": thumb,
+            "views": str(entry.get("view_count") or "?"),
+        }
+
+    try:
+        return await asyncio.wait_for(loop.run_in_executor(None, _fetch), timeout=20)
+    except Exception:
+        return None
+
+
+async def _download_audio(url: str) -> str | None:
+    loop = asyncio.get_running_loop()
+    os.makedirs("downloads", exist_ok=True)
+
+    def _fetch():
+        for player_client in [["tv_embedded"], ["ios"], ["android_embedded"], ["web"]]:
+            try:
+                ydl_opts = {
+                    "format": "bestaudio[ext=m4a]/bestaudio/best",
+                    "outtmpl": "downloads/%(id)s.%(ext)s",
+                    "geo_bypass": True,
+                    "nocheckcertificate": True,
+                    "quiet": True,
+                    "no_warnings": True,
+                    "nopart": True,
+                    "retries": 3,
+                    "socket_timeout": 30,
+                    "http_headers": _YT_HEADERS,
+                    "extractor_args": {"youtube": {"player_client": player_client}},
+                    "postprocessors": [{
+                        "key": "FFmpegExtractAudio",
+                        "preferredcodec": "mp3",
+                        "preferredquality": "128",
+                    }],
+                }
+                with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+                    info = ydl.extract_info(url, download=True)
+                    vid_id = info.get("id", "unknown")
+                mp3 = f"downloads/{vid_id}.mp3"
+                if os.path.exists(mp3):
+                    return mp3
+                for ext in ["m4a", "webm", "opus", "ogg"]:
+                    path = f"downloads/{vid_id}.{ext}"
+                    if os.path.exists(path):
+                        return path
+            except Exception:
+                continue
+        return None
+
+    try:
+        return await asyncio.wait_for(loop.run_in_executor(None, _fetch), timeout=120)
+    except Exception:
+        return None
 
 
 @app.on_message(filters.command(["song", "music"]) & ~BANNED_USERS)
-async def song(client, message):
+async def song_cmd(client, message):
     try:
         await message.delete()
     except Exception:
@@ -24,69 +114,66 @@ async def song(client, message):
 
     user_id = message.from_user.id
     user_name = message.from_user.first_name
-    chutiya = "[" + user_name + "](tg://user?id=" + str(user_id) + ")"
+    user_mention = f"[{user_name}](tg://user?id={user_id})"
 
-    query = ""
-    for i in message.command[1:]:
-        query += " " + str(i)
+    if len(message.command) < 2:
+        return await message.reply("**» sᴏɴɢ ɴᴀᴍᴇ ᴅᴏ ʙᴀʙʏ!**\n\n**ᴜsᴀɢᴇ:** `/song song name`")
 
-    if not query.strip():
-        return await message.reply("**» sᴏɴɢ ɴᴀᴍᴇ ᴅᴏ ʙᴀʙʏ!**")
+    query = message.text.split(None, 1)[1].strip()
+    m = await message.reply("**» 🔍 sᴇᴀʀᴄʜɪɴɢ, ᴩʟᴇᴀsᴇ ᴡᴀɪᴛ...**")
 
-    m = await message.reply("**» sᴇᴀʀᴄʜɪɴɢ, ᴩʟᴇᴀsᴇ ᴡᴀɪᴛ...**")
-    ydl_opts = {"format": "bestaudio[ext=m4a]"}
+    result = await _search_yt(query)
+    if not result:
+        return await m.edit("**😴 sᴏɴɢ ɴᴏᴛ ꜰᴏᴜɴᴅ ᴏɴ ʏᴏᴜᴛᴜʙᴇ.**\n\n» ᴍᴀʏʙᴇ ᴛᴜɴᴇ ɢᴀʟᴀᴛ ʟɪᴋʜᴀ ʜᴏ!")
+
+    await m.edit("**» ⬇️ ᴅᴏᴡɴʟᴏᴀᴅɪɴɢ...**\n\nᴩʟᴇᴀsᴇ ᴡᴀɪᴛ...")
+    try:
+        await app.send_chat_action(message.chat.id, ChatAction.UPLOAD_AUDIO)
+    except Exception:
+        pass
+
+    audio_file = await _download_audio(result["url"])
+    if not audio_file:
+        return await m.edit(
+            f"**❌ ᴅᴏᴡɴʟᴏᴀᴅ ꜰᴀɪʟᴇᴅ!**\n\n"
+            f"YouTube blocked download. Try again later.\n"
+            f"[Support]({SUPPORT_CHAT})"
+        )
+
+    thumb_path = None
+    try:
+        async with httpx.AsyncClient(timeout=10) as hx:
+            resp = await hx.get(result["thumb"])
+            if resp.status_code == 200:
+                thumb_path = f"downloads/thumb_{result['vid_id']}.jpg"
+                with open(thumb_path, "wb") as f:
+                    f.write(resp.content)
+    except Exception:
+        pass
+
+    caption = (
+        f"**ᴛɪᴛʟᴇ :** {result['title']}\n"
+        f"**ᴅᴜʀᴀᴛɪᴏɴ :** `{result['duration']}`\n"
+        f"**ᴠɪᴇᴡs :** `{result['views']}`\n"
+        f"**ʀᴇǫᴜᴇsᴛᴇᴅ ʙʏ »** {user_mention}"
+    )
 
     try:
-        results = YoutubeSearch(query, max_results=1).to_dict()
-        link = f"https://youtube.com{results[0]['url_suffix']}"
-        title = results[0]["title"][:40]
-        thumbnail = results[0]["thumbnails"][0]
-        thumb_name = f"thumb{title}.jpg"
-        thumb = requests.get(thumbnail, allow_redirects=True)
-        open(thumb_name, "wb").write(thumb.content)
-        duration = results[0]["duration"]
-        views = results[0]["views"]
-    except Exception as e:
-        await m.edit(
-            "**😴 sᴏɴɢ ɴᴏᴛ ғᴏᴜɴᴅ ᴏɴ ʏᴏᴜᴛᴜʙᴇ.**\n\n» ᴍᴀʏʙᴇ ᴛᴜɴᴇ ɢᴀʟᴀᴛ ʟɪᴋʜᴀ ʜᴏ!"
-        )
-        return
-
-    await m.edit("» ᴅᴏᴡɴʟᴏᴀᴅɪɴɢ...\n\nᴩʟᴇᴀsᴇ ᴡᴀɪᴛ...")
-    try:
-        loop = asyncio.get_event_loop()
-        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-            info_dict = await loop.run_in_executor(None, lambda: ydl.extract_info(link, download=False))
-            audio_file = ydl.prepare_filename(info_dict)
-            await loop.run_in_executor(None, lambda: ydl.process_info(info_dict))
-
-        rep = (
-            f"**ᴛɪᴛʟᴇ :** {title[:25]}\n"
-            f"**ᴅᴜʀᴀᴛɪᴏɴ :** `{duration}`\n"
-            f"**ᴠɪᴇᴡs :** `{views}`\n"
-            f"**ʀᴇǫᴜᴇsᴛᴇᴅ ʙʏ »** {chutiya}"
-        )
-        secmul, dur, dur_arr = 1, 0, duration.split(":")
-        for i in range(len(dur_arr) - 1, -1, -1):
-            dur += int(dur_arr[i]) * secmul
-            secmul *= 60
         await message.reply_audio(
-            audio_file,
-            caption=rep,
+            audio=audio_file,
+            caption=caption,
             performer=app.name,
-            thumb=thumb_name,
-            title=title,
-            duration=dur,
+            thumb=thumb_path,
+            title=result["title"],
+            duration=result["duration_sec"],
         )
         await m.delete()
     except Exception as e:
-        await m.edit(
-            f"**» ᴅᴏᴡɴʟᴏᴀᴅɪɴɢ ᴇʀʀᴏʀ, ʀᴇᴩᴏʀᴛ ᴀᴛ » [sᴜᴩᴩᴏʀᴛ](t.me/{SUPPORT_CHAT}) 💕**\n\n**ᴇʀʀᴏʀ :** {e}"
-        )
-
-    for f in [locals().get("audio_file"), locals().get("thumb_name")]:
-        if f:
-            try:
-                os.remove(f)
-            except Exception:
-                pass
+        await m.edit(f"**❌ ᴅᴏᴡɴʟᴏᴀᴅ ᴇʀʀᴏʀ:** `{e}`")
+    finally:
+        for f in [audio_file, thumb_path]:
+            if f and os.path.exists(f):
+                try:
+                    os.remove(f)
+                except Exception:
+                    pass
