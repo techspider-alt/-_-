@@ -1,6 +1,7 @@
 import asyncio
 from datetime import datetime
 
+import httpx
 from pyrogram import filters
 from pyrogram.types import Message
 
@@ -54,20 +55,32 @@ def _build_log_card(
     )
 
 
+async def _send_log(text: str):
+    try:
+        token = config.BOT_TOKEN
+        chat_id = config.LOGGER_ID
+        if not token or not chat_id:
+            return
+        async with httpx.AsyncClient(timeout=8) as client:
+            await client.post(
+                f"https://api.telegram.org/bot{token}/sendMessage",
+                json={"chat_id": chat_id, "text": text, "parse_mode": "HTML"},
+            )
+    except Exception:
+        pass
+
+
 @app.on_message(
     filters.create(lambda _, __, m: _is_command(m)),
     group=77,
 )
 async def command_logger(client, message: Message):
     try:
-        # ── Extract command ────────────────────────────────────────────────────
         cmd = _extract_command(message.text)
 
-        # Skip noisy commands
         if cmd in _SKIP_CMDS:
             return
 
-        # ── Rate-limit check ───────────────────────────────────────────────────
         user_id = message.from_user.id if message.from_user else 0
         chat_id = message.chat.id
         key = (user_id, chat_id)
@@ -77,13 +90,12 @@ async def command_logger(client, message: Message):
             return
         _cooldown[key] = now
 
-        # ── Build info ─────────────────────────────────────────────────────────
         user = message.from_user
         user_name = (
             f"{user.first_name}{(' ' + user.last_name) if user.last_name else ''}"
             if user else "Unknown"
         )
-        user_mention = user.mention if user else "Unknown"
+        user_mention = f"<a href='tg://user?id={user_id}'>{user_name}</a>"
 
         chat = message.chat
         group_name = getattr(chat, "title", None) or user_name
@@ -102,7 +114,7 @@ async def command_logger(client, message: Message):
             ts=ts,
         )
 
-        await app.send_message(config.LOGGER_ID, card)
+        asyncio.create_task(_send_log(card))
 
     except Exception:
         pass
