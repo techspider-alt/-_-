@@ -127,8 +127,8 @@ async def update_(client, message, _):
             return
     else:
         os.system("pip3 install -r requirements.txt")
-        os.system(f"kill -9 {os.getpid()} && bash start")
-        exit()
+        # Railway / VPS: process exit triggers host-managed restart
+        os._exit(0)
 
 
 @app.on_message(filters.command(["restart"]) & SUDOERS)
@@ -155,4 +155,5 @@ async def restart_(_, message):
     await response.edit_text(
         "» ʀᴇsᴛᴀʀᴛ ᴘʀᴏᴄᴇss sᴛᴀʀᴛᴇᴅ, ᴘʟᴇᴀsᴇ ᴡᴀɪᴛ ғᴏʀ ғᴇᴡ sᴇᴄᴏɴᴅs ᴜɴᴛɪʟ ᴛʜᴇ ʙᴏᴛ sᴛᴀʀᴛs..."
     )
-    os.system(f"kill -9 {os.getpid()} && bash start")
+    # Railway / VPS / Replit: host-managed restart on process exit
+    os._exit(0)
