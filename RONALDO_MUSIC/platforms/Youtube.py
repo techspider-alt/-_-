@@ -568,6 +568,7 @@ class YouTubeAPI:
             for player_client, extra_args in client_attempts:
                 try:
                     ydl_optssx = {
+                        # Request audio-only — m4a (AAC) or webm (Opus), no re-encode needed
                         "format": "bestaudio[ext=m4a]/bestaudio[ext=webm]/bestaudio/best",
                         "outtmpl": "downloads/%(id)s.%(ext)s",
                         "geo_bypass": True,
@@ -576,9 +577,10 @@ class YouTubeAPI:
                         "no_warnings": True,
                         "logtostderr": False,
                         "nopart": True,
-                        "retries": 3,
-                        "fragment_retries": 3,
-                        "socket_timeout": 30,
+                        # Reduced retries & timeout — fail fast, try next client
+                        "retries": 1,
+                        "fragment_retries": 1,
+                        "socket_timeout": 12,
                         "http_headers": _YT_HEADERS,
                         "prefer_free_formats": True,
                         "extractor_args": {
@@ -587,20 +589,14 @@ class YouTubeAPI:
                                 **extra_args,
                             }
                         },
-                        "postprocessors": [{
-                            "key": "FFmpegExtractAudio",
-                            "preferredcodec": "mp3",
-                            "preferredquality": "192",
-                        }],
+                        # No FFmpegExtractAudio postprocessor — pytgcalls uses FFmpeg
+                        # internally so m4a/webm/opus plays directly, saves 10-30s per song
                         **cookies,
                     }
                     x = yt_dlp.YoutubeDL(ydl_optssx)
                     info = x.extract_info(link, download=True)
                     vid_id = info.get("id", "unknown")
-                    mp3_path = os.path.join("downloads", f"{vid_id}.mp3")
-                    if os.path.exists(mp3_path):
-                        return mp3_path
-                    for ext in ["m4a", "webm", "opus", "ogg"]:
+                    for ext in ["m4a", "webm", "opus", "ogg", "mp3"]:
                         candidate = os.path.join("downloads", f"{vid_id}.{ext}")
                         if os.path.exists(candidate):
                             return candidate
