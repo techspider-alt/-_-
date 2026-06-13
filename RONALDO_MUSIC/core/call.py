@@ -434,7 +434,7 @@ class Call(PyTgCalls):
                 from pyrogram.raw.functions.phone import CreateGroupCall as _CGA
                 peer = await app.resolve_peer(chat_id)
                 await app.invoke(_CGA(peer=peer, random_id=_rnd.randint(1, 2**31 - 1)))
-                await asyncio.sleep(2)
+                await asyncio.sleep(0.5)
                 try:
                     await assistant.join_group_call(chat_id, stream)
                 except AlreadyJoinedError:
@@ -453,7 +453,7 @@ class Call(PyTgCalls):
         except Exception as e:
             LOGGER(__name__).error(f"join_group_call failed for {chat_id}: {type(e).__name__}: {e}")
             try:
-                await asyncio.sleep(2)
+                await asyncio.sleep(0.5)
                 await assistant.join_group_call(chat_id, stream)
             except NoActiveGroupCall:
                 raise AssistantErr(_["call_8"])
