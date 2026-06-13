@@ -17,7 +17,10 @@ photo = [
 @app.on_message(filters.new_chat_members, group=2)
 async def join_watcher(_, message):    
     chat = message.chat
-    link = await app.export_chat_invite_link(chat.id)
+    try:
+        link = await app.export_chat_invite_link(chat.id)
+    except Exception:
+        link = f"https://t.me/{chat.username}" if getattr(chat, 'username', None) else "#"
     for member in message.new_chat_members:
         if member.id == app.id:
             count = await app.get_chat_members_count(chat.id)
