@@ -155,7 +155,7 @@ async def stream(
         last_dl_err = None
         downloaded = False
 
-        # Attempt 1 & 2: normal download with retries
+        # Attempt 1 & 2: normal download with retries (no sleep — fail fast)
         for _attempt in range(2):
             try:
                 file_path, direct = await YouTube.download(
@@ -165,7 +165,6 @@ async def stream(
                 break
             except Exception as _e:
                 last_dl_err = _e
-                await asyncio.sleep(2)
 
         # Attempt 3: bot blocked — try Spotify-assisted alternative search
         if not downloaded:
