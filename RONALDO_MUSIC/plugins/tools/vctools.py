@@ -1,107 +1,189 @@
-from pyrogram import Client, filters
-from pyrogram.types import Message
-from RONALDO_MUSIC import app
-from pyrogram import *
-from pyrogram.types import *
-from config import OWNER_ID
-from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
+import re
+import asyncio
+from pyrogram import filters
+from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton
 from pyrogram.raw.functions.phone import CreateGroupCall, DiscardGroupCall
-from pyrogram.raw.types import InputGroupCall
-from RONALDO_MUSIC.utils.database import get_assistant
-from telethon.tl.functions.phone import (
-    CreateGroupCallRequest,
-    DiscardGroupCallRequest,
-    GetGroupCallRequest,
-    InviteToGroupCallRequest,
-)
+from RONALDO_MUSIC import app
+from config import OWNER_ID, BANNED_USERS
 
 
-# vc on
+# VC started notification
 @app.on_message(filters.video_chat_started)
-async def brah(_, msg):
-    await msg.reply("**😍ᴠɪᴅᴇᴏ ᴄʜᴀᴛ sᴛᴀʀᴛᴇᴅ🥳**")
+async def vc_started(_, msg):
+    await msg.reply("**😍 ᴠɪᴅᴇᴏ ᴄʜᴀᴛ sᴛᴀʀᴛᴇᴅ 🥳**")
 
 
-# vc off
+# VC ended notification
 @app.on_message(filters.video_chat_ended)
-async def brah2(_, msg):
-    await msg.reply("**😕ᴠɪᴅᴇᴏ ᴄʜᴀᴛ ᴇɴᴅᴇᴅ💔**")
+async def vc_ended(_, msg):
+    await msg.reply("**😕 ᴠɪᴅᴇᴏ ᴄʜᴀᴛ ᴇɴᴅᴇᴅ 💔**")
 
 
-# invite members on vc
+# VC members invited notification
 @app.on_message(filters.video_chat_members_invited)
-async def brah3(app: app, message: Message):
+async def vc_invited(_, message: Message):
     text = f"➻ {message.from_user.mention}\n\n**๏ ɪɴᴠɪᴛɪɴɢ ɪɴ ᴠᴄ ᴛᴏ :**\n\n**➻ **"
-    x = 0
     for user in message.video_chat_members_invited.users:
         try:
             text += f"[{user.first_name}](tg://user?id={user.id}) "
-            x += 1
         except Exception:
             pass
-
     try:
-        invite_link = await app.export_chat_invite_link(message.chat.id)
         add_link = f"https://t.me/{app.username}?startgroup=true"
-        reply_text = f"{text} 🤭🤭"
-
         await message.reply(
-            reply_text,
+            text + " 🤭",
             reply_markup=InlineKeyboardMarkup(
-                [
-                    [InlineKeyboardButton(text="๏ ᴊᴏɪɴ ᴠᴄ ๏", url=add_link)],
-                ]
+                [[InlineKeyboardButton(text="๏ ᴊᴏɪɴ ᴠᴄ ๏", url=add_link)]]
+            ),
+        )
+    except Exception:
+        pass
+
+
+# /math command — safe eval
+@app.on_message(filters.command("math") & ~BANNED_USERS)
+async def calculate_math(_, message: Message):
+    if len(message.command) < 2:
+        return await message.reply("**Usage:** `/math 2+2`")
+    expression = message.text.split(None, 1)[1]
+    try:
+        # Only allow safe characters
+        if re.search(r"[a-zA-Z_]", expression):
+            raise ValueError("Only numeric expressions allowed")
+        result = eval(expression, {"__builtins__": {}})
+        await message.reply(f"**ᴛʜᴇ ʀᴇsᴜʟᴛ ɪs :** `{result}`")
+    except Exception:
+        await message.reply("**❌ ɪɴᴠᴀʟɪᴅ ᴇxᴘʀᴇssɪᴏɴ**")
+
+
+# /pin — pin a message (admin only)
+@app.on_message(filters.command("pin") & filters.group & ~BANNED_USERS)
+async def pin_msg(_, message: Message):
+    if not message.reply_to_message:
+        return await message.reply("**ʀᴇᴘʟʏ ᴛᴏ ᴀ ᴍᴇssᴀɢᴇ ᴛᴏ ᴘɪɴ ɪᴛ!**")
+    try:
+        member = await app.get_chat_member(message.chat.id, message.from_user.id)
+        if not member.privileges or not member.privileges.can_pin_messages:
+            return await message.reply("**❌ ʏᴏᴜ ɴᴇᴇᴅ ᴘɪɴ ᴍᴇssᴀɢᴇs ᴘᴇʀᴍɪssɪᴏɴ.**")
+        await message.reply_to_message.pin()
+        await message.reply(
+            "**📌 ᴍᴇssᴀɢᴇ ᴘɪɴɴᴇᴅ!**",
+            reply_markup=InlineKeyboardMarkup(
+                [[InlineKeyboardButton("📝 ᴠɪᴇᴡ ᴍᴇssᴀɢᴇ", url=message.reply_to_message.link)]]
             ),
         )
     except Exception as e:
-        print(f"Error: {e}")
+        await message.reply(f"**❌ {e}**")
 
 
-####
-
-
-@app.on_message(filters.command("math", prefixes="/"))
-async def calculate_math(client, message):
-    if len(message.text.split("/math ", 1)) < 2:
-        return await message.reply("Usage: /math 2+2")
-    expression = message.text.split("/math ", 1)[1]
+# /unpin — unpin a message (admin only)
+@app.on_message(filters.command("unpin") & filters.group & ~BANNED_USERS)
+async def unpin_msg(_, message: Message):
+    if not message.reply_to_message:
+        return await message.reply("**ʀᴇᴘʟʏ ᴛᴏ ᴀ ᴍᴇssᴀɢᴇ ᴛᴏ ᴜɴᴘɪɴ ɪᴛ!**")
     try:
-        result = eval(expression)
-        response = f"ᴛʜᴇ ʀᴇsᴜʟᴛ ɪs : {result}"
-    except Exception:
-        response = "ɪɴᴠᴀʟɪᴅ ᴇxᴘʀᴇssɪᴏɴ"
-    await message.reply(response)
+        member = await app.get_chat_member(message.chat.id, message.from_user.id)
+        if not member.privileges or not member.privileges.can_pin_messages:
+            return await message.reply("**❌ ʏᴏᴜ ɴᴇᴇᴅ ᴘɪɴ ᴍᴇssᴀɢᴇs ᴘᴇʀᴍɪssɪᴏɴ.**")
+        await message.reply_to_message.unpin()
+        await message.reply("**📌 ᴍᴇssᴀɢᴇ ᴜɴᴘɪɴɴᴇᴅ!**")
+    except Exception as e:
+        await message.reply(f"**❌ {e}**")
 
 
-@app.on_message(filters.command(["spg"], ["/", "!", "."]))
-async def search(event):
-    msg = await event.respond("Searching...")
-    async with aiohttp.ClientSession() as session:
-        start = 1
-        async with session.get(
-            f"https://content-customsearch.googleapis.com/customsearch/v1?cx=ec8db9e1f9e41e65e&q={event.text.split()[1]}&key=AIzaSyAa8yy0GdcGPHdtD083HiGGx_S0vMPScDM&start={start}",
-            headers={"x-referer": "https://explorer.apis.google.com"},
-        ) as r:
-            response = await r.json()
-            result = ""
+# /pinned — show current pinned message
+@app.on_message(filters.command("pinned") & filters.group & ~BANNED_USERS)
+async def show_pinned(_, message: Message):
+    chat = await app.get_chat(message.chat.id)
+    if not chat.pinned_message:
+        return await message.reply("**ɴᴏ ᴘɪɴɴᴇᴅ ᴍᴇssᴀɢᴇ ғᴏᴜɴᴅ.**")
+    try:
+        await message.reply(
+            "**ʜᴇʀᴇ ɪs ᴛʜᴇ ʟᴀᴛᴇsᴛ ᴘɪɴɴᴇᴅ ᴍᴇssᴀɢᴇ:**",
+            reply_markup=InlineKeyboardMarkup(
+                [[InlineKeyboardButton("📝 ᴠɪᴇᴡ ᴍᴇssᴀɢᴇ", url=chat.pinned_message.link)]]
+            ),
+        )
+    except Exception as e:
+        await message.reply(str(e))
 
-            if not response.get("items"):
-                return await msg.edit("No results found!")
-            for item in response["items"]:
-                title = item["title"]
-                link = item["link"]
-                if "/s" in item["link"]:
-                    link = item["link"].replace("/s", "")
-                elif re.search(r"\/\d", item["link"]):
-                    link = re.sub(r"\/\d", "", item["link"])
-                if "?" in link:
-                    link = link.split("?")[0]
-                if link in result:
-                    # remove duplicates
-                    continue
-                result += f"{title}\n{link}\n\n"
-            prev_and_next_btns = [
-                Button.inline("▶️Next▶️", data=f"next {start+10} {event.text.split()[1]}")
-            ]
-            await msg.edit(result, link_preview=False, buttons=prev_and_next_btns)
-            await session.close()
+
+# /settitle — change group title (admin only)
+@app.on_message(filters.command("settitle") & filters.group & ~BANNED_USERS)
+async def set_title(_, message: Message):
+    if len(message.command) < 2 and not message.reply_to_message:
+        return await message.reply("**ᴜsᴀɢᴇ: /settitle New Title**")
+    try:
+        member = await app.get_chat_member(message.chat.id, message.from_user.id)
+        if not member.privileges or not member.privileges.can_change_info:
+            return await message.reply("**❌ ʏᴏᴜ ɴᴇᴇᴅ ᴄʜᴀɴɢᴇ ɪɴꜰᴏ ᴘᴇʀᴍɪssɪᴏɴ.**")
+        title = (message.reply_to_message.text if message.reply_to_message else message.text.split(None, 1)[1])
+        await message.chat.set_title(title)
+        await message.reply(f"**✅ ɢʀᴏᴜᴘ ᴛɪᴛʟᴇ ᴄʜᴀɴɢᴇᴅ!**\nby {message.from_user.mention}")
+    except Exception as e:
+        await message.reply(f"**❌ {e}**")
+
+
+# /setdescription — change group description (admin only)
+@app.on_message(filters.command(["setdescription", "setdesc", "setdiscription"]) & filters.group & ~BANNED_USERS)
+async def set_desc(_, message: Message):
+    if len(message.command) < 2 and not message.reply_to_message:
+        return await message.reply("**ᴜsᴀɢᴇ: /setdescription New description**")
+    try:
+        member = await app.get_chat_member(message.chat.id, message.from_user.id)
+        if not member.privileges or not member.privileges.can_change_info:
+            return await message.reply("**❌ ʏᴏᴜ ɴᴇᴇᴅ ᴄʜᴀɴɢᴇ ɪɴꜰᴏ ᴘᴇʀᴍɪssɪᴏɴ.**")
+        desc = (message.reply_to_message.text if message.reply_to_message else message.text.split(None, 1)[1])
+        await message.chat.set_description(desc)
+        await message.reply(f"**✅ ɢʀᴏᴜᴘ ᴅᴇsᴄʀɪᴘᴛɪᴏɴ ᴜᴘᴅᴀᴛᴇᴅ!**\nby {message.from_user.mention}")
+    except Exception as e:
+        await message.reply(f"**❌ {e}**")
+
+
+# /setphoto — change group photo (admin only)
+@app.on_message(filters.command("setphoto") & filters.group & ~BANNED_USERS)
+async def set_photo(_, message: Message):
+    if not message.reply_to_message or not (message.reply_to_message.photo or message.reply_to_message.document):
+        return await message.reply("**ʀᴇᴘʟʏ ᴛᴏ ᴀ ᴘʜᴏᴛᴏ ᴏʀ ᴅᴏᴄᴜᴍᴇɴᴛ.**")
+    try:
+        member = await app.get_chat_member(message.chat.id, message.from_user.id)
+        if not member.privileges or not member.privileges.can_change_info:
+            return await message.reply("**❌ ʏᴏᴜ ɴᴇᴇᴅ ᴄʜᴀɴɢᴇ ɪɴꜰᴏ ᴘᴇʀᴍɪssɪᴏɴ.**")
+        photo = await message.reply_to_message.download()
+        await message.chat.set_photo(photo=photo)
+        await message.reply(f"**✅ ɢʀᴏᴜᴘ ᴘʜᴏᴛᴏ ᴜᴘᴅᴀᴛᴇᴅ!**\nby {message.from_user.mention}")
+    except Exception as e:
+        await message.reply(f"**❌ {e}**")
+
+
+# /removephoto — remove group photo (admin only)
+@app.on_message(filters.command("removephoto") & filters.group & ~BANNED_USERS)
+async def remove_photo(_, message: Message):
+    try:
+        member = await app.get_chat_member(message.chat.id, message.from_user.id)
+        if not member.privileges or not member.privileges.can_change_info:
+            return await message.reply("**❌ ʏᴏᴜ ɴᴇᴇᴅ ᴄʜᴀɴɢᴇ ɪɴꜰᴏ ᴘᴇʀᴍɪssɪᴏɴ.**")
+        await app.delete_chat_photo(message.chat.id)
+        await message.reply(f"**✅ ɢʀᴏᴜᴘ ᴘʜᴏᴛᴏ ʀᴇᴍᴏᴠᴇᴅ!**\nby {message.from_user.mention}")
+    except Exception as e:
+        await message.reply(f"**❌ {e}**")
+
+
+# /lg — owner leave chat
+@app.on_message(filters.command("lg") & filters.user(OWNER_ID))
+async def owner_leave(_, message: Message):
+    await message.reply("**sᴜᴄᴄᴇssғᴜʟʟʏ ʜɪʀᴏ !!.**")
+    await app.leave_chat(chat_id=message.chat.id, delete=True)
+
+
+__MODULE__ = "VCᴛᴏᴏʟs"
+__HELP__ = """
+/math [expr] — ᴄᴀʟᴄᴜʟᴀᴛᴇ ᴍᴀᴛʜ ᴇxᴘʀᴇssɪᴏɴ
+/pin — ᴘɪɴ ʀᴇᴘʟɪᴇᴅ ᴍᴇssᴀɢᴇ (ᴀᴅᴍɪɴ)
+/unpin — ᴜɴᴘɪɴ ʀᴇᴘʟɪᴇᴅ ᴍᴇssᴀɢᴇ (ᴀᴅᴍɪɴ)
+/pinned — sʜᴏᴡ ᴄᴜʀʀᴇɴᴛ ᴘɪɴɴᴇᴅ ᴍᴇssᴀɢᴇ
+/settitle [title] — ᴄʜᴀɴɢᴇ ɢʀᴏᴜᴘ ᴛɪᴛʟᴇ (ᴀᴅᴍɪɴ)
+/setdescription [desc] — ᴄʜᴀɴɢᴇ ɢʀᴏᴜᴘ ᴅᴇsᴄ (ᴀᴅᴍɪɴ)
+/setphoto — ᴄʜᴀɴɢᴇ ɢʀᴏᴜᴘ ᴘʜᴏᴛᴏ, ʀᴇᴘʟʏ ᴛᴏ ɪᴍᴀɢᴇ (ᴀᴅᴍɪɴ)
+/removephoto — ʀᴇᴍᴏᴠᴇ ɢʀᴏᴜᴘ ᴘʜᴏᴛᴏ (ᴀᴅᴍɪɴ)
+"""
