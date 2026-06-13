@@ -556,20 +556,24 @@ class YouTubeAPI:
                     (["mweb"],        {"player_skip": ["webpage"]}),
                 ]
             else:
+                # android comes first — uses YouTube's mobile API endpoint which
+                # is the most reliable on server/VPS IPs without cookies (2025).
+                # tv_embedded is often blocked; ios/mweb as fallbacks.
                 client_attempts = [
-                    (["tv_embedded"], {"player_skip": ["webpage", "configs"]}),
-                    (["ios"],         {"player_skip": ["webpage", "configs"]}),
+                    (["android"],          {"player_skip": ["webpage", "configs"]}),
+                    (["ios"],              {"player_skip": ["webpage", "configs"]}),
+                    (["tv_embedded"],      {"player_skip": ["webpage", "configs"]}),
                     (["android_embedded"], {"player_skip": ["webpage", "configs"]}),
-                    (["mweb"],        {"player_skip": ["webpage"]}),
-                    (["web_creator"], {}),
-                    (["android", "web"], {}),
+                    (["mweb"],             {"player_skip": ["webpage"]}),
+                    (["web_creator"],      {}),
                 ]
 
             for player_client, extra_args in client_attempts:
                 try:
                     ydl_optssx = {
-                        # Request audio-only — m4a (AAC) or webm (Opus), no re-encode needed
-                        "format": "bestaudio[ext=m4a]/bestaudio[ext=webm]/bestaudio/best",
+                        # 140 = guaranteed m4a 128kbps on virtually all YT videos,
+                        # no auth required. Falls back to bestaudio for non-YT sources.
+                        "format": "140/bestaudio[ext=m4a]/bestaudio[ext=webm]/bestaudio/best",
                         "outtmpl": "downloads/%(id)s.%(ext)s",
                         "geo_bypass": True,
                         "nocheckcertificate": True,
@@ -635,18 +639,20 @@ class YouTubeAPI:
                     (["android_embedded"], {"player_skip": ["webpage", "configs"]}),
                 ]
             else:
+                # android first — best for server/VPS IPs without cookies
                 client_attempts = [
-                    (["tv_embedded"], {"player_skip": ["webpage", "configs"]}),
-                    (["ios"],         {"player_skip": ["webpage", "configs"]}),
+                    (["android"],          {"player_skip": ["webpage", "configs"]}),
+                    (["ios"],              {"player_skip": ["webpage", "configs"]}),
+                    (["tv_embedded"],      {"player_skip": ["webpage", "configs"]}),
                     (["android_embedded"], {"player_skip": ["webpage", "configs"]}),
-                    (["mweb"],        {"player_skip": ["webpage"]}),
-                    (["web_creator"], {}),
+                    (["mweb"],             {"player_skip": ["webpage"]}),
+                    (["web_creator"],      {}),
                 ]
 
             for player_client, extra_args in client_attempts:
                 try:
                     ydl_optssx = {
-                        "format": "(bestvideo[height<=?720][width<=?1280][ext=mp4])+(bestaudio[ext=m4a])/bestvideo[height<=?720]+bestaudio/best",
+                        "format": "(bestvideo[height<=?720][ext=mp4])+(bestaudio)/bestvideo[height<=?720]+bestaudio/best",
                         "outtmpl": "downloads/%(id)s.%(ext)s",
                         "geo_bypass": True,
                         "nocheckcertificate": True,
