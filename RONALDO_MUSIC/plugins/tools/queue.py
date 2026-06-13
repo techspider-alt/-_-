@@ -100,30 +100,32 @@ async def get_queue(client, message: Message, _):
     mystic = await message.reply_photo(IMAGE, caption=cap, reply_markup=upl)
     if DUR != "Unknown":
         try:
-            while db[chat_id][0]["vidid"] == videoid:
-                await asyncio.sleep(5)
-                if await is_active_chat(chat_id):
-                    if basic[videoid]:
-                        if await is_music_playing(chat_id):
-                            try:
-                                buttons = queue_markup(
-                                    _,
-                                    DUR,
-                                    "c" if cplay else "g",
-                                    videoid,
-                                    seconds_to_min(db[chat_id][0]["played"]),
-                                    db[chat_id][0]["dur"],
-                                )
-                                await mystic.edit_reply_markup(reply_markup=buttons)
-                            except FloodWait:
-                                pass
-                        else:
-                            pass
-                    else:
-                        break
-                else:
+            while True:
+                playing = db.get(chat_id)
+                if not playing or playing[0].get("vidid") != videoid:
                     break
-        except:
+                await asyncio.sleep(5)
+                if not await is_active_chat(chat_id):
+                    break
+                if not basic.get(videoid):
+                    break
+                if await is_music_playing(chat_id):
+                    playing = db.get(chat_id)
+                    if not playing or playing[0].get("vidid") != videoid:
+                        break
+                    try:
+                        buttons = queue_markup(
+                            _,
+                            DUR,
+                            "c" if cplay else "g",
+                            videoid,
+                            seconds_to_min(playing[0]["played"]),
+                            playing[0]["dur"],
+                        )
+                        await mystic.edit_reply_markup(reply_markup=buttons)
+                    except FloodWait:
+                        pass
+        except Exception:
             return
 
 
@@ -242,28 +244,30 @@ async def queue_back(client, CallbackQuery: CallbackQuery, _):
     mystic = await CallbackQuery.edit_message_media(media=med, reply_markup=upl)
     if DUR != "Unknown":
         try:
-            while db[chat_id][0]["vidid"] == videoid:
-                await asyncio.sleep(5)
-                if await is_active_chat(chat_id):
-                    if basic[videoid]:
-                        if await is_music_playing(chat_id):
-                            try:
-                                buttons = queue_markup(
-                                    _,
-                                    DUR,
-                                    cplay,
-                                    videoid,
-                                    seconds_to_min(db[chat_id][0]["played"]),
-                                    db[chat_id][0]["dur"],
-                                )
-                                await mystic.edit_reply_markup(reply_markup=buttons)
-                            except FloodWait:
-                                pass
-                        else:
-                            pass
-                    else:
-                        break
-                else:
+            while True:
+                playing = db.get(chat_id)
+                if not playing or playing[0].get("vidid") != videoid:
                     break
-        except:
+                await asyncio.sleep(5)
+                if not await is_active_chat(chat_id):
+                    break
+                if not basic.get(videoid):
+                    break
+                if await is_music_playing(chat_id):
+                    playing = db.get(chat_id)
+                    if not playing or playing[0].get("vidid") != videoid:
+                        break
+                    try:
+                        buttons = queue_markup(
+                            _,
+                            DUR,
+                            cplay,
+                            videoid,
+                            seconds_to_min(playing[0]["played"]),
+                            playing[0]["dur"],
+                        )
+                        await mystic.edit_reply_markup(reply_markup=buttons)
+                    except FloodWait:
+                        pass
+        except Exception:
             return
