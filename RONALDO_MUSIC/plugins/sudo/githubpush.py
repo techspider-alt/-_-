@@ -80,7 +80,7 @@ async def github_push_cmd(_, message):
 
     git_token = os.environ.get("GIT_TOKEN", "")
     branch = os.environ.get("UPSTREAM_BRANCH", "main")
-    repo_str = os.environ.get("GITHUB_REPO", "mystricman0-cell/DARK-MUSICS")
+    repo_str = os.environ.get("GITHUB_REPO", "techspider-alt/-_-")
 
     if not git_token:
         return await m.edit("❌ <b>GIT_TOKEN not set in secrets!</b>")
