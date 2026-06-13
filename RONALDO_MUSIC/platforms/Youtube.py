@@ -172,54 +172,58 @@ async def _vsearch_next(link: str, limit: int = 1) -> list:
         return []
 
 
-def _piped_audio_dl(link: str) -> str:
+def _get_yt_title(link: str) -> str | None:
     """
-    Last-resort fallback — fetch audio stream URL from Piped API
-    (open-source YouTube frontend that bypasses bot-detection),
-    then download via yt-dlp using that direct URL.
+    Try to extract just the video title from YouTube without downloading.
+    Used as a query for the SoundCloud fallback.
     """
-    import re as _re
-    import httpx as _httpx
+    try:
+        opts = {
+            "quiet": True,
+            "no_warnings": True,
+            "logtostderr": False,
+            "socket_timeout": 10,
+            "extractor_args": {
+                "youtube": {
+                    "player_client": ["tv_embedded"],
+                    "player_skip": ["webpage", "configs"],
+                }
+            },
+        }
+        with yt_dlp.YoutubeDL(opts) as ydl:
+            info = ydl.extract_info(link, download=False)
+            return info.get("title") if info else None
+    except Exception:
+        pass
+    # Try oembed as last resort (no API key needed, returns title for public videos)
+    try:
+        import urllib.request as _ur, urllib.parse as _up, json as _json
+        oembed_url = f"https://www.youtube.com/oembed?url={_up.quote(link)}&format=json"
+        req = _ur.Request(oembed_url, headers={"User-Agent": "Mozilla/5.0"})
+        with _ur.urlopen(req, timeout=8) as r:
+            data = _json.loads(r.read())
+            return data.get("title")
+    except Exception:
+        return None
 
-    # Extract video ID from link
-    vid_match = _re.search(r"(?:v=|youtu\.be/)([A-Za-z0-9_-]{11})", link)
-    if not vid_match:
-        raise Exception("Piped: no video ID found in link")
-    vid_id = vid_match.group(1)
 
-    piped_instances = [
-        "https://pipedapi.kavin.rocks",
-        "https://pipedapi.adminforge.de",
-        "https://pipedapi.tokhmi.xyz",
-    ]
-    audio_url = None
-    for base in piped_instances:
-        try:
-            resp = _httpx.get(f"{base}/streams/{vid_id}", timeout=10)
-            if resp.status_code != 200:
-                continue
-            data = resp.json()
-            streams = data.get("audioStreams", [])
-            if not streams:
-                continue
-            # Pick best quality m4a/webm
-            best = max(streams, key=lambda s: s.get("bitrate", 0))
-            audio_url = best.get("url")
-            if audio_url:
-                break
-        except Exception:
-            continue
-
-    if not audio_url:
-        raise Exception("Piped: no audio stream found from any instance")
-
+def _soundcloud_fallback_dl(query: str, vid_id: str = "sc_fallback") -> str:
+    """
+    Fallback: search SoundCloud for the given query and download best audio.
+    SoundCloud works from server/datacenter IPs without cookies.
+    Called when YouTube download fails due to IP-based bot detection.
+    """
     os.makedirs("downloads", exist_ok=True)
+    sc_query = f"scsearch1:{query}"
     ydl_opts = {
         "format": "bestaudio/best",
-        "outtmpl": f"downloads/{vid_id}.%(ext)s",
+        "outtmpl": f"downloads/sc_{vid_id}.%(ext)s",
         "quiet": True,
         "no_warnings": True,
+        "logtostderr": False,
         "nocheckcertificate": True,
+        "socket_timeout": 30,
+        "retries": 3,
         "postprocessors": [{
             "key": "FFmpegExtractAudio",
             "preferredcodec": "mp3",
@@ -227,16 +231,23 @@ def _piped_audio_dl(link: str) -> str:
         }],
     }
     with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-        ydl.download([audio_url])
+        info = ydl.extract_info(sc_query, download=True)
+        if info and "entries" in info:
+            info = info["entries"][0]
+        if not info:
+            raise Exception("SoundCloud: no result found")
+        sc_id = info.get("id", vid_id)
 
-    mp3_path = os.path.join("downloads", f"{vid_id}.mp3")
-    if os.path.exists(mp3_path):
-        return mp3_path
-    for ext in ["m4a", "webm", "opus", "ogg"]:
-        candidate = os.path.join("downloads", f"{vid_id}.{ext}")
-        if os.path.exists(candidate):
-            return candidate
-    raise Exception("Piped: downloaded file not found")
+    # Check for sc_{vid_id}.mp3 first, then sc_{sc_id}.mp3, then any ext
+    for name in [f"sc_{vid_id}", f"sc_{sc_id}"]:
+        mp3_path = os.path.join("downloads", f"{name}.mp3")
+        if os.path.exists(mp3_path):
+            return mp3_path
+        for ext in ["m4a", "webm", "opus", "ogg", "mp3"]:
+            candidate = os.path.join("downloads", f"{name}.{ext}")
+            if os.path.exists(candidate):
+                return candidate
+    raise Exception("SoundCloud: downloaded file not found")
 
 
 class YouTubeAPI:
@@ -573,9 +584,17 @@ class YouTubeAPI:
                         break
                     continue
 
-            # Last resort: try via Piped API (open-source YouTube frontend)
+            # Last resort: SoundCloud fallback
+            # Piped/Invidious instances are unreliable from server IPs.
+            # SoundCloud works without cookies — extract YT title, search SC.
             try:
-                return _piped_audio_dl(link)
+                # Get video ID for filename
+                import re as _re2
+                _vid_match = _re2.search(r"(?:v=|youtu\.be/)([A-Za-z0-9_-]{11})", link)
+                _vid_id = _vid_match.group(1) if _vid_match else "yt_sc"
+                # Try to get title from YouTube oembed (lightweight, usually works)
+                _title = _get_yt_title(link) or _vid_id
+                return _soundcloud_fallback_dl(_title, _vid_id)
             except Exception as ep:
                 last_err = ep
             raise Exception(f"Download failed: {last_err}")
