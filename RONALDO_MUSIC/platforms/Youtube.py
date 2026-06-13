@@ -504,17 +504,29 @@ class YouTubeAPI:
         def audio_dl():
             os.makedirs("downloads", exist_ok=True)
             last_err = None
-            # Try ALL player clients — never stop early on bot-detection,
-            # different clients bypass different checks
-            client_attempts = [
-                (["tv_embedded"], {"player_skip": ["webpage", "configs"], "skip": ["hls", "dash"]}),
-                (["ios"],         {"player_skip": ["webpage", "configs"]}),
-                (["android_embedded"], {"player_skip": ["webpage", "configs"]}),
-                (["android", "web"],  {}),
-                (["mweb"],        {"player_skip": ["webpage"]}),
-                (["web"],         {"use_po_token": ["true"]}),
-                (["mediaconnect"], {}),
-            ]
+            has_cookies = bool(cookies)
+
+            # ── Build attempt list ──────────────────────────────────────────────
+            # With cookies: use web client (most reliable with cookies)
+            # Without cookies: try all embedded/mobile clients that don't need login
+            if has_cookies:
+                client_attempts = [
+                    (["web"],         {}),
+                    (["tv_embedded"], {"player_skip": ["webpage", "configs"]}),
+                    (["ios"],         {"player_skip": ["webpage", "configs"]}),
+                    (["android_embedded"], {"player_skip": ["webpage", "configs"]}),
+                    (["mweb"],        {"player_skip": ["webpage"]}),
+                ]
+            else:
+                client_attempts = [
+                    (["tv_embedded"], {"player_skip": ["webpage", "configs"]}),
+                    (["ios"],         {"player_skip": ["webpage", "configs"]}),
+                    (["android_embedded"], {"player_skip": ["webpage", "configs"]}),
+                    (["mweb"],        {"player_skip": ["webpage"]}),
+                    (["web_creator"], {}),
+                    (["android", "web"], {}),
+                ]
+
             for player_client, extra_args in client_attempts:
                 try:
                     ydl_optssx = {
@@ -524,9 +536,10 @@ class YouTubeAPI:
                         "nocheckcertificate": True,
                         "quiet": True,
                         "no_warnings": True,
+                        "logtostderr": False,
                         "nopart": True,
-                        "retries": 5,
-                        "fragment_retries": 5,
+                        "retries": 3,
+                        "fragment_retries": 3,
                         "socket_timeout": 30,
                         "http_headers": _YT_HEADERS,
                         "prefer_free_formats": True,
@@ -549,7 +562,7 @@ class YouTubeAPI:
                     mp3_path = os.path.join("downloads", f"{vid_id}.mp3")
                     if os.path.exists(mp3_path):
                         return mp3_path
-                    for ext in ["m4a", "webm", "opus", "ogg", "mp3"]:
+                    for ext in ["m4a", "webm", "opus", "ogg"]:
                         candidate = os.path.join("downloads", f"{vid_id}.{ext}")
                         if os.path.exists(candidate):
                             return candidate
@@ -559,6 +572,7 @@ class YouTubeAPI:
                     if _is_bot_blocked(e):
                         break
                     continue
+
             # Last resort: try via Piped API (open-source YouTube frontend)
             try:
                 return _piped_audio_dl(link)
@@ -569,15 +583,24 @@ class YouTubeAPI:
         def video_dl():
             os.makedirs("downloads", exist_ok=True)
             last_err = None
-            client_attempts = [
-                (["tv_embedded"], {"player_skip": ["webpage", "configs"]}),
-                (["ios"],         {"player_skip": ["webpage", "configs"]}),
-                (["android_embedded"], {"player_skip": ["webpage", "configs"]}),
-                (["android", "web"], {}),
-                (["mweb"],        {"player_skip": ["webpage"]}),
-                (["web"],         {"use_po_token": ["true"]}),
-                (["mediaconnect"], {}),
-            ]
+            has_cookies = bool(cookies)
+
+            if has_cookies:
+                client_attempts = [
+                    (["web"],         {}),
+                    (["tv_embedded"], {"player_skip": ["webpage", "configs"]}),
+                    (["ios"],         {"player_skip": ["webpage", "configs"]}),
+                    (["android_embedded"], {"player_skip": ["webpage", "configs"]}),
+                ]
+            else:
+                client_attempts = [
+                    (["tv_embedded"], {"player_skip": ["webpage", "configs"]}),
+                    (["ios"],         {"player_skip": ["webpage", "configs"]}),
+                    (["android_embedded"], {"player_skip": ["webpage", "configs"]}),
+                    (["mweb"],        {"player_skip": ["webpage"]}),
+                    (["web_creator"], {}),
+                ]
+
             for player_client, extra_args in client_attempts:
                 try:
                     ydl_optssx = {
@@ -587,9 +610,10 @@ class YouTubeAPI:
                         "nocheckcertificate": True,
                         "quiet": True,
                         "no_warnings": True,
+                        "logtostderr": False,
                         "merge_output_format": "mp4",
-                        "retries": 5,
-                        "fragment_retries": 5,
+                        "retries": 3,
+                        "fragment_retries": 3,
                         "socket_timeout": 30,
                         "http_headers": _YT_HEADERS,
                         "extractor_args": {
