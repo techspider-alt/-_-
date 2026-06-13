@@ -658,32 +658,35 @@ class Call(PyTgCalls):
                     )
                 try:
                     await client.change_stream(chat_id, stream)
-                except Exception:
-                    # change_stream failed — skip to next track
+                except Exception as _cs_err:
+                    # change_stream failed — do NOT pop again (already popped at top)
+                    # retry by returning to next iteration of change_stream
+                    LOGGER(__name__).warning(f"change_stream vid_ cs-err {chat_id}: {_cs_err}")
                     try:
                         await mystic.delete()
                     except Exception:
                         pass
                     try:
-                        check.pop(0)
-                    except Exception:
-                        pass
-                    if check:
-                        try:
-                            await app.send_message(
-                                original_chat_id,
-                                "❍ ꜱᴛʀᴇᴀᴍ ꜰᴀɪʟᴇᴅ, ꜱᴋɪᴘᴘɪɴɢ ᴛᴏ ɴᴇxᴛ ᴛʀᴀᴄᴋ...",
-                            )
-                        except Exception:
-                            pass
-                        return await self.change_stream(client, chat_id)
-                    else:
-                        await _clear_(chat_id)
-                        try:
-                            await client.leave_group_call(chat_id)
-                        except Exception:
-                            pass
-                        return
+                        await asyncio.sleep(1)
+                        await client.change_stream(chat_id, stream)
+                    except Exception as _retry_err:
+                        LOGGER(__name__).error(f"change_stream vid_ retry-err {chat_id}: {_retry_err}")
+                        if check:
+                            try:
+                                await app.send_message(
+                                    original_chat_id,
+                                    "❍ ꜱᴛʀᴇᴀᴍ ꜰᴀɪʟᴇᴅ, ꜱᴋɪᴘᴘɪɴɢ ᴛᴏ ɴᴇxᴛ ᴛʀᴀᴄᴋ...",
+                                )
+                            except Exception:
+                                pass
+                            return await self.change_stream(client, chat_id)
+                        else:
+                            await _clear_(chat_id)
+                            try:
+                                await client.leave_group_call(chat_id)
+                            except Exception:
+                                pass
+                            return
                 img = await get_thumb(videoid)
                 button = stream_markup(_, videoid, chat_id)
                 await mystic.delete()
@@ -784,28 +787,31 @@ class Call(PyTgCalls):
                     )
                 try:
                     await client.change_stream(chat_id, stream)
-                except Exception:
-                    # change_stream failed — skip to next instead of getting stuck
+                except Exception as _cs_err:
+                    # change_stream failed — do NOT pop again (already popped at top)
+                    # retry once with a delay to let pytgcalls state settle
+                    LOGGER(__name__).warning(f"change_stream direct cs-err {chat_id}: {_cs_err}")
                     try:
-                        check.pop(0)
-                    except Exception:
-                        pass
-                    if check:
-                        try:
-                            await app.send_message(
-                                original_chat_id,
-                                "❍ ꜱᴛʀᴇᴀᴍ ꜰᴀɪʟᴇᴅ, ꜱᴋɪᴘᴘɪɴɢ ᴛᴏ ɴᴇxᴛ ᴛʀᴀᴄᴋ...",
-                            )
-                        except Exception:
-                            pass
-                        return await self.change_stream(client, chat_id)
-                    else:
-                        await _clear_(chat_id)
-                        try:
-                            await client.leave_group_call(chat_id)
-                        except Exception:
-                            pass
-                        return
+                        await asyncio.sleep(1)
+                        await client.change_stream(chat_id, stream)
+                    except Exception as _retry_err:
+                        LOGGER(__name__).error(f"change_stream direct retry-err {chat_id}: {_retry_err}")
+                        if check:
+                            try:
+                                await app.send_message(
+                                    original_chat_id,
+                                    "❍ ꜱᴛʀᴇᴀᴍ ꜰᴀɪʟᴇᴅ, ꜱᴋɪᴘᴘɪɴɢ ᴛᴏ ɴᴇxᴛ ᴛʀᴀᴄᴋ...",
+                                )
+                            except Exception:
+                                pass
+                            return await self.change_stream(client, chat_id)
+                        else:
+                            await _clear_(chat_id)
+                            try:
+                                await client.leave_group_call(chat_id)
+                            except Exception:
+                                pass
+                            return
                 if videoid == "telegram":
                     button = telegram_markup(_, chat_id)
                     run = await app.send_photo(
@@ -861,12 +867,10 @@ class Call(PyTgCalls):
                     await send_logger_card(chat_id, original_chat_id, title, user, "VIDEO" if video else "AUDIO")
         except Exception as e:
             LOGGER(__name__).error(f"change_stream playback error for {chat_id}: {type(e).__name__}: {e}")
-            # Auto-skip to next track on any playback error
-            if check and len(check) > 1:
-                try:
-                    check.pop(0)
-                except Exception:
-                    pass
+            # Auto-skip to next track on any playback error.
+            # NOTE: current track was already popped at the top of change_stream,
+            # so check[0] is already the NEXT song — do NOT pop again here.
+            if check:
                 try:
                     await app.send_message(
                         original_chat_id,
@@ -932,10 +936,17 @@ class Call(PyTgCalls):
             if not isinstance(update, (StreamAudioEnded, StreamVideoEnded)):
                 return
             # Use create_task so we exit the pytgcalls callback immediately.
-            # Awaiting change_stream directly here can deadlock py-tgcalls 1.2.x
-            # because the internal stream state is still "transitioning" when the
-            # callback fires — calling client.change_stream() inside it throws.
-            asyncio.create_task(self.change_stream(client, update.chat_id))
+            # Add a short delay so pytgcalls internal stream state fully settles
+            # before we call client.change_stream() — calling it too soon throws.
+            chat_id = update.chat_id
+            LOGGER(__name__).info(f"[queue] StreamEnded for chat {chat_id} — scheduling next track")
+            async def _delayed_next():
+                try:
+                    await asyncio.sleep(1)
+                    await self.change_stream(client, chat_id)
+                except Exception as _e:
+                    LOGGER(__name__).error(f"[queue] change_stream failed for {chat_id}: {type(_e).__name__}: {_e}")
+            asyncio.create_task(_delayed_next())
 
         for c in active:
             c.on_kicked()(stream_services_handler)
