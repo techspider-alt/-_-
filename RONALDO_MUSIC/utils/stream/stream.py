@@ -63,7 +63,7 @@ async def stream(
                 continue
             if duration_sec > config.DURATION_LIMIT:
                 continue
-            if await is_active_chat(chat_id):
+            if await is_active_chat(chat_id) and db.get(chat_id):
                 await put_queue(
                     chat_id,
                     original_chat_id,
@@ -214,7 +214,7 @@ async def stream(
                 "❍ <b>ᴅᴏᴡɴʟᴏᴀᴅ ꜰᴀɪʟᴇᴅ!</b>\n\n"
                 "ɢᴀᴀɴᴀ ᴅᴏᴡɴʟᴏᴀᴅ ɴᴀʜɪ ʜᴜᴀ. ᴋᴏɪ ᴅᴜsʀᴀ ɢᴀᴀɴᴀ ᴛʀʏ ᴋᴀʀᴏ."
             )
-        if await is_active_chat(chat_id):
+        if await is_active_chat(chat_id) and db.get(chat_id):
             await put_queue(
                 chat_id,
                 original_chat_id,
@@ -276,7 +276,7 @@ async def stream(
         file_path = result["filepath"]
         title = result["title"]
         duration_min = result["duration_min"]
-        if await is_active_chat(chat_id):
+        if await is_active_chat(chat_id) and db.get(chat_id):
             await put_queue(
                 chat_id,
                 original_chat_id,
@@ -330,7 +330,7 @@ async def stream(
         title = (result["title"]).title()
         duration_min = result["dur"]
         status = True if video else None
-        if await is_active_chat(chat_id):
+        if await is_active_chat(chat_id) and db.get(chat_id):
             await put_queue(
                 chat_id,
                 original_chat_id,
@@ -385,7 +385,7 @@ async def stream(
         thumbnail = result["thumb"]
         duration_min = "Live Track"
         status = True if video else None
-        if await is_active_chat(chat_id):
+        if await is_active_chat(chat_id) and db.get(chat_id):
             await put_queue(
                 chat_id,
                 original_chat_id,
@@ -450,7 +450,7 @@ async def stream(
         link = result
         title = "ɪɴᴅᴇx ᴏʀ ᴍ3ᴜ8 ʟɪɴᴋ"
         duration_min = "00:00"
-        if await is_active_chat(chat_id):
+        if await is_active_chat(chat_id) and db.get(chat_id):
             await put_queue_index(
                 chat_id,
                 original_chat_id,
