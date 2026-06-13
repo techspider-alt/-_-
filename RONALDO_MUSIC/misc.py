@@ -12,6 +12,11 @@ SUDOERS = filters.user()
 HAPP = None
 _boot_ = time.time()
 
+# Tracks which chats have a seeker-driven fallback queued.
+# change_stream() discards a chat_id here on entry, so the seeker knows
+# StreamAudioEnded already handled it and can skip its fallback call.
+advancing_chats: set = set()
+
 try:
     import heroku3 as _heroku3_mod
     _heroku3_available = True
