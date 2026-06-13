@@ -96,13 +96,12 @@ def _cookies_opts() -> dict:
 
 
 def _is_bot_blocked(err: Exception) -> bool:
-    """Check if error is due to YouTube bot detection / rate limiting."""
+    """Check if error means video is actually unavailable (not just bot-detection)."""
     msg = str(err).lower()
+    # Only stop retrying for truly unavailable/private content — NOT for bot-detection errors
     return any(x in msg for x in [
-        "sign in", "bot", "confirm you", "429", "rate limit",
-        "too many requests", "precondition", "verification",
-        "please sign", "not a bot", "captcha", "unavailable",
-        "video unavailable", "private video",
+        "private video", "video unavailable", "this video is not available",
+        "has been removed", "account associated",
     ])
 
 
@@ -171,6 +170,73 @@ async def _vsearch_next(link: str, limit: int = 1) -> list:
         return data.get("result", []) or []
     except Exception:
         return []
+
+
+def _piped_audio_dl(link: str) -> str:
+    """
+    Last-resort fallback — fetch audio stream URL from Piped API
+    (open-source YouTube frontend that bypasses bot-detection),
+    then download via yt-dlp using that direct URL.
+    """
+    import re as _re
+    import httpx as _httpx
+
+    # Extract video ID from link
+    vid_match = _re.search(r"(?:v=|youtu\.be/)([A-Za-z0-9_-]{11})", link)
+    if not vid_match:
+        raise Exception("Piped: no video ID found in link")
+    vid_id = vid_match.group(1)
+
+    piped_instances = [
+        "https://pipedapi.kavin.rocks",
+        "https://pipedapi.adminforge.de",
+        "https://pipedapi.tokhmi.xyz",
+    ]
+    audio_url = None
+    for base in piped_instances:
+        try:
+            resp = _httpx.get(f"{base}/streams/{vid_id}", timeout=10)
+            if resp.status_code != 200:
+                continue
+            data = resp.json()
+            streams = data.get("audioStreams", [])
+            if not streams:
+                continue
+            # Pick best quality m4a/webm
+            best = max(streams, key=lambda s: s.get("bitrate", 0))
+            audio_url = best.get("url")
+            if audio_url:
+                break
+        except Exception:
+            continue
+
+    if not audio_url:
+        raise Exception("Piped: no audio stream found from any instance")
+
+    os.makedirs("downloads", exist_ok=True)
+    ydl_opts = {
+        "format": "bestaudio/best",
+        "outtmpl": f"downloads/{vid_id}.%(ext)s",
+        "quiet": True,
+        "no_warnings": True,
+        "nocheckcertificate": True,
+        "postprocessors": [{
+            "key": "FFmpegExtractAudio",
+            "preferredcodec": "mp3",
+            "preferredquality": "192",
+        }],
+    }
+    with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+        ydl.download([audio_url])
+
+    mp3_path = os.path.join("downloads", f"{vid_id}.mp3")
+    if os.path.exists(mp3_path):
+        return mp3_path
+    for ext in ["m4a", "webm", "opus", "ogg"]:
+        candidate = os.path.join("downloads", f"{vid_id}.{ext}")
+        if os.path.exists(candidate):
+            return candidate
+    raise Exception("Piped: downloaded file not found")
 
 
 class YouTubeAPI:
@@ -438,16 +504,18 @@ class YouTubeAPI:
         def audio_dl():
             os.makedirs("downloads", exist_ok=True)
             last_err = None
-            # Try multiple player clients — tv_embedded bypasses most bot detection
-            for player_client in [
-                ["tv_embedded"],
-                ["android_embedded"],
-                ["android", "web"],
-                ["ios"],
-                ["mweb"],
-                ["web"],
-                ["mediaconnect"],
-            ]:
+            # Try ALL player clients — never stop early on bot-detection,
+            # different clients bypass different checks
+            client_attempts = [
+                (["tv_embedded"], {"player_skip": ["webpage", "configs"], "skip": ["hls", "dash"]}),
+                (["ios"],         {"player_skip": ["webpage", "configs"]}),
+                (["android_embedded"], {"player_skip": ["webpage", "configs"]}),
+                (["android", "web"],  {}),
+                (["mweb"],        {"player_skip": ["webpage"]}),
+                (["web"],         {"use_po_token": ["true"]}),
+                (["mediaconnect"], {}),
+            ]
+            for player_client, extra_args in client_attempts:
                 try:
                     ydl_optssx = {
                         "format": "bestaudio[ext=m4a]/bestaudio[ext=webm]/bestaudio/best",
@@ -457,16 +525,15 @@ class YouTubeAPI:
                         "quiet": True,
                         "no_warnings": True,
                         "nopart": True,
-                        "retries": 8,
-                        "fragment_retries": 8,
+                        "retries": 5,
+                        "fragment_retries": 5,
                         "socket_timeout": 30,
                         "http_headers": _YT_HEADERS,
                         "prefer_free_formats": True,
                         "extractor_args": {
                             "youtube": {
                                 "player_client": player_client,
-                                "skip": ["hls", "dash"],
-                                "player_skip": ["webpage", "configs"],
+                                **extra_args,
                             }
                         },
                         "postprocessors": [{
@@ -489,24 +556,29 @@ class YouTubeAPI:
                     return os.path.join("downloads", f"{vid_id}.{info.get('ext', 'webm')}")
                 except Exception as e:
                     last_err = e
-                    # If bot blocked, no point trying other clients with same URL
                     if _is_bot_blocked(e):
                         break
                     continue
+            # Last resort: try via Piped API (open-source YouTube frontend)
+            try:
+                return _piped_audio_dl(link)
+            except Exception as ep:
+                last_err = ep
             raise Exception(f"Download failed: {last_err}")
 
         def video_dl():
             os.makedirs("downloads", exist_ok=True)
             last_err = None
-            for player_client in [
-                ["tv_embedded"],
-                ["android_embedded"],
-                ["android", "web"],
-                ["ios"],
-                ["mweb"],
-                ["web"],
-                ["mediaconnect"],
-            ]:
+            client_attempts = [
+                (["tv_embedded"], {"player_skip": ["webpage", "configs"]}),
+                (["ios"],         {"player_skip": ["webpage", "configs"]}),
+                (["android_embedded"], {"player_skip": ["webpage", "configs"]}),
+                (["android", "web"], {}),
+                (["mweb"],        {"player_skip": ["webpage"]}),
+                (["web"],         {"use_po_token": ["true"]}),
+                (["mediaconnect"], {}),
+            ]
+            for player_client, extra_args in client_attempts:
                 try:
                     ydl_optssx = {
                         "format": "(bestvideo[height<=?720][width<=?1280][ext=mp4])+(bestaudio[ext=m4a])/bestvideo[height<=?720]+bestaudio/best",
@@ -516,14 +588,14 @@ class YouTubeAPI:
                         "quiet": True,
                         "no_warnings": True,
                         "merge_output_format": "mp4",
-                        "retries": 8,
-                        "fragment_retries": 8,
+                        "retries": 5,
+                        "fragment_retries": 5,
                         "socket_timeout": 30,
                         "http_headers": _YT_HEADERS,
                         "extractor_args": {
                             "youtube": {
                                 "player_client": player_client,
-                                "player_skip": ["webpage", "configs"],
+                                **extra_args,
                             }
                         },
                         **cookies,
