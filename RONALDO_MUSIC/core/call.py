@@ -479,6 +479,14 @@ class Call(PyTgCalls):
                 autoend[chat_id] = datetime.now() + timedelta(minutes=1)
 
     async def change_stream(self, client, chat_id):
+        # Signal seeker fallback that we're handling this transition.
+        # If _seeker_advance() wakes up and finds chat_id gone, it aborts.
+        try:
+            from RONALDO_MUSIC.misc import advancing_chats as _ac
+            _ac.discard(chat_id)
+        except Exception:
+            pass
+
         check = db.get(chat_id)
         popped = None
         loop = await get_loop(chat_id)
