@@ -24,7 +24,7 @@ async def admins(Client, message: Message, _, chat_id):
         return await message.reply_text(_["admin_15"], reply_markup=close_markup(_))
     check = db.get(chat_id)
     if not check:
-        check.insert(0, popped)
+        db[chat_id] = [popped]
         return await message.reply_text(_["admin_15"], reply_markup=close_markup(_))
     random.shuffle(check)
     check.insert(0, popped)
